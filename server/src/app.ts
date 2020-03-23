@@ -17,45 +17,48 @@ createConnection()
     app.use(logger("dev"));
 
     // register routes
-    app.get("/api", (req, res) =>
+    app.get("/", (req, res) =>
       res.status(200).send({
-        message: "Welcome"
+        message: "Welcome to the Words API"
       })
     );
 
     // get all words
-    app.get("/api/all-words", async function(req: Request, res: Response) {
+    app.get("/words/all", async function(req: Request, res: Response) {
       const words = await wordRepository.find();
-      return res.send(words); // might be res.json(words)
+      return res.send(words);
     });
 
     // add a new word
-    app.post("/api/add-word", async function(req: Request, res: Response) {
+    app.post("/words", async function(req: Request, res: Response) {
       const word = wordRepository.create(req.body);
       const results = await wordRepository.save(word);
       return res.send(results);
     });
 
     // delete a word
-    app.post("/api/delete-word", async function(req: Request, res: Response) {
-      const results = await wordRepository.delete(req.body.id);
+    app.delete("/words/:id", async function(req: Request, res: Response) {
+      const results = await wordRepository.delete(req.params.id);
       return res.send(results);
     });
 
     // get all words that match the specified box
-    app.get("/api/review-words", async function(req: Request, res: Response) {
+    app.get("/words", async function(req: Request, res: Response) {
+      // will receive request like: http://localhost:4000/words?boxes=[1,3]
+      const boxes = req.query.boxes;
       const results = await wordRepository
         .createQueryBuilder("word")
         .where("word.id IN (:...ids)", {
-          ids: [1, 3] // will need to change
+          ids: boxes
         })
         .getMany();
       return res.send(results);
     });
 
     // update an existing word
-    app.post("/api/update-word", async function(req: Request, res: Response) {
-      let wordToUpdate = await wordRepository.findOne({ id: req.body.id });
+    app.put("/words/:id", async function(req: Request, res: Response) {
+      const id = parseInt(req.params.id);
+      let wordToUpdate = await wordRepository.findOne({ id: id });
       wordToUpdate.box = req.body.box;
       wordToUpdate.dateLastSeen = req.body.dateLastSeen;
       await wordRepository.save(wordToUpdate);
