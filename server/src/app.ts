@@ -43,7 +43,15 @@ createConnection()
     });
 
     // get all words that match the specified box
-    app.get("/api/review-words", function(req: Request, res: Response) {}); // TODO
+    app.get("/api/review-words", async function(req: Request, res: Response) {
+      const results = await wordRepository
+        .createQueryBuilder("word")
+        .where("word.id IN (:...ids)", {
+          ids: [1, 3] // will need to change
+        })
+        .getMany();
+      return res.send(results);
+    });
 
     // update an existing word
     app.post("/api/update-word", async function(req: Request, res: Response) {
