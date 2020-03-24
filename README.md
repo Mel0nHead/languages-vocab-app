@@ -4,6 +4,6 @@ An app to help you learn any language through the use of flash cards.
 
 # TODO
 
-- test api
 - set up GraphQL
-- build UI
+- write tests for server and api
+- build ui
