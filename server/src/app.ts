@@ -24,44 +24,46 @@ createConnection()
     );
 
     // get all words
-    app.get("/words/all", async function(req: Request, res: Response) {
+    app.get("/words/all", async (req: Request, res: Response) => {
       const words = await wordRepository.find();
       return res.send(words);
     });
 
     // add a new word
-    app.post("/words", async function(req: Request, res: Response) {
+    app.post("/words", async (req: Request, res: Response) => {
       const word = wordRepository.create(req.body);
       const results = await wordRepository.save(word);
       return res.send(results);
     });
 
     // delete a word
-    app.delete("/words/:id", async function(req: Request, res: Response) {
+    app.delete("/words/:id", async (req: Request, res: Response) => {
       const results = await wordRepository.delete(req.params.id);
       return res.send(results);
     });
 
     // get all words that match the specified box
-    app.get("/words", async function(req: Request, res: Response) {
-      // will receive request like: http://localhost:4000/words?boxes=[1,3]
-      const boxes = req.query.boxes;
+    app.get("/words", async (req: Request, res: Response) => {
+      // will receive request like: http://localhost:4000/words?boxes=1,3
+      const boxesStr = req.query.boxes;
+      const boxes = boxesStr.split(",").map(str => parseInt(str));
       const results = await wordRepository
         .createQueryBuilder("word")
-        .where("word.id IN (:...ids)", {
-          ids: boxes
+        .where("word.box IN (:...boxes)", {
+          boxes: boxes
         })
         .getMany();
       return res.send(results);
     });
 
     // update an existing word
-    app.put("/words/:id", async function(req: Request, res: Response) {
+    app.put("/words/:id", async (req: Request, res: Response) => {
       const id = parseInt(req.params.id);
       let wordToUpdate = await wordRepository.findOne({ id: id });
       wordToUpdate.box = req.body.box;
       wordToUpdate.dateLastSeen = req.body.dateLastSeen;
       await wordRepository.save(wordToUpdate);
+      res.send(wordToUpdate);
     });
 
     // start express server
