@@ -11,7 +11,7 @@ export const resolvers = {
       const { boxes } = args; // will be array of integers
       return await Word.createQueryBuilder("word")
         .where("word.box IN (:...boxes)", {
-          boxes: boxes
+          boxes
         })
         .getMany();
     }
