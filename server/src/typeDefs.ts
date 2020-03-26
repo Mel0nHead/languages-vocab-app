@@ -1,5 +1,5 @@
 import { gql } from "apollo-server-express";
-
+// TODO: Create custom Date type for dateAdded and dateLastSeen
 export const typeDefs = gql`
     type Query {
         getAllWords(): [Word]
@@ -13,6 +13,12 @@ export const typeDefs = gql`
     }
 
     type Word {
-        
+        id: Int;
+        language: String;
+        originalWord: String;
+        translatedWord: String;
+        dateLastSeen: String;
+        dateAdded: String;
+        box: Int;
     }
 `;
