@@ -5,13 +5,11 @@ const cors = require("cors");
 const logger = require("morgan");
 import { createConnection } from "typeorm";
 import { ApolloServer } from "apollo-server-express";
-import { makeExecutableSchema } from "graphql-tools";
 
 import { typeDefs } from "./typeDefs";
 import { resolvers } from "./resolvers";
 
 const startServer = async () => {
-  // const schema = makeExecutableSchema({ typeDefs, resolvers });
   const server = new ApolloServer({ typeDefs, resolvers });
   await createConnection();
 
