@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAddWordMutation } from "../graphql/useAddWordMutation";
 
+const yandexUrl = "https://translate.yandex.net/api/v1.5/tr.json";
 const yandexApiKey =
   "trnsl.1.1.20200214T093209Z.770ffb3919b46232.ec06ae1560b2b3f7f06a7ee0cb97b88cc777790f";
 
@@ -28,7 +29,7 @@ export function Home() {
     originalWord: string,
     translatedWord: string
   ) {
-    const date = new Date(); // .getTime()
+    const date = new Date();
     addWord({
       variables: {
         language,
@@ -39,13 +40,11 @@ export function Home() {
         dateLastSeen: date
       }
     });
+    // TODO: add some sort of state to the word card that lets the user know they've added the card
   }
 
   function getSupportedLanguages() {
-    fetch(
-      `https://translate.yandex.net/api/v1.5/tr.json/getLangs?key=${yandexApiKey}&ui=en`,
-      { method: "POST" }
-    )
+    fetch(`${yandexUrl}/getLangs?key=${yandexApiKey}&ui=en`, { method: "POST" })
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -84,9 +83,9 @@ export function Home() {
   function handleTranslate() {
     if (!inputValue) return;
     const textToTranslate = encodeURI(inputValue);
-    const languageString = `${currentLanguage.source}-${currentLanguage.destination}`;
+    const languageString = `${currentLanguage.source}-${currentLanguage.destination}`; // e.g. en-ru
     fetch(
-      `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${yandexApiKey}&lang=${languageString}&text=${textToTranslate}`,
+      `${yandexUrl}/translate?key=${yandexApiKey}&lang=${languageString}&text=${textToTranslate}`,
       { method: "POST" }
     )
       .then(response => {
