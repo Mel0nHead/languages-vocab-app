@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 
-export function useGetWordsToReviewQuery(variables: { boxes: number[] }) {
+export function useGetWordsToReviewQuery(boxes: number[]) {
   return useQuery(
     gql`
       query getWordsToReview($boxes: [Int!]!) {
@@ -16,6 +16,6 @@ export function useGetWordsToReviewQuery(variables: { boxes: number[] }) {
         }
       }
     `,
-    { variables }
+    { variables: { boxes } }
   );
 }

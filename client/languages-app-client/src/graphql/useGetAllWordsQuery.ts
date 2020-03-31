@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/react-hooks";
 export function useGetAllWordsQuery() {
   return useQuery(
     gql`
-      query {
+      query getAllWords {
         getAllWords {
           id
           originalWord
