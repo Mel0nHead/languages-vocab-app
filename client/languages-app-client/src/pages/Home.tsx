@@ -51,7 +51,6 @@ export function Home() {
         }
       })
       .then(data => {
-        console.log(data.langs);
         setAvailableLanguages(data.langs);
       })
       .catch(error => {
@@ -94,7 +93,6 @@ export function Home() {
         }
       })
       .then(data => {
-        console.log(data);
         const id = Math.random();
         const word = {
           language: languageString,
@@ -126,6 +124,17 @@ export function Home() {
     <div>
       <h1>Home</h1>
       <input type="text" value={inputValue} onChange={handleInputChange} />
+      <br />
+      <span>
+        Powered by{" "}
+        <a
+          href="http://translate.yandex.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Yandex.Translate
+        </a>
+      </span>
       <div>
         <span>From:</span>
         <select
