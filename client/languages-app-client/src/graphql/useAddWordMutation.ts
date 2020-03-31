@@ -1,14 +1,7 @@
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 
-export function useAddWordMutation(variables: {
-  language: string;
-  originalWord: string;
-  translatedWord: string;
-  dateAdded: Date; // might be number
-  dateLastSeen: Date; // might be number
-  box: number;
-}) {
+export function useAddWordMutation() {
   return useMutation(
     gql`
       mutation createWord(
@@ -28,7 +21,6 @@ export function useAddWordMutation(variables: {
           box: $box
         )
       }
-    `,
-    { variables }
+    `
   );
 }

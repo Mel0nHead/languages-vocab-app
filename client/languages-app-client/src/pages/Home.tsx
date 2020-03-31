@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAddWordMutation } from "../graphql/useAddWordMutation";
 
 const yandexApiKey =
   "trnsl.1.1.20200214T093209Z.770ffb3919b46232.ec06ae1560b2b3f7f06a7ee0cb97b88cc777790f";
@@ -20,6 +21,25 @@ export function Home() {
     destination: "es"
   });
   const [words, setWords] = useState<Word[]>([]);
+  const [addWord] = useAddWordMutation();
+
+  function handleAdd(
+    language: string,
+    originalWord: string,
+    translatedWord: string
+  ) {
+    const date = new Date(); // .getTime()
+    addWord({
+      variables: {
+        language,
+        originalWord,
+        translatedWord,
+        box: 1,
+        dateAdded: date,
+        dateLastSeen: date
+      }
+    });
+  }
 
   function getSupportedLanguages() {
     fetch(
@@ -138,7 +158,17 @@ export function Home() {
             <br />
             <span>{word.language}</span>
             <div>
-              <button>Add to my words</button>
+              <button
+                onClick={() =>
+                  handleAdd(
+                    word.language,
+                    word.originalWord,
+                    word.translatedWord
+                  )
+                }
+              >
+                Add to my words
+              </button>
             </div>
           </div>
         ))}
