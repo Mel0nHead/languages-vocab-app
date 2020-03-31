@@ -24,23 +24,21 @@ export function Home() {
   const [words, setWords] = useState<Word[]>([]);
   const [addWord] = useAddWordMutation();
 
-  function handleAdd(
-    language: string,
-    originalWord: string,
-    translatedWord: string
-  ) {
+  function handleAdd(word: Word) {
     const date = new Date();
     addWord({
       variables: {
-        language,
-        originalWord,
-        translatedWord,
+        language: word.language,
+        originalWord: word.originalWord,
+        translatedWord: word.translatedWord,
         box: 1,
         dateAdded: date,
         dateLastSeen: date
       }
     });
-    // TODO: add some sort of state to the word card that lets the user know they've added the card
+    setWords(currentWords => {
+      return currentWords.filter(w => w.id !== word.id);
+    });
   }
 
   function getSupportedLanguages() {
@@ -157,17 +155,7 @@ export function Home() {
             <br />
             <span>{word.language}</span>
             <div>
-              <button
-                onClick={() =>
-                  handleAdd(
-                    word.language,
-                    word.originalWord,
-                    word.translatedWord
-                  )
-                }
-              >
-                Add to my words
-              </button>
+              <button onClick={() => handleAdd(word)}>Add to my words</button>
             </div>
           </div>
         ))}
