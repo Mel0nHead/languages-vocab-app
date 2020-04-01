@@ -2,10 +2,93 @@ import { Word } from "./entity/Word";
 import { GraphQLScalarType } from "graphql";
 import { Kind } from "graphql/language";
 
+function applyCursorsToEdges(
+  allEdges: Word[],
+  before?: string,
+  after?: string
+) {
+  let edges = allEdges;
+
+  if (after) {
+    const id = parseInt(atob(after));
+    edges = allEdges.filter(word => word.id > id);
+  }
+
+  if (before) {
+    const id = parseInt(atob(before));
+    edges = allEdges.filter(word => word.id < id);
+  }
+  return edges;
+}
+
+function getEdgesToReturn(edges: Word[], first?: number, last?: number) {
+  let edgesToReturn = edges;
+  if (first) {
+    if (first < 0) {
+      throw new Error("'First' cannot be less than 0");
+    }
+    if (edges.length > first) {
+      edgesToReturn = edges.slice(0, first);
+    }
+  }
+  if (last) {
+    if (last < 0) {
+      throw new Error("'Last' cannot be less than 0");
+    }
+    if (edges.length > last) {
+      edgesToReturn = edges.slice(-last);
+    }
+  }
+  return edgesToReturn;
+}
+
+function hasPreviousPage(edges: Word[], last: number) {
+  if (last) {
+    if (edges.length > last) {
+      return true;
+    }
+    return false;
+  }
+  return false;
+}
+
+function hasNextPage(
+  edges: Word[],
+  before: string,
+  after: string,
+  first: number,
+  last: number
+) {
+  if (first) {
+    if (edges.length > first) {
+      return true;
+    }
+    return false;
+  }
+}
+
 export const resolvers = {
   Query: {
     getAllWords: async (_: any, args: any) => {
-      return await Word.find();
+      const { first, last, after, before } = args;
+      const allEdges = await Word.createQueryBuilder("word")
+        .orderBy("word.id", "ASC")
+        .getMany();
+
+      const edges = applyCursorsToEdges(allEdges, before, after);
+      const edgesToReturn = getEdgesToReturn(edges, first, last);
+
+      const wordEdges = edgesToReturn.map(word => {
+        return {
+          node: word,
+          cursor: btoa(word.id.toString())
+        };
+      });
+
+      return {
+        edges: wordEdges,
+        pageInfo: {}
+      };
     },
     getWordsToReview: async (_: any, args: any) => {
       const { boxes } = args; // will be array of integers
