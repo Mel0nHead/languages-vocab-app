@@ -4,6 +4,5 @@ An app to help you learn any language through the use of flash cards.
 
 # TODO
 
-- Material-UI
-- Implement pagination
-- add Test entity
+- Test that pagination works
+- move to material-ui
