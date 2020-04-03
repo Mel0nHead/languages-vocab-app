@@ -11,12 +11,12 @@ function applyCursorsToEdges(
 
   if (after) {
     const id = parseInt(atob(after));
-    edges = allEdges.filter(word => word.id > id);
+    edges = allEdges.filter((word) => word.id > id);
   }
 
   if (before) {
     const id = parseInt(atob(before));
-    edges = allEdges.filter(word => word.id < id);
+    edges = allEdges.filter((word) => word.id < id);
   }
   return edges;
 }
@@ -47,24 +47,19 @@ function hasPreviousPage(edges: Word[], last: number) {
     if (edges.length > last) {
       return true;
     }
-    return false;
+    // TODO: check if elements exist prior to 'after': if they do, return 'true'
   }
   return false;
 }
 
-function hasNextPage(
-  edges: Word[],
-  before: string,
-  after: string,
-  first: number,
-  last: number
-) {
+function hasNextPage(edges: Word[], first: number) {
   if (first) {
     if (edges.length > first) {
       return true;
     }
-    return false;
+    // TODO: check if elements exist after 'before': if they do, return 'true'
   }
+  return false;
 }
 
 export const resolvers = {
@@ -78,26 +73,29 @@ export const resolvers = {
       const edges = applyCursorsToEdges(allEdges, before, after);
       const edgesToReturn = getEdgesToReturn(edges, first, last);
 
-      const wordEdges = edgesToReturn.map(word => {
+      const wordEdges = edgesToReturn.map((word) => {
         return {
           node: word,
-          cursor: btoa(word.id.toString())
+          cursor: btoa(word.id.toString()),
         };
       });
 
       return {
         edges: wordEdges,
-        pageInfo: {}
+        pageInfo: {
+          hasPreviousPage: hasPreviousPage(edges, last),
+          hasNextPage: hasNextPage(edges, first),
+        },
       };
     },
     getWordsToReview: async (_: any, args: any) => {
       const { boxes } = args; // will be array of integers
       return await Word.createQueryBuilder("word")
         .where("word.box IN (:...boxes)", {
-          boxes
+          boxes,
         })
         .getMany();
-    }
+    },
   },
   Mutation: {
     addWord: async (_: any, args: any) => {
@@ -129,7 +127,7 @@ export const resolvers = {
       } catch (error) {
         return false;
       }
-    }
+    },
   },
   Date: new GraphQLScalarType({
     name: "Date",
@@ -145,6 +143,6 @@ export const resolvers = {
         return new Date(ast.value); // ast value is always in string format
       }
       return null;
-    }
-  })
+    },
+  }),
 };
