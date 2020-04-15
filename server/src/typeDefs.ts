@@ -18,13 +18,23 @@ export const typeDefs = gql`
     box: Int!
   }
 
+  type WordEdge {
+    node: Word!
+    cursor: String!
+  }
+
   type WordConnection {
-    edges: [Word]!
+    edges: [WordEdge]!
     pageInfo: PageInfo!
   }
 
   type Query {
-    getAllWords: WordConnection!
+    getAllWords(
+      first: Int
+      last: Int
+      after: String
+      before: String
+    ): WordConnection!
     getWordsToReview(boxes: [Int!]!): [Word]
   }
 

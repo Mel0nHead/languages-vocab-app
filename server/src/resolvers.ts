@@ -10,12 +10,12 @@ function applyCursorsToEdges(
   let edges = allEdges;
 
   if (after) {
-    const id = parseInt(atob(after));
+    const id = parseInt(Buffer.from(after, "base64").toString());
     edges = allEdges.filter((word) => word.id > id);
   }
 
   if (before) {
-    const id = parseInt(atob(before));
+    const id = parseInt(Buffer.from(before, "base64").toString());
     edges = allEdges.filter((word) => word.id < id);
   }
   return edges;
@@ -76,7 +76,7 @@ export const resolvers = {
       const wordEdges = edgesToReturn.map((word) => {
         return {
           node: word,
-          cursor: btoa(word.id.toString()),
+          cursor: Buffer.from(word.id.toString()).toString("base64"),
         };
       });
 
