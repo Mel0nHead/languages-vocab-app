@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useAddWordMutation } from "../graphql/useAddWordMutation";
-
-const yandexUrl = "https://translate.yandex.net/api/v1.5/tr.json";
-const yandexApiKey =
-  "trnsl.1.1.20200214T093209Z.770ffb3919b46232.ec06ae1560b2b3f7f06a7ee0cb97b88cc777790f";
+import { TranslateCard } from "../components/TranslateCard";
+import { LanguageSelect } from "../components/LanguageSelect";
+import { YANDEX_URL, YANDEX_KEY } from "../constants";
+import { fetchTranslation } from "../utils/fetchTranslation";
+import { createWord } from "../utils/createWord";
 
 export interface Word {
   language: string;
@@ -15,11 +16,11 @@ export interface Word {
 export function Home() {
   const [inputValue, setInputValue] = useState("");
   const [availableLanguages, setAvailableLanguages] = useState({
-    en: "English"
+    en: "English",
   });
   const [currentLanguage, setCurrentLanguage] = useState({
     source: "en",
-    destination: "es"
+    destination: "es",
   });
   const [words, setWords] = useState<Word[]>([]);
   const [addWord] = useAddWordMutation();
@@ -33,29 +34,25 @@ export function Home() {
         translatedWord: word.translatedWord,
         box: 1,
         dateAdded: date,
-        dateLastSeen: date
-      }
+        dateLastSeen: date,
+      },
     });
-    setWords(currentWords => {
-      return currentWords.filter(w => w.id !== word.id);
+    setWords((currentWords) => {
+      return currentWords.filter((w) => w.id !== word.id);
     });
   }
 
-  function getSupportedLanguages() {
-    fetch(`${yandexUrl}/getLangs?key=${yandexApiKey}&ui=en`, { method: "POST" })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          console.log(`HTTP Error: ${response.status}`);
-        }
-      })
-      .then(data => {
-        setAvailableLanguages(data.langs);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  async function getSupportedLanguages() {
+    try {
+      const res = await fetch(
+        `${YANDEX_URL}/getLangs?key=${YANDEX_KEY}&ui=en`,
+        { method: "POST" }
+      );
+      const data = await res.json();
+      setAvailableLanguages(data.langs);
+    } catch (error) {
+      throw new Error("There was an error");
+    }
   }
 
   useEffect(() => {
@@ -66,58 +63,29 @@ export function Home() {
     setInputValue(event.target.value);
   }
 
-  function handleLanguageChange(
-    event: React.ChangeEvent<HTMLSelectElement>,
-    key: "source" | "destination"
-  ) {
-    const newLanguage = event.target.value;
-    setCurrentLanguage(currentLanguage => ({
-      ...currentLanguage,
-      [key]: newLanguage
-    }));
+  function handleLanguageChange(key: "source" | "destination") {
+    return function (event: React.ChangeEvent<HTMLSelectElement>) {
+      const newLanguage = event.target.value;
+      setCurrentLanguage((currentLanguage) => ({
+        ...currentLanguage,
+        [key]: newLanguage,
+      }));
+    };
   }
 
-  function handleTranslate() {
+  async function handleTranslate() {
     if (!inputValue) return;
     const textToTranslate = encodeURI(inputValue);
     const languageString = `${currentLanguage.source}-${currentLanguage.destination}`; // e.g. en-ru
-    fetch(
-      `${yandexUrl}/translate?key=${yandexApiKey}&lang=${languageString}&text=${textToTranslate}`,
-      { method: "POST" }
-    )
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          console.log(`HTTP Error: ${response.status}`);
-        }
-      })
-      .then(data => {
-        const id = Math.random();
-        const word = {
-          language: languageString,
-          originalWord: inputValue,
-          translatedWord: data.text[0],
-          id
-        };
-        setWords(currentWords => {
-          return [word, ...currentWords];
-        });
-        setInputValue("");
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
 
-  function getLanguageOptions() {
-    return Object.entries(availableLanguages).map(language => {
-      return (
-        <option key={language[0]} value={language[0]}>
-          {language[1]}
-        </option>
-      );
+    const data = await fetchTranslation(languageString, textToTranslate);
+    if (!data) return;
+
+    const word = createWord(data, languageString, inputValue);
+    setWords((currentWords) => {
+      return [word, ...currentWords];
     });
+    setInputValue("");
   }
 
   return (
@@ -136,37 +104,25 @@ export function Home() {
         </a>
       </span>
       <div>
-        <span>From:</span>
-        <select
+        <LanguageSelect
+          label="From:"
           value={currentLanguage.source}
-          onChange={e => handleLanguageChange(e, "source")}
-        >
-          {getLanguageOptions()}
-        </select>
-        <span>To:</span>
-        <select
+          handleChange={handleLanguageChange("source")}
+          availableLanguages={availableLanguages}
+        />
+        <LanguageSelect
+          label="To:"
           value={currentLanguage.destination}
-          onChange={e => handleLanguageChange(e, "destination")}
-        >
-          {getLanguageOptions()}
-        </select>
+          handleChange={handleLanguageChange("destination")}
+          availableLanguages={availableLanguages}
+        />
       </div>
       <div>
         <button onClick={handleTranslate}>Translate</button>
       </div>
       <div>
-        {words.map(word => (
-          <div
-            key={word.id}
-            style={{ border: "1px solid red", marginBottom: "20px" }}
-          >
-            <span>{`${word.originalWord} - ${word.translatedWord}`}</span>
-            <br />
-            <span>{word.language}</span>
-            <div>
-              <button onClick={() => handleAdd(word)}>Add to my words</button>
-            </div>
-          </div>
+        {words.map((word) => (
+          <TranslateCard word={word} handleAdd={handleAdd} key={word.id} />
         ))}
       </div>
     </div>
