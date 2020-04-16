@@ -5,6 +5,7 @@ import { LanguageSelect } from "../components/LanguageSelect";
 import { YANDEX_URL, YANDEX_KEY } from "../constants";
 import { fetchTranslation } from "../utils/fetchTranslation";
 import { createWord } from "../utils/createWord";
+import { TextField, Button, Box } from "@material-ui/core";
 
 export interface Word {
   language: string;
@@ -64,7 +65,9 @@ export function Home() {
   }
 
   function handleLanguageChange(key: "source" | "destination") {
-    return function (event: React.ChangeEvent<HTMLSelectElement>) {
+    return function (
+      event: React.ChangeEvent<{ name?: string | undefined; value: unknown }>
+    ) {
       const newLanguage = event.target.value;
       setCurrentLanguage((currentLanguage) => ({
         ...currentLanguage,
@@ -91,19 +94,29 @@ export function Home() {
   return (
     <div>
       <h1>Home</h1>
-      <input type="text" value={inputValue} onChange={handleInputChange} />
-      <br />
-      <span>
-        Powered by{" "}
-        <a
-          href="http://translate.yandex.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Yandex.Translate
-        </a>
-      </span>
-      <div>
+      <Box mb={4}>
+        <TextField
+          variant="filled"
+          label="Enter a word to translate"
+          placeholder="e.g. dog"
+          fullWidth
+          value={inputValue}
+          onChange={handleInputChange}
+          style={{ marginBottom: "5px" }}
+        />
+        <br />
+        <span style={{ fontSize: "0.8rem" }}>
+          Powered by{" "}
+          <a
+            href="http://translate.yandex.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Yandex.Translate
+          </a>
+        </span>
+      </Box>
+      <Box mb={2}>
         <LanguageSelect
           label="From:"
           value={currentLanguage.source}
@@ -116,9 +129,11 @@ export function Home() {
           handleChange={handleLanguageChange("destination")}
           availableLanguages={availableLanguages}
         />
-      </div>
+      </Box>
       <div>
-        <button onClick={handleTranslate}>Translate</button>
+        <Button variant="contained" onClick={handleTranslate} color="primary">
+          Translate
+        </Button>
       </div>
       <div>
         {words.map((word) => (
