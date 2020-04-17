@@ -1,16 +1,16 @@
 import React from "react";
 import { Word } from "../pages/Home";
 import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { Box } from "@material-ui/core";
+import { Box, Paper } from "@material-ui/core";
 
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
+    margin: "20px",
   },
   bullet: {
     display: "inline-block",
@@ -27,15 +27,16 @@ const useStyles = makeStyles({
 
 interface TranslateCardProps {
   word: Word;
-  handleAdd: (word: Word) => void;
+  buttonLabel: string;
+  onClick: () => void;
 }
 
 export function TranslateCard(props: TranslateCardProps) {
-  const { word, handleAdd } = props;
+  const { word, onClick } = props;
   const classes = useStyles();
 
   return (
-    <Card className={classes.root} style={{ margin: "20px" }}>
+    <Paper className={classes.root} elevation={3}>
       <CardContent>
         <Box mb={2}>
           <Typography color="textSecondary" gutterBottom>
@@ -63,8 +64,8 @@ export function TranslateCard(props: TranslateCardProps) {
         </Box>
       </CardContent>
       <CardActions>
-        <Button onClick={() => handleAdd(word)}>Add to my words</Button>
+        <Button onClick={onClick}>{props.buttonLabel}</Button>
       </CardActions>
-    </Card>
+    </Paper>
   );
 }

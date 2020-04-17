@@ -29,7 +29,6 @@ export function LanguageSelect(props: LanguageSelectProps) {
         >
           {Object.entries(props.availableLanguages).map((language) => {
             return (
-              // e.g. lna
               <option key={language[0]} value={language[0]}>
                 {`${language[1]}`}
               </option>
@@ -37,17 +36,6 @@ export function LanguageSelect(props: LanguageSelectProps) {
           })}
         </Select>
       </FormControl>
-      {/* <span>{props.label}</span>
-      <select value={props.value} onChange={props.handleChange}>
-        {Object.entries(props.availableLanguages).map((language) => {
-          return (
-            // e.g. lna
-            <option key={language[0]} value={language[0]}>
-              {`${language[1]}`}
-            </option>
-          );
-        })}
-      </select> */}
     </>
   );
 }

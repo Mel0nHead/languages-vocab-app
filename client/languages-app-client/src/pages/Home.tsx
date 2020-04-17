@@ -5,7 +5,7 @@ import { LanguageSelect } from "../components/LanguageSelect";
 import { YANDEX_URL, YANDEX_KEY } from "../constants";
 import { fetchTranslation } from "../utils/fetchTranslation";
 import { createWord } from "../utils/createWord";
-import { TextField, Button, Box } from "@material-ui/core";
+import { TextField, Button, Box, makeStyles } from "@material-ui/core";
 
 export interface Word {
   language: string;
@@ -14,7 +14,13 @@ export interface Word {
   id: number;
 }
 
+const useStyles = makeStyles({
+  textField: { marginBottom: "5px" },
+  yandexLink: { fontSize: "0.8rem" },
+});
+
 export function Home() {
+  const classes = useStyles();
   const [inputValue, setInputValue] = useState("");
   const [availableLanguages, setAvailableLanguages] = useState({
     en: "English",
@@ -102,10 +108,10 @@ export function Home() {
           fullWidth
           value={inputValue}
           onChange={handleInputChange}
-          style={{ marginBottom: "5px" }}
+          className={classes.textField}
         />
         <br />
-        <span style={{ fontSize: "0.8rem" }}>
+        <span className={classes.yandexLink}>
           Powered by{" "}
           <a
             href="http://translate.yandex.com"
@@ -137,7 +143,12 @@ export function Home() {
       </div>
       <div>
         {words.map((word) => (
-          <TranslateCard word={word} handleAdd={handleAdd} key={word.id} />
+          <TranslateCard
+            word={word}
+            onClick={() => handleAdd(word)}
+            key={word.id}
+            buttonLabel="Add to my words"
+          />
         ))}
       </div>
     </div>
