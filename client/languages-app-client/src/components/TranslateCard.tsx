@@ -6,6 +6,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Box, Paper } from "@material-ui/core";
+import ReactCountryFlag from "react-country-flag";
 
 const useStyles = makeStyles({
   root: {
@@ -61,6 +62,7 @@ export function TranslateCard(props: TranslateCardProps) {
           <Typography variant="h5" component="h2">
             {word.language}
           </Typography>
+          <ReactCountryFlag style={{ fontSize: "2rem" }} countryCode="US" svg />
         </Box>
       </CardContent>
       <CardActions>
