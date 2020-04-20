@@ -67,11 +67,14 @@ export function TranslateCard(props: TranslateCardProps) {
               return (
                 <span key={index} title={languageInfo?.language || "English"}>
                   <ReactCountryFlag
-                    style={{ fontSize: "2rem" }}
+                    style={{
+                      fontSize: "2rem",
+                      marginRight: "5px",
+                      borderRadius: "3px",
+                    }}
                     countryCode={languageInfo?.countryCode || "GB"}
                     svg
                   />
-                  <span title="them's hoverin' words">hover me</span>
                 </span>
               );
             })}
