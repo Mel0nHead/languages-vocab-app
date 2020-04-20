@@ -105,3 +105,10 @@ const languagesInfo: LanguageInfo[] = [
   { language: "Yiddish", languageCode: "yi", countryCode: "IL" },
   { language: "Chinese", languageCode: "zh", countryCode: "CN" },
 ];
+
+export function getLanguageInfoFromLanguageCode(languageCode: string) {
+  const language = languagesInfo.filter(
+    (language) => language.languageCode === languageCode
+  );
+  return language[0] as LanguageInfo | undefined;
+}

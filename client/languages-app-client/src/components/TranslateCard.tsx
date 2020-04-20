@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Box, Paper } from "@material-ui/core";
 import ReactCountryFlag from "react-country-flag";
+import { getLanguageInfoFromLanguageCode } from "../constants";
 
 const useStyles = makeStyles({
   root: {
@@ -34,6 +35,7 @@ interface TranslateCardProps {
 
 export function TranslateCard(props: TranslateCardProps) {
   const { word, onClick } = props;
+  const langsArr = word.language.split("-");
   const classes = useStyles();
 
   return (
@@ -60,9 +62,20 @@ export function TranslateCard(props: TranslateCardProps) {
             Languages
           </Typography>
           <Typography variant="h5" component="h2">
-            {word.language}
+            {langsArr.map((langStr, index) => {
+              const languageInfo = getLanguageInfoFromLanguageCode(langStr);
+              return (
+                <span key={index} title={languageInfo?.language || "English"}>
+                  <ReactCountryFlag
+                    style={{ fontSize: "2rem" }}
+                    countryCode={languageInfo?.countryCode || "GB"}
+                    svg
+                  />
+                  <span title="them's hoverin' words">hover me</span>
+                </span>
+              );
+            })}
           </Typography>
-          <ReactCountryFlag style={{ fontSize: "2rem" }} countryCode="US" svg />
         </Box>
       </CardContent>
       <CardActions>
