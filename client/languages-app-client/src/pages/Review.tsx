@@ -2,6 +2,7 @@ import React from "react";
 import { useGetWordsToReviewQuery } from "../graphql/useGetWordsToReviewQuery";
 import { Word } from "./Home";
 import { useDeleteWordMutation } from "../graphql/useDeleteWordMutation";
+import { TranslateCard } from "../components/TranslateCard";
 
 interface ExtendedWord extends Word {
   dateAdded: number;
@@ -30,17 +31,12 @@ export function Review() {
       <h1>Review</h1>
       {data.getWordsToReview.map((word: ExtendedWord) => {
         return (
-          <div
+          <TranslateCard
+            word={word}
+            onClick={() => handleDelete(word.id)}
             key={word.id}
-            style={{ border: "1px solid red", marginBottom: "20px" }}
-          >
-            <span>{`${word.originalWord} - ${word.translatedWord}`}</span>
-            <br />
-            <span>{word.language}</span>
-            <div>
-              <button onClick={() => handleDelete(word.id)}>Delete</button>
-            </div>
-          </div>
+            buttonLabel="Delete from my words"
+          />
         );
       })}
     </div>
