@@ -12,6 +12,6 @@ export function useUpdateWordMutation(variables: {
         updateWord(id: $id, dateLastSeen: $dateLastSeen, box: $box)
       }
     `,
-    { variables }
+    { variables, refetchQueries: ["getWordsToReview"] }
   );
 }

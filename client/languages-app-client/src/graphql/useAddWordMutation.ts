@@ -21,6 +21,7 @@ export function useAddWordMutation() {
           box: $box
         )
       }
-    `
+    `,
+    { refetchQueries: ["getWordsToReview"] }
   );
 }
