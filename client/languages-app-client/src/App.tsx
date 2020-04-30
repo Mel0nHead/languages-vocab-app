@@ -4,6 +4,7 @@ import { Home } from "./pages/Home";
 import { Review } from "./pages/Review";
 import { AppBar, Container, makeStyles } from "@material-ui/core";
 import "./App.css";
+import { Test } from "./pages/Test";
 
 const useStyles = makeStyles({
   navLink: {
@@ -35,6 +36,9 @@ export default function App() {
           <Link to="/review" className={classes.navLink}>
             Review
           </Link>
+          <Link to="/test" className={classes.navLink}>
+            Test
+          </Link>
         </nav>
       </AppBar>
       <Container maxWidth="sm" className={classes.container}>
@@ -42,6 +46,7 @@ export default function App() {
           <Route path="/" exact component={Home} />
           <Route path="/home" exact component={Home} />
           <Route path="/review" exact component={Review} />
+          <Route path="/test" extact component={Test} />
           <Route path="*" render={() => <h1>Page not found</h1>} />
         </Switch>
       </Container>
