@@ -6,6 +6,7 @@ export function useGetNextWordQuery(first: number, after: string | null) {
     gql`
       query getWords($first: Int, $after: String) {
         getAllWords(first: $first, after: $after) {
+          totalCount
           edges {
             node {
               id

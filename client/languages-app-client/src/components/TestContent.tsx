@@ -7,6 +7,8 @@ import {
   Divider,
   Box,
   Button,
+  CircularProgress,
+  LinearProgress,
 } from "@material-ui/core";
 import { useGetNextWordQuery } from "../graphql/useGetNextWordQuery";
 import { getLanguageInfo } from "../utils/getLanguageInfo";
@@ -36,10 +38,17 @@ interface TestContentProps {
   cursor: string | null;
 }
 
+/**
+ * TODO:
+ * - move progress bar to parent component
+ * - refactor
+ */
+
 export function TestContent(props: TestContentProps) {
   const classes = useStyles();
   const [isRevealed, setIsRevealed] = useState(false);
   const { data, error, loading } = useGetNextWordQuery(1, props.cursor);
+  const [wordCount, setWordCount] = useState(0);
 
   if (!data) {
     return <b>No data</b>;
@@ -50,7 +59,7 @@ export function TestContent(props: TestContentProps) {
   }
 
   if (loading) {
-    return <b>Loading...</b>;
+    return <CircularProgress />;
   }
 
   const currentWord = data?.getAllWords?.edges[0].node;
@@ -61,8 +70,17 @@ export function TestContent(props: TestContentProps) {
   const originalWordInfo = getLanguageInfo(languageStrings[0]);
   const translatedWordInfo = getLanguageInfo(languageStrings[1]);
 
+  const totalWords = data?.getAllWords?.totalCount;
+  const normalise = (value: number) => (value * 100) / totalWords;
+
   return (
     <>
+      <Box mb={2}>
+        <span>
+          {wordCount}/{data?.getAllWords?.totalCount}
+        </span>
+        <LinearProgress variant="determinate" value={normalise(wordCount)} />
+      </Box>
       <Paper>
         <Grid
           container
@@ -119,6 +137,7 @@ export function TestContent(props: TestContentProps) {
                 variant="contained"
                 className={classes.successButton}
                 onClick={() => {
+                  setWordCount((wordCount) => wordCount + 1);
                   setIsRevealed(false);
                   props.handleGetNextQuestion(hasNextPage, currentWordCursor);
                 }}

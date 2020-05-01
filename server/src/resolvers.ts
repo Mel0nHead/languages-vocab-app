@@ -70,8 +70,8 @@ export const resolvers = {
         .orderBy("word.id", "ASC")
         .getMany();
 
-      const edges = applyCursorsToEdges(allEdges, before, after);
-      const edgesToReturn = getEdgesToReturn(edges, first, last);
+      const edges = applyCursorsToEdges(allEdges, before, after); // slices based on cursor
+      const edgesToReturn = getEdgesToReturn(edges, first, last); // return specified number from previous result
 
       const wordEdges = edgesToReturn.map((word) => {
         return {
@@ -81,6 +81,7 @@ export const resolvers = {
       });
 
       return {
+        totalCount: allEdges.length,
         edges: wordEdges,
         pageInfo: {
           hasPreviousPage: hasPreviousPage(edges, last),

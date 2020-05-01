@@ -24,6 +24,7 @@ export const typeDefs = gql`
   }
 
   type WordConnection {
+    totalCount: Int!
     edges: [WordEdge]!
     pageInfo: PageInfo!
   }

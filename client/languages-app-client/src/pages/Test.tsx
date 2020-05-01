@@ -3,11 +3,6 @@ import { StartTest } from "../components/StartTest";
 import { FinishedTest } from "../components/FinishedTest";
 import { TestContent } from "../components/TestContent";
 
-/**
- * TODO:
- * - add a progress bar
- */
-
 export function Test() {
   const [testInProgress, setTestInProgress] = useState(false);
   const [isTestFinished, setIsTestFinished] = useState(false);
