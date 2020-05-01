@@ -5,9 +5,9 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { Box, Paper } from "@material-ui/core";
+import { Box, Paper, Divider } from "@material-ui/core";
 import ReactCountryFlag from "react-country-flag";
-import { getLanguageInfoFromLanguageCode } from "../constants";
+import { getLanguageInfo } from "../utils/getLanguageInfo";
 
 const useStyles = makeStyles({
   root: {
@@ -63,7 +63,7 @@ export function TranslateCard(props: TranslateCardProps) {
           </Typography>
           <Typography variant="h5" component="h2">
             {langsArr.map((langStr, index) => {
-              const languageInfo = getLanguageInfoFromLanguageCode(langStr);
+              const languageInfo = getLanguageInfo(langStr);
               return (
                 <span key={index} title={languageInfo?.language || "English"}>
                   <ReactCountryFlag
@@ -81,8 +81,15 @@ export function TranslateCard(props: TranslateCardProps) {
           </Typography>
         </Box>
       </CardContent>
+      <Divider />
       <CardActions>
-        <Button onClick={onClick}>{props.buttonLabel}</Button>
+        <Button
+          onClick={onClick}
+          color="primary"
+          style={{ fontWeight: "bold" }}
+        >
+          {props.buttonLabel}
+        </Button>
       </CardActions>
     </Paper>
   );
