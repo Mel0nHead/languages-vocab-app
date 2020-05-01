@@ -6,6 +6,7 @@ import {
   Divider,
   Box,
   Grid,
+  makeStyles,
 } from "@material-ui/core";
 import { useGetNextWordQuery } from "../graphql/useGetNextWordQuery";
 import { getLanguageInfo } from "../utils/getLanguageInfo";
@@ -18,12 +19,43 @@ import { FlagIcon } from "../components/FlagIcon";
  * - refactor this mess
  */
 
+const useStyles = makeStyles((theme) => ({
+  grid: {
+    padding: theme.spacing(1),
+  },
+}));
+
 export function Test() {
+  const classes = useStyles();
   const [testInProgress, setTestInProgress] = useState(false);
   const [isTestFinished, setIsTestFinished] = useState(false);
   const [cursor, setCursor] = useState<string | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
   const { data, error, loading } = useGetNextWordQuery(1, cursor);
+
+  function handleStartAnotherTest() {
+    setTestInProgress(true);
+    setIsTestFinished(false);
+    setCursor(null);
+  }
+
+  function handleStartNewTest() {
+    setTestInProgress(true);
+  }
+
+  function handleGetNextQuestion(hasNextPage: boolean, cursor: string) {
+    setIsRevealed(false);
+    if (hasNextPage) {
+      setCursor(cursor);
+    } else {
+      setIsTestFinished(true);
+      setTestInProgress(false);
+    }
+  }
+
+  function handleReveal() {
+    setIsRevealed(true);
+  }
 
   function getNotInProgressMessage() {
     return (
@@ -35,9 +67,7 @@ export function Test() {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => {
-              setTestInProgress(true);
-            }}
+            onClick={handleStartNewTest}
           >
             Start Test
           </Button>
@@ -57,11 +87,7 @@ export function Test() {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => {
-              setTestInProgress(true);
-              setIsTestFinished(false);
-              setCursor(null);
-            }}
+            onClick={handleStartAnotherTest}
           >
             Start Test
           </Button>
@@ -95,7 +121,7 @@ export function Test() {
             direction="row"
             justify="space-between"
             alignItems="center"
-            style={{ padding: "8px" }}
+            className={classes.grid}
           >
             <Grid>
               <Typography>
@@ -128,11 +154,7 @@ export function Test() {
           </Box>
           <Divider />
           <Box p={1}>
-            <Button
-              onClick={() => setIsRevealed(!isRevealed)}
-              color="primary"
-              style={{ fontWeight: "bold" }}
-            >
+            <Button onClick={handleReveal} color="primary">
               Reveal answer
             </Button>
           </Box>
@@ -152,18 +174,11 @@ export function Test() {
                   style={{
                     backgroundColor: "#339933",
                     color: "white",
-                    fontWeight: "bold",
                     margin: "8px",
                   }}
-                  onClick={() => {
-                    setIsRevealed(false);
-                    if (hasNextPage) {
-                      setCursor(currentWordCursor);
-                    } else {
-                      setIsTestFinished(true);
-                      setTestInProgress(false);
-                    }
-                  }}
+                  onClick={() =>
+                    handleGetNextQuestion(hasNextPage, currentWordCursor)
+                  }
                 >
                   Yes
                 </Button>
@@ -172,7 +187,6 @@ export function Test() {
                   style={{
                     backgroundColor: "#b30000",
                     color: "white",
-                    fontWeight: "bold",
                     margin: "8px",
                   }}
                 >
