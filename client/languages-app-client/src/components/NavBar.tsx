@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   navLink: {
-    marginRight: "10px",
+    marginRight: "20px",
     color: "white",
     textDecoration: "none",
     "&:hover": {

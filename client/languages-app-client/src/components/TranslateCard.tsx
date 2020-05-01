@@ -12,7 +12,7 @@ import { FlagIcon } from "./FlagIcon";
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
-    margin: "20px",
+    marginBottom: "20px",
   },
   bullet: {
     display: "inline-block",
