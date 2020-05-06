@@ -16,10 +16,17 @@ Backend: Express, TypeORM, MySQL
   - navigating away from /test page will lose progress
   - should be a progress bar showing how far through the test user is (like in duo lingo) (optional as it might need api work)
   - after completing test, user should have the option to do the test again
+  - should show score at the end of the test
 
 - ADD UNIT/INTEGRATION TESTS FOR UI
 
+  - probably just use jest and react-testing-library
+
 - ADD 'TEST' ENTITY TO BACKEND
+
   - test entity should exist in API
   - should be a many-to-many relationship between tests and words
   - fields should include id, date completed, words, correct words, incorrect words
+
+- GET APOLLO CLIENT TO AUTOGENERATE INTERFACES
+  - means that we can have types for the data and inputs of GraphQL queries/mutations

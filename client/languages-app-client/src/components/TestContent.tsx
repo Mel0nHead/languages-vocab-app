@@ -7,12 +7,10 @@ import {
   Divider,
   Box,
   Button,
-  CircularProgress,
-  LinearProgress,
 } from "@material-ui/core";
-import { useGetNextWordQuery } from "../graphql/useGetNextWordQuery";
 import { getLanguageInfo } from "../utils/getLanguageInfo";
 import { FlagIcon } from "./FlagIcon";
+import { AnswerType } from "../pages/Test";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -35,52 +33,32 @@ const useStyles = makeStyles((theme) => ({
 
 interface TestContentProps {
   handleGetNextQuestion: (hasNextPage: boolean, cursor: string) => void;
+  handleScoreChange: (type: AnswerType) => void;
   cursor: string | null;
+  data: any;
 }
-
-/**
- * TODO:
- * - move progress bar to parent component
- * - refactor
- */
 
 export function TestContent(props: TestContentProps) {
   const classes = useStyles();
   const [isRevealed, setIsRevealed] = useState(false);
-  const { data, error, loading } = useGetNextWordQuery(1, props.cursor);
-  const [wordCount, setWordCount] = useState(0);
 
-  if (!data) {
-    return <b>No data</b>;
-  }
-
-  if (error) {
-    return <b>An error occurred: {error.message}</b>;
-  }
-
-  if (loading) {
-    return <CircularProgress />;
-  }
-
-  const currentWord = data?.getAllWords?.edges[0].node;
-  const currentWordCursor = data?.getAllWords?.edges[0].cursor;
-  const hasNextPage = data?.getAllWords.pageInfo.hasNextPage;
+  // TODO: use function to extract data (need to have generated types for data first)
+  const currentWord = props.data?.getAllWords?.edges[0].node;
+  const currentWordCursor = props.data?.getAllWords?.edges[0].cursor;
+  const hasNextPage = props.data?.getAllWords.pageInfo.hasNextPage;
   const languageStrings = currentWord.language.split("-"); // e.g. ["en", "ru"]
 
   const originalWordInfo = getLanguageInfo(languageStrings[0]);
   const translatedWordInfo = getLanguageInfo(languageStrings[1]);
 
-  const totalWords = data?.getAllWords?.totalCount;
-  const normalise = (value: number) => (value * 100) / totalWords;
+  function handleAnswer(answerType: AnswerType) {
+    setIsRevealed(false);
+    props.handleGetNextQuestion(hasNextPage, currentWordCursor);
+    props.handleScoreChange(answerType);
+  }
 
   return (
     <>
-      <Box mb={2}>
-        <span>
-          {wordCount}/{data?.getAllWords?.totalCount}
-        </span>
-        <LinearProgress variant="determinate" value={normalise(wordCount)} />
-      </Box>
       <Paper>
         <Grid
           container
@@ -136,15 +114,15 @@ export function TestContent(props: TestContentProps) {
               <Button
                 variant="contained"
                 className={classes.successButton}
-                onClick={() => {
-                  setWordCount((wordCount) => wordCount + 1);
-                  setIsRevealed(false);
-                  props.handleGetNextQuestion(hasNextPage, currentWordCursor);
-                }}
+                onClick={() => handleAnswer("correct")}
               >
                 Yes
               </Button>
-              <Button variant="contained" className={classes.failureButton}>
+              <Button
+                variant="contained"
+                className={classes.failureButton}
+                onClick={() => handleAnswer("incorrect")}
+              >
                 No
               </Button>
             </Box>
