@@ -28,7 +28,12 @@ export function NavBar() {
     <AppBar className={classes.navBar}>
       <nav>
         {linkConfig.map((link) => (
-          <Link to={link.href} className={classes.navLink} key={link.href}>
+          <Link
+            to={link.href}
+            className={classes.navLink}
+            key={link.href}
+            data-testid="nav-link"
+          >
             {link.name}
           </Link>
         ))}

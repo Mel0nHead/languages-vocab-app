@@ -8,7 +8,7 @@ interface StartTestProps {
 export function StartTest(props: StartTestProps) {
   return (
     <Box>
-      <Typography>
+      <Typography data-testid="start-test-text">
         Welcome to the test page. To start a test, click the button below.
       </Typography>
       <Box mt={2}>
@@ -16,6 +16,7 @@ export function StartTest(props: StartTestProps) {
           variant="contained"
           color="primary"
           onClick={props.startNewTest}
+          data-testid="start-test-button"
         >
           Start Test
         </Button>
