@@ -8,16 +8,6 @@ Backend: Express, TypeORM, MySQL
 
 # TODO
 
-- ADD 'TEST' PAGE
-
-  - separate /test page
-  - navigating to it starts a test of the saved words
-  - refreshing the page should keep progress of test
-  - navigating away from /test page will lose progress
-  - should be a progress bar showing how far through the test user is (like in duo lingo) (optional as it might need api work)
-  - after completing test, user should have the option to do the test again
-  - should show score at the end of the test
-
 - ADD UNIT/INTEGRATION TESTS FOR UI
 
   - probably just use jest and react-testing-library
@@ -29,4 +19,7 @@ Backend: Express, TypeORM, MySQL
   - fields should include id, date completed, words, correct words, incorrect words
 
 - GET APOLLO CLIENT TO AUTOGENERATE INTERFACES
+
   - means that we can have types for the data and inputs of GraphQL queries/mutations
+
+- ADD TESTS FOR API
