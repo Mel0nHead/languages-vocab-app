@@ -2,13 +2,13 @@ export const YANDEX_URL = "https://translate.yandex.net/api/v1.5/tr.json";
 export const YANDEX_KEY =
   "trnsl.1.1.20200214T093209Z.770ffb3919b46232.ec06ae1560b2b3f7f06a7ee0cb97b88cc777790f";
 
-interface LanguageInfo {
+export interface LanguageInfo {
   language: string;
   languageCode: string;
   countryCode: string;
 }
 
-const languagesInfo: LanguageInfo[] = [
+export const LANGUAGES_INFO: LanguageInfo[] = [
   { language: "Afrikaans", languageCode: "af", countryCode: "ZA" },
   { language: "Amharic", languageCode: "am", countryCode: "ET" },
   { language: "Arabic", languageCode: "ar", countryCode: "SA" },
@@ -105,10 +105,3 @@ const languagesInfo: LanguageInfo[] = [
   { language: "Yiddish", languageCode: "yi", countryCode: "IL" },
   { language: "Chinese", languageCode: "zh", countryCode: "CN" },
 ];
-
-export function getLanguageInfoFromLanguageCode(languageCode: string) {
-  const language = languagesInfo.filter(
-    (language) => language.languageCode === languageCode
-  );
-  return language[0] as LanguageInfo | undefined;
-}

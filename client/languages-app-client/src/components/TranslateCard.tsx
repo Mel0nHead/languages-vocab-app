@@ -5,14 +5,14 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { Box, Paper } from "@material-ui/core";
-import ReactCountryFlag from "react-country-flag";
-import { getLanguageInfoFromLanguageCode } from "../constants";
+import { Box, Paper, Divider } from "@material-ui/core";
+import { getLanguageInfo } from "../utils/getLanguageInfo";
+import { FlagIcon } from "./FlagIcon";
 
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
-    margin: "20px",
+    marginBottom: "20px",
   },
   bullet: {
     display: "inline-block",
@@ -63,26 +63,21 @@ export function TranslateCard(props: TranslateCardProps) {
           </Typography>
           <Typography variant="h5" component="h2">
             {langsArr.map((langStr, index) => {
-              const languageInfo = getLanguageInfoFromLanguageCode(langStr);
-              return (
-                <span key={index} title={languageInfo?.language || "English"}>
-                  <ReactCountryFlag
-                    style={{
-                      fontSize: "2rem",
-                      marginRight: "5px",
-                      borderRadius: "3px",
-                    }}
-                    countryCode={languageInfo?.countryCode || "GB"}
-                    svg
-                  />
-                </span>
-              );
+              const languageInfo = getLanguageInfo(langStr);
+              return <FlagIcon languageInfo={languageInfo} key={index} />;
             })}
           </Typography>
         </Box>
       </CardContent>
+      <Divider />
       <CardActions>
-        <Button onClick={onClick}>{props.buttonLabel}</Button>
+        <Button
+          onClick={onClick}
+          color="primary"
+          style={{ fontWeight: "bold" }}
+        >
+          {props.buttonLabel}
+        </Button>
       </CardActions>
     </Paper>
   );
