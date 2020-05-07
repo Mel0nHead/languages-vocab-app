@@ -8,7 +8,10 @@ interface FlagIconProps {
 
 export function FlagIcon(props: FlagIconProps) {
   return (
-    <span title={props.languageInfo?.language || "English"}>
+    <span
+      title={props.languageInfo?.language || "English"}
+      data-testid="flag-icon-container"
+    >
       <ReactCountryFlag
         style={{
           fontSize: "2rem",
