@@ -6,10 +6,20 @@ export function createWord(
   originalWord: string
 ): Word {
   const id = Math.random();
-  return {
+
+  const obj = {
     language,
     id,
     originalWord,
+    translatedWord: "Unknown",
+  };
+
+  if (!data || !data.text) {
+    return obj;
+  }
+
+  return {
+    ...obj,
     translatedWord: data.text[0],
   };
 }

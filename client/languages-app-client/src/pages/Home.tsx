@@ -89,7 +89,7 @@ export function Home() {
 
     const data = await fetchTranslation(languageString, textToTranslate);
     if (!data) return;
-
+    console.log(data);
     const word = createWord(data, languageString, inputValue);
     setWords((currentWords) => {
       return [word, ...currentWords];
