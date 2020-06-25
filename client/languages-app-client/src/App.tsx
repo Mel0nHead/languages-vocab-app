@@ -7,7 +7,7 @@ import "./App.css";
 import { Test } from "./pages/Test";
 import { theme } from "./theme";
 import { NavBar } from "./components/NavBar";
-import { ApolloProvider } from "@apollo/react-common";
+import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient from "apollo-boost";
 
 const client = new ApolloClient({

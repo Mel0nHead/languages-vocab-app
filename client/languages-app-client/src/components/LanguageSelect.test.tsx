@@ -19,6 +19,8 @@ describe("Component: LanguageSelect", () => {
       />
     );
     expect(component.getByTestId("select-label").textContent).toBe("Label");
-    // TODO: work out how to test <Select /> properly
+    expect(
+      component.getByTestId("select").querySelectorAll("option")
+    ).toHaveLength(3);
   });
 });

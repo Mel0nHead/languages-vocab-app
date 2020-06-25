@@ -23,6 +23,7 @@ export function Review() {
   }
 
   if (error) {
+    console.log(error);
     return <b data-testid="error-message">An error occurred</b>;
   }
 
