@@ -39,7 +39,7 @@ export function TranslateCard(props: TranslateCardProps) {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.root} elevation={3}>
+    <Paper className={classes.root} elevation={3} data-testid="translate-card">
       <CardContent>
         <Box mb={2}>
           <Typography color="textSecondary" gutterBottom>

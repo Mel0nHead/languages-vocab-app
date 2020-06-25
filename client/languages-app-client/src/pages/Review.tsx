@@ -22,8 +22,7 @@ export function Review() {
     return <b data-testid="loading-message">Loading...</b>;
   }
 
-  if (error) {
-    console.log(error);
+  if (error || !data) {
     return <b data-testid="error-message">An error occurred</b>;
   }
 
