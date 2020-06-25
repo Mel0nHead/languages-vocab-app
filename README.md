@@ -8,7 +8,7 @@ Backend: Express, TypeORM, MySQL
 
 # TODO
 
-- ADD UNIT/INTEGRATION TESTS FOR UI
+- ADD UNIT/INTEGRATION TESTS FOR UI - IN PROGRESS
 
   - probably just use jest and react-testing-library
 
@@ -23,3 +23,4 @@ Backend: Express, TypeORM, MySQL
   - means that we can have types for the data and inputs of GraphQL queries/mutations
 
 - ADD TESTS FOR API
+  - need to research this as I have no idea how to do it

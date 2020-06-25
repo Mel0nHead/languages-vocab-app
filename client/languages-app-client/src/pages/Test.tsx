@@ -37,6 +37,7 @@ export function Test() {
     setWordCount((wordCount) => wordCount + 1);
 
     if (hasNextPage) {
+      // TODO: change logic so that hook is not called conditionally!!
       setCursor(cursor);
     } else {
       setTestStatus({ progress: false, finished: true });
@@ -49,14 +50,14 @@ export function Test() {
     });
   }
 
-  if (loading) return <b>Loading</b>;
+  if (loading) return <b data-testid="loading-message">Loading</b>;
 
-  if (error) return <b>Error: {error.message}</b>;
+  if (error) return <b data-testid="error-message">Error: {error.message}</b>;
 
-  if (!data) return <b>No data</b>;
+  if (!data) return <b data-testid="no-data-message">No data</b>;
 
   return (
-    <div>
+    <div data-testid="test-container">
       <h1>Test</h1>
       <div>
         {!testStatus.progress && !testStatus.finished && (

@@ -87,6 +87,7 @@ export function Home() {
     const textToTranslate = encodeURI(inputValue);
     const languageString = `${currentLanguage.source}-${currentLanguage.destination}`; // e.g. en-ru
 
+    // TODO: create custom useFetch hook so that fetch logic can be extracted out of components
     const data = await fetchTranslation(languageString, textToTranslate);
     if (!data) return;
     const word = createWord(data, languageString, inputValue);
