@@ -5,5 +5,12 @@ export function getLanguageInfo(languageCode: string) {
   const language = LANGUAGES_INFO.filter(
     (language) => language.languageCode === languageCode
   );
-  return language[0] as LanguageInfo | undefined;
+  return (
+    language[0] ||
+    ({
+      language: "Unknown",
+      languageCode,
+      countryCode: "Unknown",
+    } as LanguageInfo)
+  );
 }

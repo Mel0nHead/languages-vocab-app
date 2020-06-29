@@ -9,17 +9,18 @@ interface FinishedTestProps {
 
 export function FinishedTest(props: FinishedTestProps) {
   return (
-    <Box>
-      <Typography>
+    <Box data-testid="finished-test-container">
+      <Typography data-testid="score-text">
         Score: {props.correctAnswers}/{props.totalWords}
       </Typography>
-      <Typography>
+      <Typography data-testid="game-over-text">
         You have finished the test! Click the button below to start a new test.
       </Typography>
       <Box mt={2}>
         <Button
           variant="contained"
           color="primary"
+          data-testid="start-test-button"
           onClick={props.startAnotherTest}
         >
           Start Test

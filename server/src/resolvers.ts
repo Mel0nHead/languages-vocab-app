@@ -134,7 +134,7 @@ export const resolvers = {
     name: "Date",
     description: "Date custom scalar type",
     parseValue(value) {
-      return new Date(value); // value from the client
+      return new Date(value); // value received from the client
     },
     serialize(value) {
       return value.getTime(); // value sent to the client

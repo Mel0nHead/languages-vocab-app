@@ -16,9 +16,11 @@ export function LanguageSelect(props: LanguageSelectProps) {
   return (
     <>
       <FormControl variant="outlined">
-        <InputLabel htmlFor="from-language">{props.label}</InputLabel>
+        <InputLabel htmlFor="from-language" data-testid="select-label">
+          {props.label}
+        </InputLabel>
         <Select
-          native
+          native={true}
           value={props.value}
           onChange={props.handleChange}
           label="From"
@@ -26,6 +28,7 @@ export function LanguageSelect(props: LanguageSelectProps) {
             name: "from",
             id: "from-language",
           }}
+          data-testid="select"
         >
           {Object.entries(props.availableLanguages).map((language) => {
             return (

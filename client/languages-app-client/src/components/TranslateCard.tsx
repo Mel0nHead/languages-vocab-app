@@ -39,13 +39,17 @@ export function TranslateCard(props: TranslateCardProps) {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.root} elevation={3}>
+    <Paper className={classes.root} elevation={3} data-testid="translate-card">
       <CardContent>
         <Box mb={2}>
           <Typography color="textSecondary" gutterBottom>
             Original word
           </Typography>
-          <Typography variant="h5" component="h2">
+          <Typography
+            variant="h5"
+            component="h2"
+            data-testid="original-word-text"
+          >
             {word.originalWord}
           </Typography>
         </Box>
@@ -53,7 +57,11 @@ export function TranslateCard(props: TranslateCardProps) {
           <Typography color="textSecondary" gutterBottom>
             Translation
           </Typography>
-          <Typography variant="h5" component="h2">
+          <Typography
+            variant="h5"
+            component="h2"
+            data-testid="translated-word-text"
+          >
             {word.translatedWord}
           </Typography>
         </Box>
@@ -61,7 +69,7 @@ export function TranslateCard(props: TranslateCardProps) {
           <Typography color="textSecondary" gutterBottom>
             Languages
           </Typography>
-          <Typography variant="h5" component="h2">
+          <Typography variant="h5" component="h2" data-testid="icon-container">
             {langsArr.map((langStr, index) => {
               const languageInfo = getLanguageInfo(langStr);
               return <FlagIcon languageInfo={languageInfo} key={index} />;
@@ -75,6 +83,7 @@ export function TranslateCard(props: TranslateCardProps) {
           onClick={onClick}
           color="primary"
           style={{ fontWeight: "bold" }}
+          data-testid="translate-card-button"
         >
           {props.buttonLabel}
         </Button>

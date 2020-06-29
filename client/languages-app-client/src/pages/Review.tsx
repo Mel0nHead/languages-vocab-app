@@ -19,15 +19,15 @@ export function Review() {
   }
 
   if (loading) {
-    return <b>Loading...</b>;
+    return <b data-testid="loading-message">Loading...</b>;
   }
 
-  if (error) {
-    return <b>An error occurred</b>;
+  if (error || !data) {
+    return <b data-testid="error-message">An error occurred</b>;
   }
 
   return (
-    <div>
+    <div data-testid="review-container">
       <h1>Review</h1>
       {data.getWordsToReview.map((word: ExtendedWord) => {
         return (

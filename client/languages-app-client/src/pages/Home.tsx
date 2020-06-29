@@ -87,9 +87,9 @@ export function Home() {
     const textToTranslate = encodeURI(inputValue);
     const languageString = `${currentLanguage.source}-${currentLanguage.destination}`; // e.g. en-ru
 
+    // TODO: create custom useFetch hook so that fetch logic can be extracted out of components
     const data = await fetchTranslation(languageString, textToTranslate);
     if (!data) return;
-
     const word = createWord(data, languageString, inputValue);
     setWords((currentWords) => {
       return [word, ...currentWords];
@@ -109,6 +109,7 @@ export function Home() {
           value={inputValue}
           onChange={handleInputChange}
           className={classes.textField}
+          data-testid="translate-input"
         />
         <br />
         <span className={classes.yandexLink}>
@@ -137,7 +138,12 @@ export function Home() {
         />
       </Box>
       <div>
-        <Button variant="contained" onClick={handleTranslate} color="primary">
+        <Button
+          variant="contained"
+          onClick={handleTranslate}
+          color="primary"
+          data-testid="translate-btn"
+        >
           Translate
         </Button>
       </div>

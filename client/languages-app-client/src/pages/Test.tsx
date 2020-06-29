@@ -18,7 +18,7 @@ export function Test() {
   const [wordCount, setWordCount] = useState(0);
   const [score, setScore] = useState({ correct: 0, incorrect: 0 });
 
-  const totalWords = data?.getAllWords?.totalCount;
+  const totalWordsCount = data?.getAllWords?.totalCount;
 
   function handleStartAnotherTest() {
     setWordCount(0);
@@ -37,6 +37,7 @@ export function Test() {
     setWordCount((wordCount) => wordCount + 1);
 
     if (hasNextPage) {
+      // TODO: change logic so that hook is not called conditionally!!
       setCursor(cursor);
     } else {
       setTestStatus({ progress: false, finished: true });
@@ -49,14 +50,21 @@ export function Test() {
     });
   }
 
-  if (loading) return <b>Loading</b>;
+  if (loading) return <b data-testid="loading-message">Loading</b>;
 
-  if (error) return <b>Error: {error.message}</b>;
+  if (error) return <b data-testid="error-message">Error: {error.message}</b>;
 
-  if (!data) return <b>No data</b>;
+  if (!data) return <b data-testid="no-data-message">No data</b>;
+
+  if (!totalWordsCount)
+    return (
+      <b data-testid="no-words-message">
+        You have no words to test! Please add some words first on the Home page.
+      </b>
+    );
 
   return (
-    <div>
+    <div data-testid="test-container">
       <h1>Test</h1>
       <div>
         {!testStatus.progress && !testStatus.finished && (
@@ -66,18 +74,19 @@ export function Test() {
           <FinishedTest
             startAnotherTest={handleStartAnotherTest}
             correctAnswers={score.correct}
-            totalWords={totalWords}
+            totalWords={totalWordsCount}
           />
         )}
         {testStatus.progress && (
           <>
             {/* TODO: extract into separate component */}
-            <span>
-              {wordCount}/{totalWords}
+            <span data-testid="test-counter">
+              {wordCount}/{totalWordsCount}
             </span>
             <LinearProgress
               variant="determinate"
-              value={normalise(wordCount, totalWords)}
+              value={normalise(wordCount, totalWordsCount)}
+              data-testid="test-progress-bar"
             />
             <TestContent
               cursor={cursor}
