@@ -7,7 +7,7 @@ interface StartTestProps {
 
 export function StartTest(props: StartTestProps) {
   return (
-    <Box>
+    <Box data-testid="start-test-container">
       <Typography data-testid="start-test-text">
         Welcome to the test page. To start a test, click the button below.
       </Typography>

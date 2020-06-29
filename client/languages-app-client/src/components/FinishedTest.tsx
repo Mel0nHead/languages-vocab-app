@@ -9,7 +9,7 @@ interface FinishedTestProps {
 
 export function FinishedTest(props: FinishedTestProps) {
   return (
-    <Box>
+    <Box data-testid="finished-test-container">
       <Typography data-testid="score-text">
         Score: {props.correctAnswers}/{props.totalWords}
       </Typography>

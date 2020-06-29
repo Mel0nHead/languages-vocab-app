@@ -18,7 +18,7 @@ export function Test() {
   const [wordCount, setWordCount] = useState(0);
   const [score, setScore] = useState({ correct: 0, incorrect: 0 });
 
-  const totalWords = data?.getAllWords?.totalCount;
+  const totalWordsCount = data?.getAllWords?.totalCount;
 
   function handleStartAnotherTest() {
     setWordCount(0);
@@ -56,6 +56,13 @@ export function Test() {
 
   if (!data) return <b data-testid="no-data-message">No data</b>;
 
+  if (!totalWordsCount)
+    return (
+      <b data-testid="no-words-message">
+        You have no words to test! Please add some words first on the Home page.
+      </b>
+    );
+
   return (
     <div data-testid="test-container">
       <h1>Test</h1>
@@ -67,18 +74,19 @@ export function Test() {
           <FinishedTest
             startAnotherTest={handleStartAnotherTest}
             correctAnswers={score.correct}
-            totalWords={totalWords}
+            totalWords={totalWordsCount}
           />
         )}
         {testStatus.progress && (
           <>
             {/* TODO: extract into separate component */}
-            <span>
-              {wordCount}/{totalWords}
+            <span data-testid="test-counter">
+              {wordCount}/{totalWordsCount}
             </span>
             <LinearProgress
               variant="determinate"
-              value={normalise(wordCount, totalWords)}
+              value={normalise(wordCount, totalWordsCount)}
+              data-testid="test-progress-bar"
             />
             <TestContent
               cursor={cursor}

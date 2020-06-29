@@ -59,7 +59,7 @@ export function TestContent(props: TestContentProps) {
 
   return (
     <>
-      <Paper>
+      <Paper data-testid="in-progress-test-container">
         <Grid
           container
           direction="row"

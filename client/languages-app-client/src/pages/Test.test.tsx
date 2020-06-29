@@ -24,7 +24,18 @@ const getAllWords = {
     ],
     pageInfo: {
       hasPreviousPage: false,
-      hasNextPage: true,
+      hasNextPage: false,
+    },
+  },
+};
+
+const noWordsData = {
+  getAllWords: {
+    totalCount: 0,
+    edges: [],
+    pageInfo: {
+      hasPreviousPage: false,
+      hasNextPage: false,
     },
   },
 };
@@ -51,6 +62,7 @@ async function setUpTest(data: any, error: Error | undefined) {
       <Test />
     </MockedProvider>
   );
+  // check loading state
   expect(component.queryByTestId("loading-message")).toBeInTheDocument();
   await wait();
 
@@ -101,8 +113,39 @@ describe("Component: Test", () => {
     expect(noDataMsg).toBeInTheDocument();
     expect(testContainer).not.toBeInTheDocument();
   });
-  // TODO: finish these tests
-  it("should show start view if it is the beginning of a test", () => {});
-  it("should show progress view if test is in progress", () => {});
-  it("should show finish test view if test is finished", () => {});
+
+  it("should show 'start' view, 'in progress' view and 'finished' view", async () => {
+    const { component } = await setUpTest(getAllWords, undefined);
+    expect(component.queryByTestId("start-test-container")).toBeInTheDocument();
+    fireEvent.click(component.getByTestId("start-test-button")); // start the test
+
+    expect(
+      component.getByTestId("in-progress-test-container")
+    ).toBeInTheDocument();
+    expect(component.getByTestId("test-progress-bar")).toBeInTheDocument();
+    expect(component.getByTestId("test-counter").textContent).toBe("0/1");
+
+    fireEvent.click(component.getByTestId("reveal-answer-button"));
+    fireEvent.click(component.getByTestId("yes-button")); // answer the only test question
+
+    expect(
+      component.getByTestId("finished-test-container")
+    ).toBeInTheDocument();
+  });
+
+  it("should display message when there are no words to review", async () => {
+    const {
+      loadingMsg,
+      errorMsg,
+      noDataMsg,
+      testContainer,
+      component,
+    } = await setUpTest(noWordsData, undefined);
+
+    expect(loadingMsg).not.toBeInTheDocument();
+    expect(errorMsg).not.toBeInTheDocument();
+    expect(noDataMsg).not.toBeInTheDocument();
+    expect(testContainer).not.toBeInTheDocument();
+    expect(component.getByTestId("no-words-message")).toBeInTheDocument();
+  });
 });
