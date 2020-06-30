@@ -1,6 +1,9 @@
 import { Word } from "./entity/Word";
+import { TestResult } from "./entity/TestResult";
 import { GraphQLScalarType } from "graphql";
 import { Kind } from "graphql/language";
+
+// TODO: completely refactor this file to get rid of mutability
 
 function applyCursorsToEdges(
   allEdges: Word[],
@@ -97,8 +100,20 @@ export const resolvers = {
         })
         .getMany();
     },
+    getAllTestResults: async (_: any, args: any) => {
+      try {
+        return await TestResult.createQueryBuilder("testResult")
+          .orderBy("testResult.dateStarted", "DESC")
+          .getMany();
+      } catch (error) {
+        throw new Error(
+          "There was an error with the query 'getAllTestResults'"
+        );
+      }
+    },
   },
   Mutation: {
+    // mutations relating to WORD entity
     addWord: async (_: any, args: any) => {
       try {
         const word = Word.create(args);
@@ -127,6 +142,53 @@ export const resolvers = {
         return true;
       } catch (error) {
         return false;
+      }
+    },
+    // mutations relating to TEST RESULT entity
+    createTestResult: async (_: any, args: any) => {
+      try {
+        const testResult = TestResult.create({
+          dateStarted: new Date(),
+          dateCompleted: null,
+          correctWords: [],
+          incorrectWords: [],
+        });
+        await TestResult.save(testResult);
+        return { testResultId: testResult.id };
+      } catch (error) {
+        throw new Error(
+          "There was an error with the mutation 'createTestResult'"
+        );
+      }
+    },
+    updateTestResult: async (_: any, args: any) => {
+      const { testResultId, wordId, isCorrect } = args;
+      try {
+        let testResult = await TestResult.findOne({ id: testResultId });
+        let word = await Word.findOne({ id: wordId });
+
+        if (isCorrect) {
+          testResult.correctWords.push(word);
+        } else {
+          testResult.incorrectWords.push(word);
+        }
+        await TestResult.save(testResult);
+      } catch (error) {
+        throw new Error(
+          "There was an error with the mutation 'updateTestResult'"
+        );
+      }
+    },
+    finishTestResult: async (_: any, args: any) => {
+      const { testResultId } = args;
+      try {
+        let testResult = await TestResult.findOne({ id: testResultId });
+        testResult.dateCompleted = new Date();
+        await TestResult.save(testResult);
+      } catch (error) {
+        throw new Error(
+          "There was an error with the mutation 'finishTestResult'"
+        );
       }
     },
   },

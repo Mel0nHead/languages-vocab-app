@@ -29,6 +29,14 @@ export const typeDefs = gql`
     pageInfo: PageInfo!
   }
 
+  type TestResult {
+    id: Int!
+    dateStarted: Date!
+    dateCompleted: Date | null!
+    correctWords: [Word]!
+    incorrectWords: [Word]!
+  }
+
   type Query {
     getAllWords(
       first: Int

@@ -19,7 +19,7 @@ export class Word extends BaseEntity {
 
   @Column()
   dateLastSeen: Date;
-
+  // TODO: remove this 'box' field as it is not needed
   @Column()
   box: number;
 }
