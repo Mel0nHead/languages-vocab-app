@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  BaseEntity,
+  ManyToMany,
+} from "typeorm";
+import { TestResult } from "./TestResult";
 
 @Entity()
 export class Word extends BaseEntity {
@@ -22,4 +29,7 @@ export class Word extends BaseEntity {
   // TODO: remove this 'box' field as it is not needed
   @Column()
   box: number;
+
+  @ManyToMany((type) => TestResult, (testResult) => testResult.words)
+  testResults: TestResult[];
 }

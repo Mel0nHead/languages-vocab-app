@@ -150,8 +150,7 @@ export const resolvers = {
         const testResult = TestResult.create({
           dateStarted: new Date(),
           dateCompleted: null,
-          correctWords: [],
-          incorrectWords: [],
+          words: [],
         });
         await TestResult.save(testResult);
         return { testResultId: testResult.id };
@@ -162,17 +161,12 @@ export const resolvers = {
       }
     },
     updateTestResult: async (_: any, args: any) => {
-      const { testResultId, wordId, isCorrect } = args;
+      const { testResultId, wordId } = args;
       try {
         let testResult = await TestResult.findOne({ id: testResultId });
         let word = await Word.findOne({ id: wordId });
-
-        if (isCorrect) {
-          testResult.correctWords.push(word);
-        } else {
-          testResult.incorrectWords.push(word);
-        }
-        await TestResult.save(testResult);
+        testResult.words.push(word);
+        return TestResult.save(testResult);
       } catch (error) {
         throw new Error(
           "There was an error with the mutation 'updateTestResult'"
@@ -184,7 +178,7 @@ export const resolvers = {
       try {
         let testResult = await TestResult.findOne({ id: testResultId });
         testResult.dateCompleted = new Date();
-        await TestResult.save(testResult);
+        return TestResult.save(testResult);
       } catch (error) {
         throw new Error(
           "There was an error with the mutation 'finishTestResult'"

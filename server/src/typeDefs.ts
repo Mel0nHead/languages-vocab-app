@@ -16,6 +16,7 @@ export const typeDefs = gql`
     dateLastSeen: Date!
     dateAdded: Date!
     box: Int!
+    testResults: [TestResult]!
   }
 
   type WordEdge {
@@ -33,8 +34,7 @@ export const typeDefs = gql`
     id: Int!
     dateStarted: Date!
     dateCompleted: Date | null!
-    correctWords: [Word]!
-    incorrectWords: [Word]!
+    words: [Word]!
   }
 
   type Query {
@@ -48,6 +48,7 @@ export const typeDefs = gql`
   }
 
   type Mutation {
+    # For words
     addWord(
       language: String!
       originalWord: String!
@@ -58,5 +59,9 @@ export const typeDefs = gql`
     ): Boolean!
     deleteWord(id: Int!): Boolean!
     updateWord(id: Int!, dateLastSeen: Date!, box: Int!): Boolean!
+    # For test results
+    createTestResult(): Int!
+    updateTestResult(testResultId: Int! wordId: Int!): TestResult!
+    finishTestResult(testResultId: Int!): TestResult!
   }
 `;
