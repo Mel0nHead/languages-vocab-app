@@ -16,7 +16,7 @@ export class TestResult extends BaseEntity {
   @Column()
   dateStarted: Date;
 
-  @Column()
+  @Column({ nullable: true })
   dateCompleted: Date | null;
 
   @ManyToMany((type) => Word, (word) => word.testResults, { cascade: true })

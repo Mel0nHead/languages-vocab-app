@@ -2,6 +2,7 @@ import { Word } from "./entity/Word";
 import { TestResult } from "./entity/TestResult";
 import { GraphQLScalarType } from "graphql";
 import { Kind } from "graphql/language";
+import { Connection } from "typeorm";
 
 // TODO: completely refactor this file to get rid of mutability
 
@@ -152,8 +153,7 @@ export const resolvers = {
           dateCompleted: null,
           words: [],
         });
-        await TestResult.save(testResult);
-        return { testResultId: testResult.id };
+        return TestResult.save(testResult);
       } catch (error) {
         throw new Error(
           "There was an error with the mutation 'createTestResult'"
@@ -165,12 +165,11 @@ export const resolvers = {
       try {
         let testResult = await TestResult.findOne({ id: testResultId });
         let word = await Word.findOne({ id: wordId });
-        testResult.words.push(word);
+        // TODO: need to fix how the entities are queried and saved. Look into using connection.manager
+        // https://orkhan.gitbook.io/typeorm/docs/many-to-many-relations#saving-many-to-many-relations
         return TestResult.save(testResult);
       } catch (error) {
-        throw new Error(
-          "There was an error with the mutation 'updateTestResult'"
-        );
+        throw new Error(error);
       }
     },
     finishTestResult: async (_: any, args: any) => {

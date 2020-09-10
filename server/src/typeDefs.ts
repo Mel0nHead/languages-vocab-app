@@ -33,7 +33,7 @@ export const typeDefs = gql`
   type TestResult {
     id: Int!
     dateStarted: Date!
-    dateCompleted: Date | null!
+    dateCompleted: Date
     words: [Word]!
   }
 
@@ -45,6 +45,7 @@ export const typeDefs = gql`
       before: String
     ): WordConnection!
     getWordsToReview(boxes: [Int!]!): [Word]
+    getAllTestResults: [TestResult]!
   }
 
   type Mutation {
@@ -60,8 +61,8 @@ export const typeDefs = gql`
     deleteWord(id: Int!): Boolean!
     updateWord(id: Int!, dateLastSeen: Date!, box: Int!): Boolean!
     # For test results
-    createTestResult(): Int!
-    updateTestResult(testResultId: Int! wordId: Int!): TestResult!
+    createTestResult: TestResult!
+    updateTestResult(testResultId: Int!, wordId: Int!): TestResult!
     finishTestResult(testResultId: Int!): TestResult!
   }
 `;
