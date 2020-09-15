@@ -69,11 +69,16 @@ export const resolvers = {
   Query: {
     getAllWords: async (_: any, args: any) => {
       const { first, last, after, before } = args;
-      const allEdges = await Word.createQueryBuilder("word")
-        .leftJoinAndSelect("word.testResults", "testResult")
+      const correctWordEdges = await Word.createQueryBuilder("word")
+        .leftJoinAndSelect("word.correctTestResults", "testResult")
+        .orderBy("word.id", "ASC")
+        .getMany();
+      const incorrectWordEdges = await Word.createQueryBuilder("word")
+        .leftJoinAndSelect("word.incorrectTestResults", "testResult")
         .orderBy("word.id", "ASC")
         .getMany();
 
+      const allEdges = [...incorrectWordEdges, ...correctWordEdges];
       const edges = applyCursorsToEdges(allEdges, before, after); // slices based on cursor
       const edgesToReturn = getEdgesToReturn(edges, first, last); // return specified number from previous result
 
@@ -101,15 +106,27 @@ export const resolvers = {
         })
         .getMany();
     },
-    getAllTestResults: async (_: any, args: any) => {
+    getCorrectTestResults: async (_: any, args: any) => {
       try {
         return TestResult.createQueryBuilder("testResult")
           .orderBy("testResult.dateStarted", "DESC")
-          .leftJoinAndSelect("testResult.words", "word")
+          .leftJoinAndSelect("testResult.correctWords", "word")
           .getMany();
       } catch (error) {
         throw new Error(
-          "There was an error with the query 'getAllTestResults'"
+          "There was an error with the query 'getCorrectTestResults'"
+        );
+      }
+    },
+    getIncorrectTestResults: async (_: any, args: any) => {
+      try {
+        return TestResult.createQueryBuilder("testResult")
+          .orderBy("testResult.dateStarted", "DESC")
+          .leftJoinAndSelect("testResult.incorrectWords", "word")
+          .getMany();
+      } catch (error) {
+        throw new Error(
+          "There was an error with the query 'getIncorrectTestResults'"
         );
       }
     },
@@ -152,7 +169,8 @@ export const resolvers = {
         const testResult = TestResult.create({
           dateStarted: new Date(),
           dateCompleted: null,
-          words: [],
+          correctWords: [],
+          incorrectWords: [],
         });
         return TestResult.save(testResult);
       } catch (error) {
@@ -162,11 +180,17 @@ export const resolvers = {
       }
     },
     updateTestResult: async (_: any, args: any) => {
-      const { testResultId, wordId } = args;
+      const { testResultId, wordId, isCorrect } = args;
       try {
         let testResult = await TestResult.findOne({ id: testResultId });
         let word = await Word.findOne({ id: wordId });
-        testResult.words.push(word);
+
+        if (isCorrect) {
+          testResult.correctWords.push(word);
+        } else {
+          testResult.incorrectWords.push(word);
+        }
+
         return TestResult.save(testResult);
       } catch (error) {
         throw new Error(error);

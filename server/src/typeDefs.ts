@@ -16,7 +16,8 @@ export const typeDefs = gql`
     dateLastSeen: Date!
     dateAdded: Date!
     box: Int!
-    testResults: [TestResult]!
+    correctTestResults: [TestResult]!
+    incorrectTestResults: [TestResult]!
   }
 
   type WordEdge {
@@ -34,7 +35,8 @@ export const typeDefs = gql`
     id: Int!
     dateStarted: Date!
     dateCompleted: Date
-    words: [Word]!
+    correctWords: [Word]!
+    incorrectWords: [Word]!
   }
 
   type Query {
@@ -45,7 +47,8 @@ export const typeDefs = gql`
       before: String
     ): WordConnection!
     getWordsToReview(boxes: [Int!]!): [Word]
-    getAllTestResults: [TestResult]!
+    getCorrectTestResults: [TestResult]!
+    getIncorrectTestResults: [TestResult]!
   }
 
   type Mutation {

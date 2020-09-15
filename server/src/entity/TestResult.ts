@@ -19,10 +19,17 @@ export class TestResult extends BaseEntity {
   @Column({ nullable: true })
   dateCompleted: Date | null;
 
-  @ManyToMany((type) => Word, (word) => word.testResults, {
+  @ManyToMany((type) => Word, (word) => word.correctTestResults, {
     cascade: true,
     eager: true,
   })
   @JoinTable()
-  words: Word[];
+  correctWords: Word[];
+
+  @ManyToMany((type) => Word, (word) => word.incorrectTestResults, {
+    cascade: true,
+    eager: true,
+  })
+  @JoinTable()
+  incorrectWords: Word[];
 }

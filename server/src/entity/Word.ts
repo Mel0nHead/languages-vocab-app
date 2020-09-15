@@ -30,6 +30,9 @@ export class Word extends BaseEntity {
   @Column()
   box: number;
 
-  @ManyToMany((type) => TestResult, (testResult) => testResult.words)
-  testResults: TestResult[];
+  @ManyToMany((type) => TestResult, (testResult) => testResult.correctWords)
+  correctTestResults: TestResult[];
+
+  @ManyToMany((type) => TestResult, (testResult) => testResult.incorrectWords)
+  incorrectTestResults: TestResult[];
 }
