@@ -2,7 +2,6 @@ import { Word } from "./entity/Word";
 import { TestResult } from "./entity/TestResult";
 import { GraphQLScalarType } from "graphql";
 import { Kind } from "graphql/language";
-import { Connection } from "typeorm";
 
 // TODO: completely refactor this file to get rid of mutability
 
@@ -71,6 +70,7 @@ export const resolvers = {
     getAllWords: async (_: any, args: any) => {
       const { first, last, after, before } = args;
       const allEdges = await Word.createQueryBuilder("word")
+        // TODO: make sure this returns test results for each word
         .orderBy("word.id", "ASC")
         .getMany();
 
@@ -103,8 +103,9 @@ export const resolvers = {
     },
     getAllTestResults: async (_: any, args: any) => {
       try {
-        return await TestResult.createQueryBuilder("testResult")
+        return TestResult.createQueryBuilder("testResult")
           .orderBy("testResult.dateStarted", "DESC")
+          .leftJoinAndSelect("testResult.words", "word")
           .getMany();
       } catch (error) {
         throw new Error(
@@ -165,8 +166,7 @@ export const resolvers = {
       try {
         let testResult = await TestResult.findOne({ id: testResultId });
         let word = await Word.findOne({ id: wordId });
-        // TODO: need to fix how the entities are queried and saved. Look into using connection.manager
-        // https://orkhan.gitbook.io/typeorm/docs/many-to-many-relations#saving-many-to-many-relations
+        testResult.words.push(word);
         return TestResult.save(testResult);
       } catch (error) {
         throw new Error(error);
