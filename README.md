@@ -16,6 +16,10 @@ Backend: Express, TypeORM, MySQL
   - mutations: createTestResult (when test is first started?), updateTestResult (when you answer a question), finishTestResult (once the test is completed)
   - queries: getAllTestResults (sorted by most recent date completed)
 
+- SET UP BETTER LINTING
+
+  - both for UI and API
+
 - GET APOLLO CLIENT TO AUTOGENERATE INTERFACES
 
   - means that we can have types for the data and inputs of GraphQL queries/mutations
@@ -23,6 +27,7 @@ Backend: Express, TypeORM, MySQL
 - ADD TESTS FOR API
 
   - need to research this as I have no idea how to do it
+  - could also do with refactoring as the codebase is currently a shambles
 
 - REFACTOR UI
 

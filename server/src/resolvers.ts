@@ -70,7 +70,7 @@ export const resolvers = {
     getAllWords: async (_: any, args: any) => {
       const { first, last, after, before } = args;
       const allEdges = await Word.createQueryBuilder("word")
-        // TODO: make sure this returns test results for each word
+        .leftJoinAndSelect("word.testResults", "testResult")
         .orderBy("word.id", "ASC")
         .getMany();
 
