@@ -69,16 +69,10 @@ export const resolvers = {
   Query: {
     getAllWords: async (_: any, args: any) => {
       const { first, last, after, before } = args;
-      const correctWordEdges = await Word.createQueryBuilder("word")
-        .leftJoinAndSelect("word.correctTestResults", "testResult")
+      const allEdges = await Word.createQueryBuilder("word")
         .orderBy("word.id", "ASC")
         .getMany();
-      const incorrectWordEdges = await Word.createQueryBuilder("word")
-        .leftJoinAndSelect("word.incorrectTestResults", "testResult")
-        .orderBy("word.id", "ASC")
-        .getMany();
-
-      const allEdges = [...incorrectWordEdges, ...correctWordEdges];
+      // TODO: seems to be a bug when you try and get all correct and incorrect words using createQueryBuilder
       const edges = applyCursorsToEdges(allEdges, before, after); // slices based on cursor
       const edgesToReturn = getEdgesToReturn(edges, first, last); // return specified number from previous result
 
