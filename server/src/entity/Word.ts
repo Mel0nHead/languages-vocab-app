@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  BaseEntity,
+  OneToMany,
+} from "typeorm";
+import { TestToWord } from "./TestToWord";
 
 @Entity()
 export class Word extends BaseEntity {
@@ -21,5 +28,8 @@ export class Word extends BaseEntity {
   dateLastSeen: Date;
 
   @Column()
-  box: number;
+  box: number; // remove this at some point
+
+  @OneToMany((type) => TestToWord, (testToWord) => testToWord.word)
+  testToWords: TestToWord[];
 }
