@@ -69,6 +69,7 @@ export const resolvers = {
       const { first, last, after, before } = args;
       const allEdges = await Word.createQueryBuilder("word")
         .orderBy("word.id", "ASC")
+        .leftJoinAndSelect("word.testToWords", "testToWord")
         .getMany();
 
       const edges = applyCursorsToEdges(allEdges, before, after); // slices based on cursor
