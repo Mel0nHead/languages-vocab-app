@@ -2,6 +2,7 @@ import { Word } from "./entity/Word";
 import { GraphQLScalarType } from "graphql";
 import { Kind } from "graphql/language";
 import { Test } from "./entity/Test";
+import { TestToWord } from "./entity/TestToWord";
 
 function applyCursorsToEdges(
   allEdges: Word[],
@@ -149,6 +150,27 @@ export const resolvers = {
           testToWords: [],
         });
         return Test.save(test);
+      } catch (e) {
+        throw new Error(e);
+      }
+    },
+    updateTest: async (_: any, args: any) => {
+      try {
+        const { testId, wordId, isWordCorrect } = args;
+        let word = Word.findOne({ id: wordId });
+        let test = Test.findOne({ id: testId });
+        // create the testToWord
+        const testToWord = TestToWord.create({
+          // TODO: fix this
+          wordId,
+          testId,
+          isWordCorrect,
+          word,
+          test,
+        });
+        // link to word
+        // link to test
+        // save all of them
       } catch (e) {
         throw new Error(e);
       }
