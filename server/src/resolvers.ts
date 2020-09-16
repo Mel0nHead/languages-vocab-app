@@ -1,6 +1,7 @@
 import { Word } from "./entity/Word";
 import { GraphQLScalarType } from "graphql";
 import { Kind } from "graphql/language";
+import { Test } from "./entity/Test";
 
 function applyCursorsToEdges(
   allEdges: Word[],
@@ -96,6 +97,15 @@ export const resolvers = {
           boxes,
         })
         .getMany();
+    },
+    getAllTests: async (_: any, args: any) => {
+      try {
+        return Test.createQueryBuilder("test")
+          .leftJoinAndSelect("test.testToWords", "testToWord")
+          .getMany();
+      } catch (e) {
+        throw new Error("Error occurred with getAllTests");
+      }
     },
   },
   Mutation: {
