@@ -112,7 +112,8 @@ export const resolvers = {
   Mutation: {
     addWord: async (_: any, args: any) => {
       try {
-        const word = Word.create(args);
+        const wordObj = { ...args, testToWords: [] };
+        const word = Word.create(wordObj);
         await Word.save(word);
         return true;
       } catch (error) {
@@ -138,6 +139,18 @@ export const resolvers = {
         return true;
       } catch (error) {
         return false;
+      }
+    },
+    createTest: async (_: any, args: any) => {
+      try {
+        const test = Test.create({
+          dateStarted: new Date(),
+          dateCompleted: null,
+          testToWords: [],
+        });
+        return Test.save(test);
+      } catch (e) {
+        throw new Error(e);
       }
     },
   },

@@ -67,5 +67,6 @@ export const typeDefs = gql`
     ): Boolean!
     deleteWord(id: Int!): Boolean!
     updateWord(id: Int!, dateLastSeen: Date!, box: Int!): Boolean!
+    createTest: Test!
   }
 `;
