@@ -72,7 +72,7 @@ export const resolvers = {
       const allEdges = await Word.createQueryBuilder("word")
         .orderBy("word.id", "ASC")
         .getMany();
-      // TODO: seems to be a bug when you try and get all correct and incorrect words using createQueryBuilder
+      // TODO: seems to be a bug when you try and get all correct and incorrect test results using createQueryBuilder
       const edges = applyCursorsToEdges(allEdges, before, after); // slices based on cursor
       const edgesToReturn = getEdgesToReturn(edges, first, last); // return specified number from previous result
 
