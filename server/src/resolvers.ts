@@ -156,21 +156,28 @@ export const resolvers = {
     },
     updateTest: async (_: any, args: any) => {
       try {
-        const { testId, wordId, isWordCorrect } = args;
-        let word = Word.findOne({ id: wordId });
-        let test = Test.findOne({ id: testId });
-        // create the testToWord
-        const testToWord = TestToWord.create({
-          // TODO: fix this
-          wordId,
-          testId,
-          isWordCorrect,
+        const { testId, wordId } = args;
+        let word = await Word.createQueryBuilder("word")
+          .leftJoinAndSelect("word.testToWords", "testToWord")
+          .where("word.id = :id", { id: wordId })
+          .getOne();
+        let test = await Test.createQueryBuilder("test")
+          .leftJoinAndSelect("test.testToWords", "testToWord")
+          .where("test.id = :id", { id: testId })
+          .getOne();
+        const testToWordObj: TestToWord = {
+          ...args,
           word,
           test,
-        });
-        // link to word
-        // link to test
+        };
+        const testToWord = TestToWord.create(testToWordObj);
+        // TODO: fix error to do with testId being null
+        word.testToWords.push(testToWord);
+        test.testToWords.push(testToWord);
         // save all of them
+        await Word.save(word);
+        await TestToWord.save(testToWord);
+        return Test.save(test);
       } catch (e) {
         throw new Error(e);
       }
