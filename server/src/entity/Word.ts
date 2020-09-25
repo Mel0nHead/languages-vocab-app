@@ -27,8 +27,4 @@ export class Word extends BaseEntity {
   @Field()
   @Column()
   dateLastSeen: Date;
-
-  @Field()
-  @Column()
-  box: number;
 }
