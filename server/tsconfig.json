@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "lib": ["es2018", "esnext.asynciterable"],
-    "target": "es2018",
+    "lib": ["es5", "es6", "dom"],
+    "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,

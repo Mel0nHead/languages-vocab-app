@@ -1,16 +1,20 @@
 import "reflect-metadata";
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const logger = require("morgan");
+// const express = require("express");
+import express from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
+import logger from "morgan";
 import { createConnection } from "typeorm";
 import { ApolloServer } from "apollo-server-express";
-
-import { typeDefs } from "./typeDefs";
-import { resolvers } from "./resolvers";
+import { WordResolver } from "./resolvers/WordResolver";
+import { buildSchema } from "type-graphql";
 
 const startServer = async () => {
-  const server = new ApolloServer({ typeDefs, resolvers });
+  const schema = await buildSchema({
+    resolvers: [WordResolver],
+  });
+
+  const server = new ApolloServer({ schema });
   await createConnection();
 
   // create and setup express app
