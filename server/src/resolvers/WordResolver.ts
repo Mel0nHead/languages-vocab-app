@@ -1,6 +1,13 @@
 import { Query, Mutation, Resolver, Arg } from "type-graphql";
 import { Word } from "../entity/Word";
-import { AddWordInput } from "../input/AddWordInput";
+import { AddWordInput } from "../types/AddWordInput";
+import { GetWordsInput } from "../types/GetWordsInput";
+import { WordConnection } from "../types/WordConnection";
+import { WordEdge } from "../types/WordEdge";
+import { applyCursorsToWords } from "../utils/applyCursorsToWords";
+import { sliceWordsUsingFirstAndLast } from "../utils/sliceWordsUsingFirstAndLast";
+import { hasNextPage } from "../utils/hasNextPage";
+import { hasPreviousPage } from "../utils/hasPreviousPage";
 
 @Resolver(Word)
 export class WordResolver {
@@ -28,9 +35,35 @@ export class WordResolver {
     return Word.save(word);
   }
 
-  // TODO: once we know everything is working, then we need to implement pagination for this query
-  @Query(() => [Word])
-  async getWords() {
-    return Word.find();
+  @Query(() => WordConnection)
+  async getWords(
+    @Arg("getWordsArgs") { first, last, before, after }: GetWordsInput
+  ): Promise<WordConnection> {
+    const allWords = await Word.createQueryBuilder("word")
+      .orderBy("word.id", "ASC")
+      .getMany();
+
+    const filteredWords = applyCursorsToWords(allWords, before, after);
+    const slicedAndFilteredWords = sliceWordsUsingFirstAndLast(
+      filteredWords,
+      first,
+      last
+    );
+
+    const wordEdges: WordEdge[] = slicedAndFilteredWords.map((word) => {
+      return {
+        node: word,
+        cursor: Buffer.from(word.id.toString()).toString("base64"),
+      };
+    });
+
+    return {
+      totalCount: allWords.length,
+      edges: wordEdges,
+      pageInfo: {
+        hasPreviousPage: hasPreviousPage(filteredWords, last),
+        hasNextPage: hasNextPage(filteredWords, first),
+      },
+    };
   }
 }
