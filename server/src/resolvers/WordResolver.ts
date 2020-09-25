@@ -1,7 +1,7 @@
 import { Query, Mutation, Resolver, Arg } from "type-graphql";
 import { Word } from "../entity/Word";
 import { AddWordInput } from "../types/AddWordInput";
-import { GetWordsArgs } from "../types/GetWordsArgs";
+import { GetWordsInput } from "../types/GetWordsInput";
 import { WordConnection } from "../types/WordConnection";
 import { WordEdge } from "../types/WordEdge";
 import { applyCursorsToEdges } from "../utils/applyCursorsToEdges";
@@ -38,7 +38,7 @@ export class WordResolver {
   // TODO: once we know everything is working, then we need to implement pagination for this query
   @Query(() => WordConnection)
   async getWords(
-    @Arg("getWordsArgs") { first, last, before, after }: GetWordsArgs
+    @Arg("getWordsArgs") { first, last, before, after }: GetWordsInput
   ): Promise<WordConnection> {
     const allEdges = await Word.createQueryBuilder("word")
       .orderBy("word.id", "ASC")

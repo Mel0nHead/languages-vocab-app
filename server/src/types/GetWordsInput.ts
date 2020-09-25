@@ -1,7 +1,7 @@
-import { ArgsType, Field, Int } from "type-graphql";
+import { ArgsType, Field, InputType, Int } from "type-graphql";
 
-@ArgsType()
-export class GetWordsArgs {
+@InputType()
+export class GetWordsInput {
   @Field(() => Int, { nullable: true })
   first?: number;
 
