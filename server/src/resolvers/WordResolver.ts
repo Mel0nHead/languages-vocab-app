@@ -4,8 +4,8 @@ import { AddWordInput } from "../types/AddWordInput";
 import { GetWordsInput } from "../types/GetWordsInput";
 import { WordConnection } from "../types/WordConnection";
 import { WordEdge } from "../types/WordEdge";
-import { applyCursorsToEdges } from "../utils/applyCursorsToEdges";
-import { getEdgesToReturn } from "../utils/getEdgesToReturn";
+import { applyCursorsToWords } from "../utils/applyCursorsToWords";
+import { sliceWordsUsingFirstAndLast } from "../utils/sliceWordsUsingFirstAndLast";
 import { hasNextPage } from "../utils/hasNextPage";
 import { hasPreviousPage } from "../utils/hasPreviousPage";
 
@@ -35,19 +35,22 @@ export class WordResolver {
     return Word.save(word);
   }
 
-  // TODO: once we know everything is working, then we need to implement pagination for this query
   @Query(() => WordConnection)
   async getWords(
     @Arg("getWordsArgs") { first, last, before, after }: GetWordsInput
   ): Promise<WordConnection> {
-    const allEdges = await Word.createQueryBuilder("word")
+    const allWords = await Word.createQueryBuilder("word")
       .orderBy("word.id", "ASC")
       .getMany();
 
-    const edges = applyCursorsToEdges(allEdges, before, after); // slices based on cursor
-    const edgesToReturn = getEdgesToReturn(edges, first, last); // return specified number from previous result
+    const filteredWords = applyCursorsToWords(allWords, before, after);
+    const slicedAndFilteredWords = sliceWordsUsingFirstAndLast(
+      filteredWords,
+      first,
+      last
+    );
 
-    const wordEdges: WordEdge[] = edgesToReturn.map((word) => {
+    const wordEdges: WordEdge[] = slicedAndFilteredWords.map((word) => {
       return {
         node: word,
         cursor: Buffer.from(word.id.toString()).toString("base64"),
@@ -55,11 +58,11 @@ export class WordResolver {
     });
 
     return {
-      totalCount: allEdges.length,
+      totalCount: allWords.length,
       edges: wordEdges,
       pageInfo: {
-        hasPreviousPage: hasPreviousPage(edges, last),
-        hasNextPage: hasNextPage(edges, first),
+        hasPreviousPage: hasPreviousPage(filteredWords, last),
+        hasNextPage: hasNextPage(filteredWords, first),
       },
     };
   }

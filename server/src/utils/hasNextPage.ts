@@ -1,6 +1,6 @@
 import { Word } from "../entity/Word";
 
-export function hasNextPage(edges: Word[], first: number) {
+export function hasNextPage(edges: Word[], first?: number) {
   if (first) {
     if (edges.length > first) {
       return true;

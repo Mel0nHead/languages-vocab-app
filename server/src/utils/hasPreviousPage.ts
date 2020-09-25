@@ -1,6 +1,6 @@
 import { Word } from "../entity/Word";
 
-export function hasPreviousPage(edges: Word[], last: number) {
+export function hasPreviousPage(edges: Word[], last?: number) {
   if (last) {
     if (edges.length > last) {
       return true;
