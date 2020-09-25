@@ -6,18 +6,21 @@ export const addWordGql = gql`
     $language: String!
     $originalWord: String!
     $translatedWord: String!
-    $dateAdded: Date!
-    $dateLastSeen: Date!
-    $box: Int!
   ) {
-    addWord(
-      language: $language
-      originalWord: $originalWord
-      translatedWord: $translatedWord
-      dateAdded: $dateAdded
-      dateLastSeen: $dateLastSeen
-      box: $box
-    )
+    createWord(
+      newWordInput: {
+        language: $language
+        originalWord: $originalWord
+        translatedWord: $translatedWord
+      }
+    ) {
+      id
+      originalWord
+      translatedWord
+      language
+      dateAdded
+      dateLastSeen
+    }
   }
 `;
 
