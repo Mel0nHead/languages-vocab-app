@@ -14,9 +14,11 @@ export class WordResolver {
     }).save();
   }
 
-  @Mutation(() => Word)
+  @Mutation(() => Boolean)
   async deleteWord(@Arg("wordId") wordId: number) {
-    return Word.delete(wordId);
+    let id = wordId;
+    await Word.delete(id);
+    return true;
   }
 
   @Mutation(() => Word)
