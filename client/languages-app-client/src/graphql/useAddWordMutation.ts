@@ -1,6 +1,8 @@
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 
+// TODO: get the frontend working and start using the generated interfaces
+
 export const addWordGql = gql`
   mutation createWord(
     $language: String!

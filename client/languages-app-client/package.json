@@ -27,6 +27,7 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
+    "codegen": "apollo client:codegen --outputFlat --target=typescript ./src/generated-graphql-interfaces.ts",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

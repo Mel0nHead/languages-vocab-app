@@ -4,7 +4,7 @@ import { useMutation } from "@apollo/react-hooks";
 export function useUpdateWordMutation(variables: { wordId: number }) {
   return useMutation(
     gql`
-      mutation updateWord($id: Int!, $dateLastSeen: Date!, $box: Int!) {
+      mutation updateWord($id: Int!) {
         updateWord(wordId: $id) {
           id
           language
