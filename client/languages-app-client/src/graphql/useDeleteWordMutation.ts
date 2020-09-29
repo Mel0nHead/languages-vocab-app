@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/react-hooks";
 
 export const deleteWordGql = gql`
   mutation deleteWord($id: Int!) {
-    deleteWord(id: $id)
+    deleteWord(wordId: $id)
   }
 `;
 
