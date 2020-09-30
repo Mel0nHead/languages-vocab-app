@@ -11,6 +11,7 @@ import {
 import { getLanguageInfo } from "../utils/getLanguageInfo";
 import { FlagIcon } from "./FlagIcon";
 import { AnswerType } from "../pages/Test";
+import { getWords } from "../generated-graphql-interfaces";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -35,7 +36,7 @@ interface TestContentProps {
   handleGetNextQuestion: (hasNextPage: boolean, cursor: string) => void;
   handleScoreChange: (type: AnswerType) => void;
   cursor: string | null;
-  data: any;
+  data: getWords;
 }
 
 export function TestContent(props: TestContentProps) {
@@ -43,9 +44,9 @@ export function TestContent(props: TestContentProps) {
   const [isRevealed, setIsRevealed] = useState(false);
 
   // TODO: use function to extract data (need to have generated types for data first)
-  const currentWord = props.data?.getAllWords?.edges[0].node;
-  const currentWordCursor = props.data?.getAllWords?.edges[0].cursor;
-  const hasNextPage = props.data?.getAllWords.pageInfo.hasNextPage;
+  const currentWord = props.data?.getWords?.edges[0].node;
+  const currentWordCursor = props.data?.getWords?.edges[0].cursor;
+  const hasNextPage = props.data?.getWords.pageInfo.hasNextPage;
   const languageStrings = currentWord.language.split("-"); // e.g. ["en", "ru"]
 
   const originalWordInfo = getLanguageInfo(languageStrings[0]);

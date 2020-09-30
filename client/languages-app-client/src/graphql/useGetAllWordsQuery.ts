@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { getAllWords } from "../generated-graphql-interfaces";
 
-export const getNextWordGql = gql`
+export const getAllWordsGql = gql`
   query getAllWords {
     getWords(getWordsArgs: {}) {
       totalCount
@@ -24,5 +24,5 @@ export const getNextWordGql = gql`
 `;
 
 export function useGetAllWordsQuery() {
-  return useQuery<getAllWords>(getNextWordGql);
+  return useQuery<getAllWords>(getAllWordsGql);
 }
