@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
-// TODO: add better typings
 export function useFetch<T>(url: string, options?: RequestInit) {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
+  const stringifiedOptions = JSON.stringify(options);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -15,7 +15,7 @@ export function useFetch<T>(url: string, options?: RequestInit) {
       try {
         const res = await fetch(url, options);
         const json = await res.json();
-        setData((currentData: any) => (!signal.aborted ? json : currentData));
+        setData((currentData) => (!signal.aborted ? json : currentData));
       } catch (e) {
         setError((currentError) => (!signal.aborted ? e : currentError));
       } finally {
@@ -30,7 +30,7 @@ export function useFetch<T>(url: string, options?: RequestInit) {
     return () => {
       abortController.abort();
     };
-  }, []);
+  }, [url, stringifiedOptions]);
 
   return { data, error, loading };
 }

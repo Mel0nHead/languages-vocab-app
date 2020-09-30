@@ -118,6 +118,7 @@ export function Home() {
         </span>
       </Box>
       <Box mb={2}>
+        {supportedLanguagesError && <b>An error occurred</b>}
         {isSupportedLanguagesLoading && <b>Loading supported languages...</b>}
         {!isSupportedLanguagesLoading && supportedLanguagesData && (
           <>
