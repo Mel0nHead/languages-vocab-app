@@ -40,21 +40,22 @@ interface TestContentProps {
 }
 
 export function TestContent(props: TestContentProps) {
+  const {
+    data: { getWords },
+  } = props;
   const classes = useStyles();
   const [isRevealed, setIsRevealed] = useState(false);
-
-  // TODO: use function to extract data (need to have generated types for data first)
-  const currentWord = props.data?.getWords?.edges[0].node;
-  const currentWordCursor = props.data?.getWords?.edges[0].cursor;
-  const hasNextPage = props.data?.getWords.pageInfo.hasNextPage;
-  const languageStrings = currentWord.language.split("-"); // e.g. ["en", "ru"]
-
+  const currentWord = getWords.edges[0];
+  const languageStrings = currentWord.node.language.split("-"); // e.g. ["en", "ru"]
   const originalWordInfo = getLanguageInfo(languageStrings[0]);
   const translatedWordInfo = getLanguageInfo(languageStrings[1]);
 
   function handleAnswer(answerType: AnswerType) {
     setIsRevealed(false);
-    props.handleGetNextQuestion(hasNextPage, currentWordCursor);
+    props.handleGetNextQuestion(
+      getWords.pageInfo.hasNextPage,
+      currentWord.cursor
+    );
     props.handleScoreChange(answerType);
   }
 
@@ -93,7 +94,7 @@ export function TestContent(props: TestContentProps) {
               component="h2"
               data-testid="test-original-word"
             >
-              {currentWord.originalWord}
+              {currentWord.node.originalWord}
             </Typography>
           </Box>
           <Box>
@@ -109,7 +110,7 @@ export function TestContent(props: TestContentProps) {
               component="h2"
               data-testid="test-translated-word"
             >
-              {isRevealed ? currentWord.translatedWord : "???"}
+              {isRevealed ? currentWord.node.translatedWord : "???"}
             </Typography>
           </Box>
         </Box>
