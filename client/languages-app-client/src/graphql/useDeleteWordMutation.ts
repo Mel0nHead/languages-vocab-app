@@ -1,5 +1,9 @@
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
+import {
+  deleteWord,
+  deleteWordVariables,
+} from "../generated-graphql-interfaces";
 
 export const deleteWordGql = gql`
   mutation deleteWord($id: Int!) {
@@ -8,5 +12,7 @@ export const deleteWordGql = gql`
 `;
 
 export function useDeleteWordMutation() {
-  return useMutation(deleteWordGql, { refetchQueries: ["getWordsToReview"] });
+  return useMutation<deleteWord, deleteWordVariables>(deleteWordGql, {
+    refetchQueries: ["getWordsToReview"],
+  });
 }

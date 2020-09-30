@@ -1,7 +1,9 @@
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
-
-// TODO: get the frontend working and start using the generated interfaces
+import {
+  createWord,
+  createWordVariables,
+} from "../generated-graphql-interfaces";
 
 export const addWordGql = gql`
   mutation createWord(
@@ -27,5 +29,7 @@ export const addWordGql = gql`
 `;
 
 export function useAddWordMutation() {
-  return useMutation(addWordGql, { refetchQueries: ["getWordsToReview"] });
+  return useMutation<createWord, createWordVariables>(addWordGql, {
+    refetchQueries: ["getWordsToReview"],
+  });
 }
