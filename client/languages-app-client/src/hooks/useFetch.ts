@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+// TODO: test for this
 export function useFetch<T>(url: string, options?: RequestInit) {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
@@ -30,6 +31,7 @@ export function useFetch<T>(url: string, options?: RequestInit) {
     return () => {
       abortController.abort();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url, stringifiedOptions]);
 
   return { data, error, loading };

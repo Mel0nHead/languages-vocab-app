@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useAddWordMutation } from "../graphql/useAddWordMutation";
 import { TranslateCard } from "../components/TranslateCard";
-import { LanguageSelect } from "../components/LanguageSelect";
-import { YANDEX_URL, YANDEX_KEY } from "../constants";
 import { fetchTranslation } from "../utils/fetchTranslation";
 import { createWord } from "../utils/createWord";
 import { TextField, Button, Box, makeStyles } from "@material-ui/core";
-import { useFetch } from "../hooks/useFetch";
+import { ChooseLanguages } from "../components/ChooseLanguages";
 
 export interface Word {
   language: string;
@@ -15,11 +13,10 @@ export interface Word {
   id: string;
 }
 
-interface YandexSupportedLanguages {
-  dirs: string[];
-  langs: {
-    [code: string]: string;
-  };
+export interface TranslationResponse {
+  code: number;
+  lang: string;
+  text: string[];
 }
 
 const useStyles = makeStyles({
@@ -30,22 +27,13 @@ const useStyles = makeStyles({
 export function Home() {
   const classes = useStyles();
   const [inputValue, setInputValue] = useState("");
-  const {
-    data: supportedLanguagesData,
-    loading: isSupportedLanguagesLoading,
-    error: supportedLanguagesError,
-  } = useFetch<YandexSupportedLanguages>(
-    `${YANDEX_URL}/getLangs?key=${YANDEX_KEY}&ui=en`,
-    {
-      method: "POST",
-    }
-  );
   const [currentLanguage, setCurrentLanguage] = useState({
     source: "en",
     destination: "es",
   });
   const [words, setWords] = useState<Word[]>([]);
   const [addWord] = useAddWordMutation();
+  const [error, setError] = useState(false);
 
   function handleAdd(word: Word) {
     addWord({
@@ -81,8 +69,11 @@ export function Home() {
     const textToTranslate = encodeURI(inputValue);
     const languageString = `${currentLanguage.source}-${currentLanguage.destination}`; // e.g. en-ru
 
-    // TODO: create custom useFetch hook so that fetch logic can be extracted out of components
-    const data = await fetchTranslation(languageString, textToTranslate);
+    const data: TranslationResponse | null = await fetchTranslation(
+      languageString,
+      textToTranslate
+    );
+    setError(data ? false : true);
     if (!data) return;
     const word = createWord(data, languageString, inputValue);
     setWords((currentWords) => {
@@ -118,24 +109,10 @@ export function Home() {
         </span>
       </Box>
       <Box mb={2}>
-        {supportedLanguagesError && <b>An error occurred</b>}
-        {isSupportedLanguagesLoading && <b>Loading supported languages...</b>}
-        {!isSupportedLanguagesLoading && supportedLanguagesData && (
-          <>
-            <LanguageSelect
-              label="From:"
-              value={currentLanguage.source}
-              handleChange={handleLanguageChange("source")}
-              availableLanguages={supportedLanguagesData.langs}
-            />
-            <LanguageSelect
-              label="To:"
-              value={currentLanguage.destination}
-              handleChange={handleLanguageChange("destination")}
-              availableLanguages={supportedLanguagesData.langs}
-            />
-          </>
-        )}
+        <ChooseLanguages
+          currentLanguage={currentLanguage}
+          handleLanguageChange={handleLanguageChange}
+        />
       </Box>
       <div>
         <Button
@@ -147,6 +124,12 @@ export function Home() {
           Translate
         </Button>
       </div>
+      {error && (
+        <b>
+          An error occurred with the translation. Please refresh the page and
+          try again.
+        </b>
+      )}
       <div>
         {words.map((word) => (
           <TranslateCard
