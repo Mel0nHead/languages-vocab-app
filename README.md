@@ -8,25 +8,22 @@ Backend: Express, TypeORM, MySQL
 
 # TODO
 
-- GET APOLLO CLIENT TO AUTOGENERATE INTERFACES
+- REFACTOR UI
 
-  - means that we can have types for the data and inputs of GraphQL queries/mutations
+  - look for all the TODOs
+  - create custom useFetch hook (with tests)
+  - add snackbars for successful operations
 
 - ADD USERS AND THE ABILITY TO LOGIN
 
   - should be able to create a user
   - user should have username and password to log in
 
-- ADD 'TEST' ENTITY TO BACKEND
-
-  - test entity should exist in API
-  - should be a many-to-many relationship between tests and words (with custom properties)
-
 - ADD TESTS FOR API
 
   - need to research this as I have no idea how to do it
 
-- REFACTOR UI
+- ADD 'TEST' ENTITY TO BACKEND
 
-  - look for all the TODOs
-  - create custom useFetch hook (with tests)
+  - test entity should exist in API
+  - should be a many-to-many relationship between tests and words (with custom properties)

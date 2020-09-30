@@ -71,7 +71,6 @@ describe("Component: Home", () => {
 
     expect(mockAddMutation).toHaveBeenCalled();
     expect(mockAddMutation.mock.calls[0][0].variables).toMatchObject({
-      box: 1,
       language: "en-es",
       originalWord: "dog",
       translatedWord: "perro",

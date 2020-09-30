@@ -11,7 +11,6 @@ export async function fetchTranslation(
     );
     return res.json();
   } catch (error) {
-    console.log(error);
     return null;
   }
 }

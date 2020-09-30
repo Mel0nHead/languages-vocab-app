@@ -2,28 +2,32 @@ import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import { TestContent } from "./TestContent";
 import "@testing-library/jest-dom/extend-expect";
+import { getWords } from "../generated-graphql-interfaces";
 
 function setUpTest() {
   const nextQuestionMock = jest.fn();
   const scoreChangeMock = jest.fn();
-  const data = {
-    getAllWords: {
+  const data: getWords = {
+    getWords: {
+      __typename: "WordConnection",
       totalCount: 10,
       edges: [
         {
+          __typename: "WordEdge",
           node: {
-            id: 1,
+            __typename: "Word",
+            id: "1",
             originalWord: "dog",
             translatedWord: "perro",
             dateLastSeen: "Fri May 08 2020 09:05:42 GMT+0100",
             dateAdded: "Fri May 08 2020 09:05:42 GMT+0100",
-            box: 1,
             language: "en-es",
           },
           cursor: "MQ==",
         },
       ],
       pageInfo: {
+        __typename: "PageInfo",
         hasPreviousPage: false,
         hasNextPage: true,
       },

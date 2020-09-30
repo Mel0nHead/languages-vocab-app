@@ -1,20 +1,13 @@
 import React from "react";
-import { useGetWordsToReviewQuery } from "../graphql/useGetWordsToReviewQuery";
-import { Word } from "./Home";
+import { useGetAllWordsQuery } from "../graphql/useGetAllWordsQuery";
 import { useDeleteWordMutation } from "../graphql/useDeleteWordMutation";
 import { TranslateCard } from "../components/TranslateCard";
 
-interface ExtendedWord extends Word {
-  dateAdded: number;
-  dateLastSeen: number;
-  box: number;
-}
-
 export function Review() {
-  const { data, error, loading } = useGetWordsToReviewQuery([1]);
+  const { data, error, loading } = useGetAllWordsQuery();
   const [deleteWord] = useDeleteWordMutation();
 
-  function handleDelete(id: number) {
+  function handleDelete(id: string) {
     deleteWord({ variables: { id } });
   }
 
@@ -29,12 +22,12 @@ export function Review() {
   return (
     <div data-testid="review-container">
       <h1>Review</h1>
-      {data.getWordsToReview.map((word: ExtendedWord) => {
+      {data.getWords.edges.map((word) => {
         return (
           <TranslateCard
-            word={word}
-            onClick={() => handleDelete(word.id)}
-            key={word.id}
+            word={word.node}
+            onClick={() => handleDelete(word.node.id)}
+            key={word.node.id}
             buttonLabel="Delete from my words"
           />
         );

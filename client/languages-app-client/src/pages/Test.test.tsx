@@ -6,7 +6,7 @@ import { Test } from "./Test";
 import { getNextWordGql } from "../graphql/useGetNextWordQuery";
 
 const getAllWords = {
-  getAllWords: {
+  getWords: {
     totalCount: 1,
     edges: [
       {
@@ -30,7 +30,7 @@ const getAllWords = {
 };
 
 const noWordsData = {
-  getAllWords: {
+  getWords: {
     totalCount: 0,
     edges: [],
     pageInfo: {

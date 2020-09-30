@@ -1,26 +1,35 @@
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
+import {
+  createWord,
+  createWordVariables,
+} from "../generated-graphql-interfaces";
 
 export const addWordGql = gql`
   mutation createWord(
     $language: String!
     $originalWord: String!
     $translatedWord: String!
-    $dateAdded: Date!
-    $dateLastSeen: Date!
-    $box: Int!
   ) {
-    addWord(
-      language: $language
-      originalWord: $originalWord
-      translatedWord: $translatedWord
-      dateAdded: $dateAdded
-      dateLastSeen: $dateLastSeen
-      box: $box
-    )
+    createWord(
+      newWordInput: {
+        language: $language
+        originalWord: $originalWord
+        translatedWord: $translatedWord
+      }
+    ) {
+      id
+      originalWord
+      translatedWord
+      language
+      dateAdded
+      dateLastSeen
+    }
   }
 `;
 
 export function useAddWordMutation() {
-  return useMutation(addWordGql, { refetchQueries: ["getWordsToReview"] });
+  return useMutation<createWord, createWordVariables>(addWordGql, {
+    refetchQueries: ["getWordsToReview"],
+  });
 }

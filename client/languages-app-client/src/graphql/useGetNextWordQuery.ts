@@ -1,9 +1,10 @@
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
+import { getWords, getWordsVariables } from "../generated-graphql-interfaces";
 
 export const getNextWordGql = gql`
   query getWords($first: Int, $after: String) {
-    getAllWords(first: $first, after: $after) {
+    getWords(getWordsArgs: { first: $first, after: $after }) {
       totalCount
       edges {
         node {
@@ -12,7 +13,6 @@ export const getNextWordGql = gql`
           translatedWord
           dateLastSeen
           dateAdded
-          box
           language
         }
         cursor
@@ -26,5 +26,7 @@ export const getNextWordGql = gql`
 `;
 
 export function useGetNextWordQuery(first: number, after: string | null) {
-  return useQuery(getNextWordGql, { variables: { first, after } });
+  return useQuery<getWords, getWordsVariables>(getNextWordGql, {
+    variables: { first, after },
+  });
 }

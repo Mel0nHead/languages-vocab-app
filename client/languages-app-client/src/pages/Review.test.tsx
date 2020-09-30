@@ -1,51 +1,65 @@
 import "@testing-library/jest-dom/extend-expect";
 import { Review } from "./Review";
-import { getWordsToReviewGql } from "../graphql/useGetWordsToReviewQuery";
+import { getAllWordsGql } from "../graphql/useGetAllWordsQuery";
 import { MockedProvider, MockedResponse } from "@apollo/react-testing";
 import { deleteWordGql } from "../graphql/useDeleteWordMutation";
 import { render, wait } from "@testing-library/react";
 import React from "react";
+import { getAllWords } from "../generated-graphql-interfaces";
 
-const wordsData = {
-  getWordsToReview: [
-    {
-      dateAdded: "Fri May 08 2020 09:05:42 GMT+0100",
-      dateLastSeen: "Fri May 08 2020 09:05:42 GMT+0100",
-      box: 1,
-      language: "en-es",
-      originalWord: "dog",
-      translatedWord: "perro",
-      id: 1,
+const wordsData: getAllWords = {
+  getWords: {
+    __typename: "WordConnection",
+    pageInfo: {
+      __typename: "PageInfo",
+      hasNextPage: false,
+      hasPreviousPage: false,
     },
-    {
-      dateAdded: "Fri May 09 2020 09:05:42 GMT+0100",
-      dateLastSeen: "Fri May 09 2020 09:05:42 GMT+0100",
-      box: 1,
-      language: "en-fi",
-      originalWord: "frog",
-      translatedWord: "sammakko",
-      id: 2,
-    },
-    {
-      dateAdded: "Fri May 10 2020 09:05:42 GMT+0100",
-      dateLastSeen: "Fri May 10 2020 09:05:42 GMT+0100",
-      box: 1,
-      language: "en-fr",
-      originalWord: "cat",
-      translatedWord: "chat",
-      id: 3,
-    },
-  ],
+    totalCount: 3,
+    edges: [
+      {
+        __typename: "WordEdge",
+        cursor: "ldkjfd",
+        node: {
+          __typename: "Word",
+          language: "en-es",
+          originalWord: "dog",
+          translatedWord: "perro",
+          id: "1",
+        },
+      },
+      {
+        __typename: "WordEdge",
+        cursor: "ldkjfd",
+        node: {
+          __typename: "Word",
+          language: "en-es",
+          originalWord: "dog",
+          translatedWord: "perro",
+          id: "2",
+        },
+      },
+      {
+        __typename: "WordEdge",
+        cursor: "ldkjfd",
+        node: {
+          __typename: "Word",
+          language: "en-es",
+          originalWord: "dog",
+          translatedWord: "perro",
+          id: "3",
+        },
+      },
+    ],
+  },
 };
 
 async function setUpTest(error: Error | undefined) {
   const mocks: MockedResponse[] = [
     {
       request: {
-        query: getWordsToReviewGql,
-        variables: {
-          boxes: [1],
-        },
+        query: getAllWordsGql,
+        variables: {},
       },
       result: {
         data: wordsData,
