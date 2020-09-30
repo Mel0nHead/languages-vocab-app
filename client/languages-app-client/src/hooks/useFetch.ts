@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 
 // TODO: add better typings
-export function useFetch(url: string, options?: RequestInit) {
-  const [data, setData] = useState<any>(null);
+export function useFetch<T>(url: string, options?: RequestInit) {
+  const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -30,7 +30,7 @@ export function useFetch(url: string, options?: RequestInit) {
     return () => {
       abortController.abort();
     };
-  }, [url, options]);
+  }, []);
 
   return { data, error, loading };
 }

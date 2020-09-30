@@ -15,6 +15,13 @@ export interface Word {
   id: string;
 }
 
+interface YandexSupportedLanguages {
+  dirs: string[];
+  langs: {
+    [code: string]: string;
+  };
+}
+
 const useStyles = makeStyles({
   textField: { marginBottom: "5px" },
   yandexLink: { fontSize: "0.8rem" },
@@ -27,12 +34,12 @@ export function Home() {
     data: supportedLanguagesData,
     loading: isSupportedLanguagesLoading,
     error: supportedLanguagesError,
-  } = useFetch(`${YANDEX_URL}/getLangs?key=${YANDEX_KEY}&ui=en`, {
-    method: "POST",
-  });
-  const [availableLanguages, setAvailableLanguages] = useState({
-    en: "English",
-  });
+  } = useFetch<YandexSupportedLanguages>(
+    `${YANDEX_URL}/getLangs?key=${YANDEX_KEY}&ui=en`,
+    {
+      method: "POST",
+    }
+  );
   const [currentLanguage, setCurrentLanguage] = useState({
     source: "en",
     destination: "es",
@@ -52,23 +59,6 @@ export function Home() {
       return currentWords.filter((w) => w.id !== word.id);
     });
   }
-
-  async function getSupportedLanguages() {
-    try {
-      const res = await fetch(
-        `${YANDEX_URL}/getLangs?key=${YANDEX_KEY}&ui=en`,
-        { method: "POST" }
-      );
-      const data = await res.json();
-      setAvailableLanguages(data.langs);
-    } catch (error) {
-      throw new Error("There was an error");
-    }
-  }
-
-  useEffect(() => {
-    getSupportedLanguages();
-  }, []);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     setInputValue(event.target.value);
@@ -129,19 +119,19 @@ export function Home() {
       </Box>
       <Box mb={2}>
         {isSupportedLanguagesLoading && <b>Loading supported languages...</b>}
-        {!isSupportedLanguagesLoading && (
+        {!isSupportedLanguagesLoading && supportedLanguagesData && (
           <>
             <LanguageSelect
               label="From:"
               value={currentLanguage.source}
               handleChange={handleLanguageChange("source")}
-              availableLanguages={supportedLanguagesData}
+              availableLanguages={supportedLanguagesData.langs}
             />
             <LanguageSelect
               label="To:"
               value={currentLanguage.destination}
               handleChange={handleLanguageChange("destination")}
-              availableLanguages={supportedLanguagesData}
+              availableLanguages={supportedLanguagesData.langs}
             />
           </>
         )}
