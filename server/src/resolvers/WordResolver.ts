@@ -1,4 +1,4 @@
-import { Query, Mutation, Resolver, Arg, Int } from "type-graphql";
+import { Query, Mutation, Resolver, Arg, ID } from "type-graphql";
 import { Word } from "../entity/Word";
 import { AddWordInput } from "../types/AddWordInput";
 import { GetWordsInput } from "../types/GetWordsInput";
@@ -22,15 +22,16 @@ export class WordResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteWord(@Arg("wordId", () => Int) wordId: number) {
-    let id = wordId;
+  async deleteWord(@Arg("wordId", () => ID) wordId: string) {
+    let id = parseInt(wordId);
     await Word.delete(id);
     return true;
   }
 
   @Mutation(() => Word)
-  async updateWord(@Arg("wordId", () => Int) wordId: number) {
-    let word = await Word.findOne({ id: wordId });
+  async updateWord(@Arg("wordId", () => ID) wordId: string) {
+    const id = parseInt(wordId);
+    let word = await Word.findOne({ id });
     word.dateLastSeen = new Date();
     return Word.save(word);
   }
