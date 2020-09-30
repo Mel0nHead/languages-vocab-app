@@ -6,6 +6,7 @@ import { YANDEX_URL, YANDEX_KEY } from "../constants";
 import { fetchTranslation } from "../utils/fetchTranslation";
 import { createWord } from "../utils/createWord";
 import { TextField, Button, Box, makeStyles } from "@material-ui/core";
+import { useFetch } from "../hooks/useFetch";
 
 export interface Word {
   language: string;
@@ -22,6 +23,13 @@ const useStyles = makeStyles({
 export function Home() {
   const classes = useStyles();
   const [inputValue, setInputValue] = useState("");
+  const {
+    data: supportedLanguagesData,
+    loading: isSupportedLanguagesLoading,
+    error: supportedLanguagesError,
+  } = useFetch(`${YANDEX_URL}/getLangs?key=${YANDEX_KEY}&ui=en`, {
+    method: "POST",
+  });
   const [availableLanguages, setAvailableLanguages] = useState({
     en: "English",
   });
@@ -120,18 +128,23 @@ export function Home() {
         </span>
       </Box>
       <Box mb={2}>
-        <LanguageSelect
-          label="From:"
-          value={currentLanguage.source}
-          handleChange={handleLanguageChange("source")}
-          availableLanguages={availableLanguages}
-        />
-        <LanguageSelect
-          label="To:"
-          value={currentLanguage.destination}
-          handleChange={handleLanguageChange("destination")}
-          availableLanguages={availableLanguages}
-        />
+        {isSupportedLanguagesLoading && <b>Loading supported languages...</b>}
+        {!isSupportedLanguagesLoading && (
+          <>
+            <LanguageSelect
+              label="From:"
+              value={currentLanguage.source}
+              handleChange={handleLanguageChange("source")}
+              availableLanguages={supportedLanguagesData}
+            />
+            <LanguageSelect
+              label="To:"
+              value={currentLanguage.destination}
+              handleChange={handleLanguageChange("destination")}
+              availableLanguages={supportedLanguagesData}
+            />
+          </>
+        )}
       </Box>
       <div>
         <Button
