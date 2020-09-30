@@ -11,8 +11,6 @@ export const getNextWordGql = gql`
           id
           originalWord
           translatedWord
-          dateLastSeen
-          dateAdded
           language
         }
         cursor
@@ -25,6 +23,6 @@ export const getNextWordGql = gql`
   }
 `;
 
-export function useGetNextWordQuery() {
+export function useGetAllWordsQuery() {
   return useQuery<getAllWords>(getNextWordGql);
 }

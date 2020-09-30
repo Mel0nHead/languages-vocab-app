@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import { Box, Paper, Divider } from "@material-ui/core";
 import { getLanguageInfo } from "../utils/getLanguageInfo";
 import { FlagIcon } from "./FlagIcon";
+import { getAllWords_getWords_edges_node } from "../generated-graphql-interfaces";
 
 const useStyles = makeStyles({
   root: {
@@ -28,7 +29,9 @@ const useStyles = makeStyles({
 });
 
 interface TranslateCardProps {
-  word: Word;
+  word:
+    | getAllWords_getWords_edges_node
+    | Omit<getAllWords_getWords_edges_node, "__typename">;
   buttonLabel: string;
   onClick: () => void;
 }

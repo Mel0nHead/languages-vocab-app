@@ -33,15 +33,11 @@ export function Home() {
   const [addWord] = useAddWordMutation();
 
   function handleAdd(word: Word) {
-    const date = new Date();
     addWord({
       variables: {
         language: word.language,
         originalWord: word.originalWord,
         translatedWord: word.translatedWord,
-        box: 1,
-        dateAdded: date,
-        dateLastSeen: date,
       },
     });
     setWords((currentWords) => {
