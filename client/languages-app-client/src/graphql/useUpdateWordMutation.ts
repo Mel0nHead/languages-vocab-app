@@ -5,10 +5,10 @@ import {
   updateWordVariables,
 } from "../generated-graphql-interfaces";
 
-export function useUpdateWordMutation(variables: { id: number }) {
+export function useUpdateWordMutation(variables: { id: string }) {
   return useMutation<updateWord, updateWordVariables>(
     gql`
-      mutation updateWord($id: Int!) {
+      mutation updateWord($id: ID!) {
         updateWord(wordId: $id) {
           id
           language

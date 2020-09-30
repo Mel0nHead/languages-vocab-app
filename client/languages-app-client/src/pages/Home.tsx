@@ -11,7 +11,7 @@ export interface Word {
   language: string;
   originalWord: string;
   translatedWord: string;
-  id: number;
+  id: string;
 }
 
 const useStyles = makeStyles({

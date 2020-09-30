@@ -5,7 +5,7 @@ export function createWord(
   language: string,
   originalWord: string
 ): Word {
-  const id = Math.random();
+  const id = Math.random().toString();
 
   const obj = {
     language,

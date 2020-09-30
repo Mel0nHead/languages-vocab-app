@@ -6,7 +6,7 @@ import {
 } from "../generated-graphql-interfaces";
 
 export const deleteWordGql = gql`
-  mutation deleteWord($id: Int!) {
+  mutation deleteWord($id: ID!) {
     deleteWord(wordId: $id)
   }
 `;

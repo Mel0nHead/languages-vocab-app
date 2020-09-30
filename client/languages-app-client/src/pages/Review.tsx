@@ -7,7 +7,7 @@ export function Review() {
   const { data, error, loading } = useGetAllWordsQuery();
   const [deleteWord] = useDeleteWordMutation();
 
-  function handleDelete(id: number) {
+  function handleDelete(id: string) {
     deleteWord({ variables: { id } });
   }
 

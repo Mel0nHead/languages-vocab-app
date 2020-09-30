@@ -18,7 +18,7 @@ export function Test() {
   const [wordCount, setWordCount] = useState(0);
   const [score, setScore] = useState({ correct: 0, incorrect: 0 });
 
-  const totalWordsCount = data?.getAllWords?.totalCount;
+  const totalWordsCount = data?.getWords?.totalCount;
 
   function handleStartAnotherTest() {
     setWordCount(0);
