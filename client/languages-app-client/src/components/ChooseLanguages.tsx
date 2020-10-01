@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { LanguageSelect } from "./LanguageSelect";
 import { useFetch } from "../hooks/useFetch";
 import { YANDEX_KEY, YANDEX_URL } from "../constants";
@@ -24,7 +24,7 @@ interface ChooseLanguagesProps {
     }>
   ) => void;
 }
-// TODO: add unit tests
+
 export function ChooseLanguages(props: ChooseLanguagesProps) {
   const { data, loading, error } = useFetch<SupportedLanguages>(
     `${YANDEX_URL}/getLangs?key=${YANDEX_KEY}&ui=en`,
@@ -33,13 +33,30 @@ export function ChooseLanguages(props: ChooseLanguagesProps) {
     }
   );
 
-  if (loading) return <b>Loading supported languages...</b>;
+  useEffect(() => {
+    console.log(data, loading, error);
+  }, [data, loading, error]);
 
-  if (error)
-    return <b>An error occurred trying to load the supported languages.</b>;
+  if (loading)
+    return (
+      <b data-testid="choose-languages-loading">
+        Loading supported languages...
+      </b>
+    );
+
+  if (!!error)
+    return (
+      <b data-testid="choose-languages-error">
+        An error occurred trying to load the supported languages.
+      </b>
+    );
 
   if (!data)
-    return <b>No data was retrieved. Refresh the page and try again.</b>;
+    return (
+      <b data-testid="choose-languages-no-data">
+        No data was retrieved. Refresh the page and try again.
+      </b>
+    );
 
   return (
     <div>
