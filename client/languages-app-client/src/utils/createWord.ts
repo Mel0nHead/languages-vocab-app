@@ -1,7 +1,7 @@
-import { Word } from "../pages/Home";
+import { TranslationResponse, Word } from "../pages/Home";
 
 export function createWord(
-  data: any,
+  data: TranslationResponse,
   language: string,
   originalWord: string
 ): Word {
@@ -14,7 +14,7 @@ export function createWord(
     translatedWord: "Unknown",
   };
 
-  if (!data || !data.text) {
+  if (!data.text) {
     return obj;
   }
 

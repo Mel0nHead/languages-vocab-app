@@ -4,11 +4,10 @@ export async function fetchTranslation(
   language: string,
   textToTranslate: string
 ) {
+  const url = `${YANDEX_URL}/translate?key=${YANDEX_KEY}&lang=${language}&text=${textToTranslate}`;
+
   try {
-    const res = await fetch(
-      `${YANDEX_URL}/translate?key=${YANDEX_KEY}&lang=${language}&text=${textToTranslate}`,
-      { method: "POST" }
-    );
+    const res = await fetch(url, { method: "POST" });
     return res.json();
   } catch (error) {
     return null;

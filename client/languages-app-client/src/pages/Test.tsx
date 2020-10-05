@@ -3,8 +3,7 @@ import { StartTest } from "../components/StartTest";
 import { FinishedTest } from "../components/FinishedTest";
 import { TestContent } from "../components/TestContent";
 import { useGetNextWordQuery } from "../graphql/useGetNextWordQuery";
-import { LinearProgress } from "@material-ui/core";
-import { normalise } from "../utils/normalise";
+import { TestProgress } from "../components/TestProgress";
 
 export type AnswerType = "correct" | "incorrect";
 
@@ -20,28 +19,19 @@ export function Test() {
 
   const totalWordsCount = data?.getWords?.totalCount;
 
-  function handleStartAnotherTest() {
+  function handleStartTest() {
     setWordCount(0);
     setScore({ correct: 0, incorrect: 0 });
     setTestStatus({ progress: true, finished: false });
     setCursor(null);
   }
 
-  function handleStartNewTest() {
-    setWordCount(0);
-    setScore({ correct: 0, incorrect: 0 });
-    setTestStatus((status) => ({ ...status, progress: true }));
-  }
-
-  function handleGetNextQuestion(hasNextPage: boolean, cursor: string) {
+  function handleGetNextQuestion(hasNextPage: boolean, newCursor: string) {
     setWordCount((wordCount) => wordCount + 1);
-
-    if (hasNextPage) {
-      // TODO: change logic so that hook is not called conditionally!!
-      setCursor(cursor);
-    } else {
-      setTestStatus({ progress: false, finished: true });
-    }
+    setCursor((currentCursor) => (hasNextPage ? newCursor : currentCursor));
+    setTestStatus((currentStatus) =>
+      !hasNextPage ? { progress: false, finished: true } : { ...currentStatus }
+    );
   }
 
   function handleScoreChange(answer: AnswerType) {
@@ -68,25 +58,20 @@ export function Test() {
       <h1>Test</h1>
       <div>
         {!testStatus.progress && !testStatus.finished && (
-          <StartTest startNewTest={handleStartNewTest} />
+          <StartTest startNewTest={handleStartTest} />
         )}
         {!testStatus.progress && testStatus.finished && (
           <FinishedTest
-            startAnotherTest={handleStartAnotherTest}
+            startAnotherTest={handleStartTest}
             correctAnswers={score.correct}
             totalWords={totalWordsCount}
           />
         )}
         {testStatus.progress && (
           <>
-            {/* TODO: extract into separate component */}
-            <span data-testid="test-counter">
-              {wordCount}/{totalWordsCount}
-            </span>
-            <LinearProgress
-              variant="determinate"
-              value={normalise(wordCount, totalWordsCount)}
-              data-testid="test-progress-bar"
+            <TestProgress
+              wordCount={wordCount}
+              totalWordsCount={totalWordsCount}
             />
             <TestContent
               cursor={cursor}

@@ -26,8 +26,6 @@ describe("Function: createWord", () => {
       translatedWord: "Unknown",
     };
     const word = createWord(data, "en-es", "dog");
-    const word2 = createWord(undefined, "en-es", "dog");
     expect(word).toMatchObject(answer);
-    expect(word2).toMatchObject(answer);
   });
 });
