@@ -14,7 +14,7 @@ export function createWord(
     translatedWord: "Unknown",
   };
 
-  if (!data.text[0]) {
+  if (!data.text) {
     return obj;
   }
 

@@ -6,6 +6,23 @@ import "@testing-library/jest-dom/extend-expect";
 
 const mockAddMutation = jest.fn();
 
+jest.mock("../hooks/useFetch", () => ({
+  useFetch: () => {
+    return {
+      data: {
+        dirs: ["en", "es", "fi"],
+        langs: {
+          en: "English",
+          es: "Spanish",
+          fi: "Finnish",
+        },
+      },
+      loading: false,
+      error: null,
+    };
+  },
+}));
+
 jest.mock("../utils/fetchTranslation.ts", () => ({
   fetchTranslation: () => {
     return { text: ["perro"] };
