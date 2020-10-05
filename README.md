@@ -8,16 +8,11 @@ Backend: Express, TypeORM, MySQL
 
 # TODO
 
-- REFACTOR UI
-
-  - look for all the TODOs
-  - create custom useFetch hook (with tests)
-  - add snackbars for successful operations
-
 - ADD USERS AND THE ABILITY TO LOGIN
 
   - should be able to create a user
   - user should have username and password to log in
+  - create a login page, and dropdown menu so user can log out
 
 - ADD TESTS FOR API
 
@@ -27,3 +22,6 @@ Backend: Express, TypeORM, MySQL
 
   - test entity should exist in API
   - should be a many-to-many relationship between tests and words (with custom properties)
+
+- ADD SNACKBARS TO UI
+- use notistack to trigger notifications when events are completed (eg. adding a word, deleting a word etc.)
