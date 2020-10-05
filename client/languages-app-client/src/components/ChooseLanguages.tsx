@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { LanguageSelect } from "./LanguageSelect";
 import { useFetch } from "../hooks/useFetch";
 import { YANDEX_KEY, YANDEX_URL } from "../constants";
@@ -33,10 +33,6 @@ export function ChooseLanguages(props: ChooseLanguagesProps) {
     }
   );
 
-  useEffect(() => {
-    console.log(data, loading, error);
-  }, [data, loading, error]);
-
   if (loading)
     return (
       <b data-testid="choose-languages-loading">
@@ -59,7 +55,7 @@ export function ChooseLanguages(props: ChooseLanguagesProps) {
     );
 
   return (
-    <div>
+    <div data-testid="choose-languages">
       <LanguageSelect
         label="From:"
         value={props.currentLanguage.source}

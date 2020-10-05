@@ -1,40 +1,88 @@
 import { render } from "@testing-library/react";
 import React from "react";
+import { useFetch } from "../hooks/useFetch";
 import { ChooseLanguages } from "./ChooseLanguages";
 
-const err: Error = {
-  name: "Error",
-  message: "I am error",
-};
-
 jest.mock("../hooks/useFetch", () => ({
-  useFetch: () => {
-    return {
+  useFetch: jest.fn(),
+}));
+
+function setUpTest() {
+  const component = render(
+    <ChooseLanguages
+      handleLanguageChange={jest.fn()}
+      currentLanguage={{ destination: "en", source: "fi" }}
+    />
+  );
+
+  return { component };
+}
+
+describe("Component: ChooseLanguages", () => {
+  it("should render error", () => {
+    // @ts-ignore
+    useFetch.mockImplementation(() => ({
       data: "i am data",
       loading: false,
       error: {
         name: "Error",
         message: "I am error",
       },
-    };
-  },
-}));
+    }));
+    const { component } = setUpTest();
 
-describe("Component: ChooseLanguages", () => {
-  it.only("should render error", () => {
-    const component = render(
-      <ChooseLanguages
-        handleLanguageChange={jest.fn()}
-        currentLanguage={{ destination: "en", source: "fi" }}
-      />
-    );
-
-    // expect(
-    //   component.queryByTestId("choose-languages-error")
-    // ).toBeInTheDocument();
+    expect(
+      component.queryByTestId("choose-languages-error")
+    ).toBeInTheDocument();
   });
 
-  it("should render loading", () => {});
-  it("should render no data message", () => {});
-  it("should render selects", () => {});
+  it("should render loading", () => {
+    // @ts-ignore
+    useFetch.mockImplementation(() => ({
+      data: "i am data",
+      loading: true,
+      error: null,
+    }));
+
+    const { component } = setUpTest();
+
+    expect(
+      component.queryByTestId("choose-languages-loading")
+    ).toBeInTheDocument();
+  });
+
+  it("should render no data message", () => {
+    // @ts-ignore
+    useFetch.mockImplementation(() => ({
+      data: null,
+      loading: false,
+      error: null,
+    }));
+
+    const { component } = setUpTest();
+
+    expect(
+      component.queryByTestId("choose-languages-no-data")
+    ).toBeInTheDocument();
+  });
+
+  it("should render selects", () => {
+    // @ts-ignore
+    useFetch.mockImplementation(() => ({
+      data: {
+        dirs: ["en", "es", "fi"],
+        langs: {
+          en: "English",
+          es: "Spanish",
+          fi: "Finnish",
+        },
+      },
+      loading: false,
+      error: null,
+    }));
+
+    const { component } = setUpTest();
+
+    expect(component.queryByTestId("choose-languages")).toBeInTheDocument();
+  });
 });
