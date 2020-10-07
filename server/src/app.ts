@@ -9,6 +9,12 @@ import { ApolloServer } from "apollo-server-express";
 import { WordResolver } from "./resolvers/WordResolver";
 import { buildSchema } from "type-graphql";
 
+// TODO:
+// Currently following this: https://www.youtube.com/watch?v=dBuU61ABEDs
+// - add a login mutation
+// - create one-to-many relationship between User and Word
+// - make a db migration
+
 const PORT = 4000;
 
 interface UserRequest extends express.Request {
