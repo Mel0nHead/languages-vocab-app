@@ -1,5 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  BaseEntity,
+  OneToMany,
+} from "typeorm";
 import { Field, ID, ObjectType } from "type-graphql";
+import { Word } from "./Word";
 
 @ObjectType()
 @Entity()
@@ -22,4 +29,8 @@ export class User extends BaseEntity {
   @Field()
   @Column()
   createdAt: Date;
+
+  // maybe this should be a function
+  @OneToMany((type) => Word, (word) => word.user)
+  words: Word[];
 }

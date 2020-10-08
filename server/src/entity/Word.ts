@@ -1,5 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  BaseEntity,
+  ManyToOne,
+} from "typeorm";
 import { Field, ID, ObjectType } from "type-graphql";
+import { User } from "./User";
 
 @ObjectType()
 @Entity()
@@ -27,4 +34,7 @@ export class Word extends BaseEntity {
   @Field()
   @Column()
   dateLastSeen: Date;
+
+  @ManyToOne((type) => User, (user) => user.words)
+  user: User;
 }
