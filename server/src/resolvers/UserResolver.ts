@@ -26,4 +26,7 @@ export class UserResolver {
   async getAllUsers(): Promise<User[]> {
     return User.find();
   }
+
+  // TODO: add a 'words' field resolver
+  // https://typegraphql.com/docs/resolvers.html#field-resolvers
 }

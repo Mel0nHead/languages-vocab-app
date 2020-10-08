@@ -30,7 +30,7 @@ export class User extends BaseEntity {
   @Column()
   createdAt: Date;
 
-  // maybe this should be a function
+  @Field()
   @OneToMany((type) => Word, (word) => word.user)
   words: Word[];
 }
