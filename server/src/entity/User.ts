@@ -19,5 +19,7 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  // TODO: add resolver for words
+  @Field()
+  @Column()
+  createdAt: Date;
 }
