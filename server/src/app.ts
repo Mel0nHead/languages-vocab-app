@@ -11,16 +11,10 @@ import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers/UserResolver";
 
 // TODO:
-// Currently following this: https://www.youtube.com/watch?v=dBuU61ABEDs
-// - add a login mutation
-// - create one-to-many relationship between User and Word
-// - make a db migration
+// - delete all users and words from db
+// - update the add, update and delete word mutations so that they add them to the specific user
 
 const PORT = 4000;
-
-// interface UserRequest extends express.Request {
-//   user: string;
-// }
 
 const startServer = async () => {
   const schema = await buildSchema({
@@ -29,10 +23,6 @@ const startServer = async () => {
 
   const server = new ApolloServer({
     schema,
-    // context: ({ req }: { req: UserRequest }) => {
-    //   const user = req.user || null;
-    //   return { user };
-    // },
   });
 
   await createConnection();
@@ -42,16 +32,6 @@ const startServer = async () => {
   app.use(bodyParser.json());
   app.use(cors());
   app.use(logger("dev"));
-
-  // for authorisation and authentication
-  // app.use(
-  //   expressJwt({
-  //     secret: "MY_SECRET",
-  //     algorithms: ["HS256"],
-  //     credentialsRequired: false,
-  //   })
-  // );
-
   server.applyMiddleware({ app });
 
   app.listen({ port: PORT }, () => {
