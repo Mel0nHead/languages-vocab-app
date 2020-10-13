@@ -22,6 +22,7 @@ import { User } from "../entity/User";
 @Resolver(Word)
 export class WordResolver implements ResolverInterface<Word> {
   @Mutation(() => Word)
+  // TODO: rename, and add the word to the specific user
   async createWord(@Arg("newWordInput") newWordInput: AddWordInput) {
     const date = new Date();
     return Word.create({
