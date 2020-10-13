@@ -1,4 +1,13 @@
-import { Query, Mutation, Resolver, Arg, ID } from "type-graphql";
+import {
+  Query,
+  Mutation,
+  Resolver,
+  Arg,
+  ID,
+  ResolverInterface,
+  FieldResolver,
+  Root,
+} from "type-graphql";
 import { Word } from "../entity/Word";
 import { AddWordInput } from "../types/AddWordInput";
 import { GetWordsInput } from "../types/GetWordsInput";
@@ -8,9 +17,10 @@ import { applyCursorsToWords } from "../utils/applyCursorsToWords";
 import { sliceWordsUsingFirstAndLast } from "../utils/sliceWordsUsingFirstAndLast";
 import { hasNextPage } from "../utils/hasNextPage";
 import { hasPreviousPage } from "../utils/hasPreviousPage";
+import { User } from "../entity/User";
 
 @Resolver(Word)
-export class WordResolver {
+export class WordResolver implements ResolverInterface<Word> {
   @Mutation(() => Word)
   async createWord(@Arg("newWordInput") newWordInput: AddWordInput) {
     const date = new Date();
@@ -66,5 +76,15 @@ export class WordResolver {
         hasNextPage: hasNextPage(filteredWords, first),
       },
     };
+  }
+
+  @FieldResolver()
+  async user(@Root() word: Word): Promise<User> {
+    const id = word.id;
+    const wordData = await Word.createQueryBuilder("word")
+      .leftJoinAndSelect("word.user", "user")
+      .where("word.id = :id", { id })
+      .getOne();
+    return wordData.user;
   }
 }

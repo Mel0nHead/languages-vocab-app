@@ -35,7 +35,7 @@ export class Word extends BaseEntity {
   @Column()
   dateLastSeen: Date;
 
-  @Field()
-  @ManyToOne((type) => User, (user) => user.words)
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.words)
   user: User;
 }

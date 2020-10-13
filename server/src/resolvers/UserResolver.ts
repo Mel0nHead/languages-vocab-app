@@ -1,9 +1,19 @@
-import { Mutation, Resolver, Arg, ID, Query } from "type-graphql";
+import {
+  Mutation,
+  Resolver,
+  Arg,
+  ID,
+  Query,
+  FieldResolver,
+  Root,
+  ResolverInterface,
+} from "type-graphql";
 import { User } from "../entity/User";
+import { Word } from "../entity/Word";
 import { CreateUserInput } from "../types/CreateUserInput";
 
 @Resolver(User)
-export class UserResolver {
+export class UserResolver implements ResolverInterface<User> {
   @Mutation(() => User)
   async createUser(@Arg("createUserInput") createUserInput: CreateUserInput) {
     return User.create({ ...createUserInput, createdAt: new Date() }).save();
@@ -27,6 +37,15 @@ export class UserResolver {
     return User.find();
   }
 
-  // TODO: add a 'words' field resolver
-  // https://typegraphql.com/docs/resolvers.html#field-resolvers
+  @FieldResolver()
+  async words(@Root() user: User): Promise<Word[]> {
+    const id = user.id;
+
+    const userData = await User.createQueryBuilder("user")
+      .leftJoinAndSelect("user.words", "word")
+      .where("user.id = :id", { id })
+      .getOne();
+
+    return userData.words;
+  }
 }

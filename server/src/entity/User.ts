@@ -30,7 +30,7 @@ export class User extends BaseEntity {
   @Column()
   createdAt: Date;
 
-  @Field()
-  @OneToMany((type) => Word, (word) => word.user)
+  @Field(() => [Word])
+  @OneToMany(() => Word, (word) => word.user)
   words: Word[];
 }
