@@ -22,14 +22,28 @@ import { User } from "../entity/User";
 @Resolver(Word)
 export class WordResolver implements ResolverInterface<Word> {
   @Mutation(() => Word)
-  // TODO: rename, and add the word to the specific user
-  async createWord(@Arg("newWordInput") newWordInput: AddWordInput) {
+  async createWord(
+    @Arg("newWordInput")
+    { userId, originalWord, translatedWord, language }: AddWordInput
+  ) {
+    const user = await User.createQueryBuilder("user")
+      .leftJoinAndSelect("user.words", "word")
+      .where("user.id = :id", { id: parseInt(userId) })
+      .getOne();
+
     const date = new Date();
-    return Word.create({
-      ...newWordInput,
+    const word = Word.create({
+      originalWord,
+      translatedWord,
+      language,
       dateAdded: date,
       dateLastSeen: date,
-    }).save();
+    });
+    await Word.save(word);
+
+    user.words.push(word);
+    await User.save(user);
+    return word;
   }
 
   @Mutation(() => Boolean)
