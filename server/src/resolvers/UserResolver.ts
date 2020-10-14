@@ -22,6 +22,7 @@ export class UserResolver implements ResolverInterface<User> {
   @Mutation(() => Boolean)
   async deleteUser(@Arg("userId", () => ID) userId: string) {
     const id = parseInt(userId);
+    // TODO: need to delete all the words that exist on selected User entity
     await User.delete(id);
     return true;
   }
