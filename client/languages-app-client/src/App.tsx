@@ -22,6 +22,8 @@ const useStyles = makeStyles({
 
 export default function App() {
   const classes = useStyles();
+  // TODO: add auth context
+  // It should store email, name, id and isAuthorised
 
   return (
     <ApolloProvider client={client}>
