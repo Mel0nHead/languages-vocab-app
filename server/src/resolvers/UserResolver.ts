@@ -22,7 +22,15 @@ export class UserResolver implements ResolverInterface<User> {
   @Mutation(() => Boolean)
   async deleteUser(@Arg("userId", () => ID) userId: string) {
     const id = parseInt(userId);
-    // TODO: need to delete all the words that exist on selected User entity
+    const user = await User.createQueryBuilder("user")
+      .leftJoinAndSelect("user.words", "word")
+      .where("user.id = :id", { id })
+      .getOne();
+
+    const wordIds = user.words.map((word) => word.id);
+    if (wordIds.length) {
+      await Word.delete(wordIds);
+    }
     await User.delete(id);
     return true;
   }
