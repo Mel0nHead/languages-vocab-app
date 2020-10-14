@@ -57,4 +57,19 @@ export class UserResolver implements ResolverInterface<User> {
 
     return userData.words;
   }
+
+  @Query()
+  async login(@Arg("email") email: string, @Arg("password") password: string) {
+    try {
+      const user = await User.createQueryBuilder("user")
+        .where("user.email = :email AND user.password = :password", {
+          email,
+          password,
+        })
+        .getOne();
+      return user;
+    } catch (e) {
+      throw new Error("Invalid email and/or password");
+    }
+  }
 }
