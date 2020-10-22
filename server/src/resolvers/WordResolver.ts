@@ -63,13 +63,14 @@ export class WordResolver implements ResolverInterface<Word> {
 
   @Query(() => WordConnection)
   async getWords(
-    @Arg("getWordsArgs") { first, last, before, after }: GetWordsInput
+    @Arg("getWordsArgs") { first, last, before, after, userId }: GetWordsInput
   ): Promise<WordConnection> {
-    const allWords = await Word.createQueryBuilder("word")
-      .orderBy("word.id", "ASC")
-      .getMany();
+    const user = await User.createQueryBuilder("user")
+      .where("user.id = :id", { id: parseInt(userId) })
+      .leftJoinAndSelect("user.words", "word")
+      .getOne();
 
-    const filteredWords = applyCursorsToWords(allWords, before, after);
+    const filteredWords = applyCursorsToWords(user.words, before, after);
     const slicedAndFilteredWords = sliceWordsUsingFirstAndLast(
       filteredWords,
       first,
@@ -84,7 +85,7 @@ export class WordResolver implements ResolverInterface<Word> {
     });
 
     return {
-      totalCount: allWords.length,
+      totalCount: user.words.length,
       edges: wordEdges,
       pageInfo: {
         hasPreviousPage: hasPreviousPage(filteredWords, last),

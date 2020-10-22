@@ -1,7 +1,10 @@
-import { Field, InputType, Int } from "type-graphql";
+import { Field, ID, InputType, Int } from "type-graphql";
 
 @InputType()
 export class GetWordsInput {
+  @Field(() => ID)
+  userId: string;
+
   @Field(() => Int, { nullable: true })
   first?: number;
 
