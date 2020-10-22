@@ -58,7 +58,7 @@ export class UserResolver implements ResolverInterface<User> {
     return userData.words;
   }
 
-  @Query(() => User)
+  @Mutation(() => User, { nullable: true })
   async login(@Arg("email") email: string, @Arg("password") password: string) {
     try {
       const user = await User.createQueryBuilder("user")
