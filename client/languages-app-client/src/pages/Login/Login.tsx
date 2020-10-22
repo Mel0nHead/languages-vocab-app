@@ -4,7 +4,7 @@ import { TextField } from "formik-material-ui";
 import React, { useState } from "react";
 import * as yup from "yup";
 import { Signup } from "./components/Signup";
-import { useLoginQuery } from "./graphql/useLoginQuery";
+import { useLoginMutation } from "./graphql/useLoginMutation";
 
 const schema = yup.object().shape({
   email: yup.string().required(),
@@ -13,7 +13,7 @@ const schema = yup.object().shape({
 
 export function Login() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [login] = useLoginQuery();
+  const [login] = useLoginMutation();
 
   function handleOpenDialog() {
     setIsDialogOpen(true);
@@ -27,9 +27,14 @@ export function Login() {
     <Box>
       <Formik
         initialValues={{ email: "", password: "" }}
-        onSubmit={() => {
-          // call login mutation - if it is successful, set userId and isAuthorised in AuthContext
-          console.log("submitted");
+        onSubmit={async (values, actions) => {
+          const user = await login({
+            variables: {
+              email: values.email,
+              password: values.password,
+            },
+          });
+          // then should call props.login
         }}
         validationSchema={schema}
       >
