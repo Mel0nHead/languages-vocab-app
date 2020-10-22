@@ -3,8 +3,8 @@ import { useQuery } from "@apollo/react-hooks";
 import { getWords, getWordsVariables } from "../generated-graphql-interfaces";
 
 export const getNextWordGql = gql`
-  query getWords($first: Int, $after: String) {
-    getWords(getWordsArgs: { first: $first, after: $after }) {
+  query getWords($first: Int, $after: String, $userId: ID!) {
+    getWords(getWordsArgs: { first: $first, after: $after, userId: $userId }) {
       totalCount
       edges {
         node {
@@ -25,8 +25,12 @@ export const getNextWordGql = gql`
   }
 `;
 
-export function useGetNextWordQuery(first: number, after: string | null) {
+export function useGetNextWordQuery(
+  first: number,
+  after: string | null,
+  userId: string
+) {
   return useQuery<getWords, getWordsVariables>(getNextWordGql, {
-    variables: { first, after },
+    variables: { first, after, userId },
   });
 }

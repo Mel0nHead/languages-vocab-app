@@ -9,7 +9,7 @@ import { theme } from "./theme";
 import { NavBar } from "./components/NavBar";
 import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient from "apollo-boost";
-import { Login } from "./pages/Login";
+import { Login } from "./pages/Login/Login";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
@@ -32,7 +32,6 @@ export const AuthContext = createContext<AuthContext>({
 });
 
 // TODO:
-// - make sure all word-related queries/mutations have the userId as an argument
 // - update all the query/mutation calls in the UI code
 // - finish the app routes and login/logout functionality
 

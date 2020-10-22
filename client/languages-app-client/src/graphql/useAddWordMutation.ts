@@ -10,12 +10,14 @@ export const addWordGql = gql`
     $language: String!
     $originalWord: String!
     $translatedWord: String!
+    $userId: ID!
   ) {
     createWord(
       newWordInput: {
         language: $language
         originalWord: $originalWord
         translatedWord: $translatedWord
+        userId: $userId
       }
     ) {
       id

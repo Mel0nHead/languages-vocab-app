@@ -1,9 +1,10 @@
-import { Box, Button, Dialog } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import React, { useState } from "react";
 import * as yup from "yup";
-import { Signup } from "./Signup";
+import { Signup } from "./components/Signup";
+import { useLoginQuery } from "./graphql/useLoginQuery";
 
 const schema = yup.object().shape({
   email: yup.string().required(),
@@ -12,6 +13,7 @@ const schema = yup.object().shape({
 
 export function Login() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [login] = useLoginQuery();
 
   function handleOpenDialog() {
     setIsDialogOpen(true);
