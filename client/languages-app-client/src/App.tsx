@@ -21,23 +21,16 @@ const useStyles = makeStyles({
 
 interface AuthContext {
   isAuthorised: boolean;
-  userId: string | null;
 }
 
 export const AuthContext = createContext<AuthContext>({
   isAuthorised: false,
-  userId: null,
 });
-
-// TODO:
-// - update all the query/mutation calls in the UI code
-// - finish the app routes and login/logout functionality
 
 export default function App() {
   const classes = useStyles();
   const [authContext, setAuthContext] = useState<AuthContext>({
     isAuthorised: !!localStorage.getItem("token"), // obviously dodgy, but will leave it for now
-    userId: null,
   });
 
   function handleLogin(userId: string) {
@@ -46,7 +39,6 @@ export default function App() {
     setAuthContext((currentContext) => ({
       ...currentContext,
       isAuthorised: true,
-      userId,
     }));
     return <Redirect to="/home" />;
   }
@@ -56,7 +48,6 @@ export default function App() {
     setAuthContext((currentContext) => ({
       ...currentContext,
       isAuthorised: false,
-      userId: null,
     }));
     return <Redirect to="/login" />;
   }
@@ -68,7 +59,7 @@ export default function App() {
           <BrowserRouter>
             {authContext.isAuthorised ? (
               <>
-                <NavBar />
+                <NavBar handleLogout={handleLogout} />
                 <Container maxWidth="sm" className={classes.container}>
                   <PrivateRoutes />
                 </Container>

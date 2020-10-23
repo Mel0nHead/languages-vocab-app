@@ -1,4 +1,4 @@
-import { Box, Button } from "@material-ui/core";
+import { Button, Divider, Paper } from "@material-ui/core";
 import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import React, { useState } from "react";
@@ -29,7 +29,8 @@ export function Login(props: LoginProps) {
   }
 
   return (
-    <Box>
+    <Paper style={{ maxWidth: 450, margin: "0 auto", padding: "20px" }}>
+      <h1>Log In</h1>
       <Formik
         initialValues={{ email: "", password: "" }}
         onSubmit={async (values, actions) => {
@@ -48,17 +49,28 @@ export function Login(props: LoginProps) {
         validationSchema={schema}
       >
         <Form>
-          <Field component={TextField} name="email" label="Email" />
-          <Field component={TextField} name="password" label="Password" />
+          <Field
+            component={TextField}
+            name="email"
+            label="Email"
+            fullWidth={true}
+          />
+          <Field
+            component={TextField}
+            name="password"
+            label="Password"
+            fullWidth={true}
+          />
           <Button type="submit">Log in</Button>
           {loading && <b>Loading...</b>}
           {loginError && <b>Incorrect email and/or password.</b>}
           {error && <b>{error.message}</b>}
+          <Divider />
         </Form>
       </Formik>
       <Button onClick={handleOpenDialog}>Create new account</Button>
 
       <Signup isOpen={isDialogOpen} handleClose={handleCloseDialog} />
-    </Box>
+    </Paper>
   );
 }

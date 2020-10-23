@@ -1,11 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useAddWordMutation } from "../graphql/useAddWordMutation";
 import { TranslateCard } from "../components/TranslateCard";
 import { fetchTranslation } from "../utils/fetchTranslation";
 import { createWord } from "../utils/createWord";
 import { TextField, Button, Box, makeStyles } from "@material-ui/core";
 import { ChooseLanguages } from "../components/ChooseLanguages";
-import { AuthContext } from "../App";
 
 export interface Word {
   language: string;
@@ -26,7 +25,6 @@ const useStyles = makeStyles({
 });
 
 export function Home() {
-  const authContext = useContext(AuthContext);
   const classes = useStyles();
   const [inputValue, setInputValue] = useState("");
   const [currentLanguage, setCurrentLanguage] = useState({

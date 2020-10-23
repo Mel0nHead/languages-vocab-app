@@ -1,15 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { StartTest } from "../components/StartTest";
 import { FinishedTest } from "../components/FinishedTest";
 import { TestContent } from "../components/TestContent";
 import { useGetNextWordQuery } from "../graphql/useGetNextWordQuery";
 import { TestProgress } from "../components/TestProgress";
-import { AuthContext } from "../App";
 
 export type AnswerType = "correct" | "incorrect";
 
 export function Test() {
-  const authContext = useContext(AuthContext);
   const [testStatus, setTestStatus] = useState({
     progress: false,
     finished: false,

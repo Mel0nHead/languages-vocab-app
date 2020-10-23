@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, AppBar } from "@material-ui/core";
+import { makeStyles, AppBar, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
@@ -13,6 +13,10 @@ const useStyles = makeStyles({
   },
   navBar: {
     padding: "20px",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 });
 
@@ -22,7 +26,11 @@ const linkConfig = [
   { name: "Test", href: "/test" },
 ];
 
-export function NavBar() {
+interface NavBarProps {
+  handleLogout: () => void;
+}
+
+export function NavBar(props: NavBarProps) {
   const classes = useStyles();
   return (
     <AppBar className={classes.navBar}>
@@ -38,6 +46,7 @@ export function NavBar() {
           </Link>
         ))}
       </nav>
+      <Button onClick={props.handleLogout}>Logout</Button>
     </AppBar>
   );
 }
