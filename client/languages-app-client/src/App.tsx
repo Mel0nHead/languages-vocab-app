@@ -1,14 +1,13 @@
 import React, { createContext, useState } from "react";
-import { Switch, BrowserRouter, Redirect } from "react-router-dom";
+import { BrowserRouter, Redirect } from "react-router-dom";
 import { Container, makeStyles, ThemeProvider } from "@material-ui/core";
 import "./App.css";
 import { theme } from "./theme";
 import { NavBar } from "./components/NavBar";
 import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient from "apollo-boost";
-import { Login } from "./pages/Login/Login";
-import { AuthRoute } from "./AuthRoute";
 import { PrivateRoutes } from "./PrivateRoutes";
+import { PublicRoutes } from "./PublicRoutes";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
@@ -43,6 +42,7 @@ export default function App() {
 
   function handleLogin(userId: string) {
     localStorage.setItem("token", "abc123");
+    localStorage.setItem("userId", userId);
     setAuthContext((currentContext) => ({
       ...currentContext,
       isAuthorised: true,
@@ -52,7 +52,7 @@ export default function App() {
   }
 
   function handleLogout() {
-    localStorage.removeItem("token");
+    localStorage.clear();
     setAuthContext((currentContext) => ({
       ...currentContext,
       isAuthorised: false,
@@ -74,19 +74,7 @@ export default function App() {
                 </Container>
               </>
             ) : (
-              <Switch>
-                <AuthRoute
-                  exact
-                  path="/"
-                  render={() => <Redirect to="/login" />}
-                />
-                <AuthRoute
-                  exact
-                  path="/login"
-                  render={() => <Login handleLogin={handleLogin} />}
-                />
-                <AuthRoute path="*" render={() => <Redirect to="/login" />} />
-              </Switch>
+              <PublicRoutes handleLogin={handleLogin} />
             )}
           </BrowserRouter>
         </ThemeProvider>

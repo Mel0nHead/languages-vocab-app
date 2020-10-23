@@ -18,7 +18,7 @@ export function Test() {
   const { data, error, loading } = useGetNextWordQuery(
     1,
     cursor,
-    authContext.userId || ""
+    localStorage.getItem("userId") || ""
   );
   const [wordCount, setWordCount] = useState(0);
   const [score, setScore] = useState({ correct: 0, incorrect: 0 });

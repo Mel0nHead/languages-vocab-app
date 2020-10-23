@@ -38,13 +38,12 @@ export function Home() {
   const [error, setError] = useState(false);
 
   function handleAdd(word: Word) {
-    if (!authContext.userId) return;
     addWord({
       variables: {
         language: word.language,
         originalWord: word.originalWord,
         translatedWord: word.translatedWord,
-        userId: authContext.userId,
+        userId: localStorage.getItem("userId") || "",
       },
     });
     setWords((currentWords) => {

@@ -4,7 +4,9 @@ import { useDeleteWordMutation } from "../graphql/useDeleteWordMutation";
 import { TranslateCard } from "../components/TranslateCard";
 
 export function Review() {
-  const { data, error, loading } = useGetAllWordsQuery();
+  const { data, error, loading } = useGetAllWordsQuery(
+    localStorage.getItem("userId") || ""
+  );
   const [deleteWord] = useDeleteWordMutation();
 
   function handleDelete(id: string) {
@@ -16,7 +18,7 @@ export function Review() {
   }
 
   if (error || !data) {
-    return <b data-testid="error-message">An error occurred</b>;
+    return <b data-testid="error-message">{error}</b>;
   }
 
   return (

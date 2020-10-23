@@ -32,6 +32,6 @@ export const addWordGql = gql`
 
 export function useAddWordMutation() {
   return useMutation<createWord, createWordVariables>(addWordGql, {
-    refetchQueries: ["getWordsToReview"],
+    refetchQueries: ["getAllWords", "getWords"],
   });
 }
