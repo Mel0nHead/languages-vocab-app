@@ -11,9 +11,14 @@ const schema = yup.object().shape({
   password: yup.string().required(),
 });
 
-export function Login() {
+interface LoginProps {
+  handleLogin: (userId: string) => void;
+}
+
+export function Login(props: LoginProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [login] = useLoginMutation();
+  const [loginError, setLoginError] = useState(false);
+  const [login, { loading, error }] = useLoginMutation();
 
   function handleOpenDialog() {
     setIsDialogOpen(true);
@@ -28,13 +33,17 @@ export function Login() {
       <Formik
         initialValues={{ email: "", password: "" }}
         onSubmit={async (values, actions) => {
-          const user = await login({
+          const { data } = await login({
             variables: {
               email: values.email,
               password: values.password,
             },
           });
-          // then should call props.login
+          setLoginError(data?.login?.id ? false : true);
+          if (data?.login?.id) {
+            props.handleLogin(data.login.id);
+          }
+          actions.setSubmitting(false);
         }}
         validationSchema={schema}
       >
@@ -42,6 +51,9 @@ export function Login() {
           <Field component={TextField} name="email" label="Email" />
           <Field component={TextField} name="password" label="Password" />
           <Button type="submit">Log in</Button>
+          {loading && <b>Loading...</b>}
+          {loginError && <b>Incorrect email and/or password.</b>}
+          {error && <b>{error.message}</b>}
         </Form>
       </Formik>
       <Button onClick={handleOpenDialog}>Create new account</Button>

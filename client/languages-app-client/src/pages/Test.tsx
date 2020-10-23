@@ -1,19 +1,25 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { StartTest } from "../components/StartTest";
 import { FinishedTest } from "../components/FinishedTest";
 import { TestContent } from "../components/TestContent";
 import { useGetNextWordQuery } from "../graphql/useGetNextWordQuery";
 import { TestProgress } from "../components/TestProgress";
+import { AuthContext } from "../App";
 
 export type AnswerType = "correct" | "incorrect";
 
 export function Test() {
+  const authContext = useContext(AuthContext);
   const [testStatus, setTestStatus] = useState({
     progress: false,
     finished: false,
   });
   const [cursor, setCursor] = useState<string | null>(null);
-  const { data, error, loading } = useGetNextWordQuery(1, cursor);
+  const { data, error, loading } = useGetNextWordQuery(
+    1,
+    cursor,
+    authContext.userId || ""
+  );
   const [wordCount, setWordCount] = useState(0);
   const [score, setScore] = useState({ correct: 0, incorrect: 0 });
 

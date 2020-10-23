@@ -1,15 +1,14 @@
 import React, { createContext, useState } from "react";
-import { Switch, Route, BrowserRouter } from "react-router-dom";
-import { Home } from "./pages/Home";
-import { Review } from "./pages/Review";
+import { Switch, BrowserRouter, Redirect } from "react-router-dom";
 import { Container, makeStyles, ThemeProvider } from "@material-ui/core";
 import "./App.css";
-import { Test } from "./pages/Test";
 import { theme } from "./theme";
 import { NavBar } from "./components/NavBar";
 import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient from "apollo-boost";
 import { Login } from "./pages/Login/Login";
+import { AuthRoute } from "./AuthRoute";
+import { PrivateRoutes } from "./PrivateRoutes";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
@@ -49,7 +48,7 @@ export default function App() {
       isAuthorised: true,
       userId,
     }));
-    // then redirect to home page
+    return <Redirect to="/home" />;
   }
 
   function handleLogout() {
@@ -59,7 +58,7 @@ export default function App() {
       isAuthorised: false,
       userId: null,
     }));
-    // then redirect to login page
+    return <Redirect to="/login" />;
   }
 
   return (
@@ -71,17 +70,23 @@ export default function App() {
               <>
                 <NavBar />
                 <Container maxWidth="sm" className={classes.container}>
-                  <Switch>
-                    <Route path="/" exact component={Home} />
-                    <Route path="/home" exact component={Home} />
-                    <Route path="/review" exact component={Review} />
-                    <Route path="/test" extact component={Test} />
-                    <Route path="*" render={() => <h1>Page not found</h1>} />
-                  </Switch>
+                  <PrivateRoutes />
                 </Container>
               </>
             ) : (
-              <Route path="*" component={Login} />
+              <Switch>
+                <AuthRoute
+                  exact
+                  path="/"
+                  render={() => <Redirect to="/login" />}
+                />
+                <AuthRoute
+                  exact
+                  path="/login"
+                  render={() => <Login handleLogin={handleLogin} />}
+                />
+                <AuthRoute path="*" render={() => <Redirect to="/login" />} />
+              </Switch>
             )}
           </BrowserRouter>
         </ThemeProvider>
