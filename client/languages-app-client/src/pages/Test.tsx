@@ -13,7 +13,11 @@ export function Test() {
     finished: false,
   });
   const [cursor, setCursor] = useState<string | null>(null);
-  const { data, error, loading } = useGetNextWordQuery(1, cursor);
+  const { data, error, loading } = useGetNextWordQuery(
+    1,
+    cursor,
+    localStorage.getItem("userId") || ""
+  );
   const [wordCount, setWordCount] = useState(0);
   const [score, setScore] = useState({ correct: 0, incorrect: 0 });
 

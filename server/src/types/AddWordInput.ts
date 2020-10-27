@@ -1,5 +1,5 @@
 import { MaxLength } from "class-validator";
-import { Field, InputType } from "type-graphql";
+import { Field, ID, InputType } from "type-graphql";
 
 @InputType()
 export class AddWordInput {
@@ -14,4 +14,7 @@ export class AddWordInput {
   @Field()
   @MaxLength(255)
   translatedWord: string;
+
+  @Field(() => ID)
+  userId: string;
 }

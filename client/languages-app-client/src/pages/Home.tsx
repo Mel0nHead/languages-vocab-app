@@ -41,6 +41,7 @@ export function Home() {
         language: word.language,
         originalWord: word.originalWord,
         translatedWord: word.translatedWord,
+        userId: localStorage.getItem("userId") || "",
       },
     });
     setWords((currentWords) => {

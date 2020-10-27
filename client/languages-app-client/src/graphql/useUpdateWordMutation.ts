@@ -15,6 +15,6 @@ export function useUpdateWordMutation(variables: { id: string }) {
         }
       }
     `,
-    { variables, refetchQueries: ["getWordsToReview"] }
+    { variables, refetchQueries: ["getAllWords", "getWords"] }
   );
 }

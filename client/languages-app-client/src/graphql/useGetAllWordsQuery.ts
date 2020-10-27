@@ -1,10 +1,13 @@
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
-import { getAllWords } from "../generated-graphql-interfaces";
+import {
+  getAllWords,
+  getAllWordsVariables,
+} from "../generated-graphql-interfaces";
 
 export const getAllWordsGql = gql`
-  query getAllWords {
-    getWords(getWordsArgs: {}) {
+  query getAllWords($userId: ID!) {
+    getWords(getWordsArgs: { userId: $userId }) {
       totalCount
       edges {
         node {
@@ -23,6 +26,8 @@ export const getAllWordsGql = gql`
   }
 `;
 
-export function useGetAllWordsQuery() {
-  return useQuery<getAllWords>(getAllWordsGql);
+export function useGetAllWordsQuery(userId: string) {
+  return useQuery<getAllWords, getAllWordsVariables>(getAllWordsGql, {
+    variables: { userId },
+  });
 }

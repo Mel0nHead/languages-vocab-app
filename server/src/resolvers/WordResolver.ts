@@ -1,4 +1,13 @@
-import { Query, Mutation, Resolver, Arg, ID } from "type-graphql";
+import {
+  Query,
+  Mutation,
+  Resolver,
+  Arg,
+  ID,
+  ResolverInterface,
+  FieldResolver,
+  Root,
+} from "type-graphql";
 import { Word } from "../entity/Word";
 import { AddWordInput } from "../types/AddWordInput";
 import { GetWordsInput } from "../types/GetWordsInput";
@@ -8,17 +17,33 @@ import { applyCursorsToWords } from "../utils/applyCursorsToWords";
 import { sliceWordsUsingFirstAndLast } from "../utils/sliceWordsUsingFirstAndLast";
 import { hasNextPage } from "../utils/hasNextPage";
 import { hasPreviousPage } from "../utils/hasPreviousPage";
+import { User } from "../entity/User";
 
 @Resolver(Word)
-export class WordResolver {
+export class WordResolver implements ResolverInterface<Word> {
   @Mutation(() => Word)
-  async createWord(@Arg("newWordInput") newWordInput: AddWordInput) {
+  async createWord(
+    @Arg("newWordInput")
+    { userId, originalWord, translatedWord, language }: AddWordInput
+  ) {
+    const user = await User.createQueryBuilder("user")
+      .leftJoinAndSelect("user.words", "word")
+      .where("user.id = :id", { id: parseInt(userId) })
+      .getOne();
+
     const date = new Date();
-    return Word.create({
-      ...newWordInput,
+    const word = Word.create({
+      originalWord,
+      translatedWord,
+      language,
       dateAdded: date,
       dateLastSeen: date,
-    }).save();
+    });
+    await Word.save(word);
+
+    user.words.push(word);
+    await User.save(user);
+    return word;
   }
 
   @Mutation(() => Boolean)
@@ -38,13 +63,14 @@ export class WordResolver {
 
   @Query(() => WordConnection)
   async getWords(
-    @Arg("getWordsArgs") { first, last, before, after }: GetWordsInput
+    @Arg("getWordsArgs") { first, last, before, after, userId }: GetWordsInput
   ): Promise<WordConnection> {
-    const allWords = await Word.createQueryBuilder("word")
-      .orderBy("word.id", "ASC")
-      .getMany();
+    const user = await User.createQueryBuilder("user")
+      .where("user.id = :id", { id: parseInt(userId) })
+      .leftJoinAndSelect("user.words", "word")
+      .getOne();
 
-    const filteredWords = applyCursorsToWords(allWords, before, after);
+    const filteredWords = applyCursorsToWords(user.words, before, after);
     const slicedAndFilteredWords = sliceWordsUsingFirstAndLast(
       filteredWords,
       first,
@@ -59,12 +85,22 @@ export class WordResolver {
     });
 
     return {
-      totalCount: allWords.length,
+      totalCount: user.words.length,
       edges: wordEdges,
       pageInfo: {
         hasPreviousPage: hasPreviousPage(filteredWords, last),
         hasNextPage: hasNextPage(filteredWords, first),
       },
     };
+  }
+
+  @FieldResolver()
+  async user(@Root() word: Word): Promise<User> {
+    const id = word.id;
+    const wordData = await Word.createQueryBuilder("word")
+      .leftJoinAndSelect("word.user", "user")
+      .where("word.id = :id", { id })
+      .getOne();
+    return wordData.user;
   }
 }

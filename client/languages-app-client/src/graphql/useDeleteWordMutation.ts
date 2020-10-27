@@ -13,6 +13,6 @@ export const deleteWordGql = gql`
 
 export function useDeleteWordMutation() {
   return useMutation<deleteWord, deleteWordVariables>(deleteWordGql, {
-    refetchQueries: ["getWordsToReview"],
+    refetchQueries: ["getAllWords", "getWords"],
   });
 }
