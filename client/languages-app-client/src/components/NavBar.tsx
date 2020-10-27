@@ -46,7 +46,13 @@ export function NavBar(props: NavBarProps) {
           </Link>
         ))}
       </nav>
-      <Button onClick={props.handleLogout}>Logout</Button>
+      <Button
+        onClick={props.handleLogout}
+        variant="outlined"
+        style={{ borderColor: "white", color: "white" }}
+      >
+        Logout
+      </Button>
     </AppBar>
   );
 }

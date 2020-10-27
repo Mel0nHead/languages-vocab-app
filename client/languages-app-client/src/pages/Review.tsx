@@ -17,8 +17,17 @@ export function Review() {
     return <b data-testid="loading-message">Loading...</b>;
   }
 
-  if (error || !data) {
+  if (error) {
     return <b data-testid="error-message">{error}</b>;
+  }
+
+  if (!data) {
+    return (
+      <b>
+        You have no words to review. Please add some words on the Home page
+        first.
+      </b>
+    );
   }
 
   return (
