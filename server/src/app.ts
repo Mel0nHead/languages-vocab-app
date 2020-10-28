@@ -15,7 +15,7 @@ import { UserResolver } from "./resolvers/UserResolver";
 const PORT = 4000;
 
 interface UserRequest extends Request {
-  user: string;
+  user: any;
 }
 
 const startServer = async () => {
@@ -25,7 +25,10 @@ const startServer = async () => {
 
   const apolloServer = new ApolloServer({
     schema,
-    context: ({ req, res }) => ({ req, res }),
+    context: ({ req }: { req: UserRequest }) => {
+      const user = req.user || null;
+      return { user };
+    },
   });
 
   await createConnection();

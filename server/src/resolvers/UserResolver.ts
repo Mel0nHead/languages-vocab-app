@@ -7,6 +7,7 @@ import {
   FieldResolver,
   Root,
   ResolverInterface,
+  Ctx,
 } from "type-graphql";
 import { User } from "../entity/User";
 import { Word } from "../entity/Word";
@@ -69,13 +70,24 @@ export class UserResolver implements ResolverInterface<User> {
         })
         .getOne();
 
-      return jwt.sign({ hello: "moto" }, "SUPER_SECRET", {
+      return jwt.sign({ hello: user }, "SUPER_SECRET", {
         algorithm: "HS256",
         subject: user.id.toString(),
         expiresIn: "10d",
       });
     } catch (e) {
       throw new Error("Invalid email and/or password");
+    }
+  }
+
+  @Query(() => User, { nullable: true })
+  async me(@Ctx() { user }: { user: { sub: string } }) {
+    try {
+      const id = parseInt(user.sub);
+      const userData = await User.findOne(id);
+      return userData;
+    } catch (e) {
+      throw new Error("Please provided an authorization token");
     }
   }
 }
