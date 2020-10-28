@@ -10,6 +10,8 @@ import { WordResolver } from "./resolvers/WordResolver";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers/UserResolver";
 
+// following this tutorial for auth: https://www.youtube.com/watch?v=dBuU61ABEDs
+
 const PORT = 4000;
 
 interface UserRequest extends Request {
@@ -23,10 +25,7 @@ const startServer = async () => {
 
   const apolloServer = new ApolloServer({
     schema,
-    context: ({ req }: { req: UserRequest }) => {
-      const user = req.user || null;
-      return { user };
-    },
+    context: ({ req, res }) => ({ req, res }),
   });
 
   await createConnection();
@@ -42,8 +41,6 @@ const startServer = async () => {
   );
 
   app.use(bodyParser.json(), cors(), logger("dev"));
-  // app.use(cors());
-  // app.use(logger("dev"));
   apolloServer.applyMiddleware({ app });
 
   app.listen({ port: PORT }, () => {
