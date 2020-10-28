@@ -8,11 +8,13 @@ import {
   Root,
   ResolverInterface,
   Ctx,
+  UseMiddleware,
 } from "type-graphql";
 import { User } from "../entity/User";
 import { Word } from "../entity/Word";
 import { CreateUserInput } from "../types/CreateUserInput";
 import jwt from "jsonwebtoken";
+import { isAuthenticated, MyContext } from "../isAuthenticated";
 
 @Resolver(User)
 export class UserResolver implements ResolverInterface<User> {
@@ -81,13 +83,19 @@ export class UserResolver implements ResolverInterface<User> {
   }
 
   @Query(() => User, { nullable: true })
-  async me(@Ctx() { user }: { user: { sub: string } }) {
+  async me(@Ctx() { req }: { req: { user: { sub: string } } }) {
     try {
-      const id = parseInt(user.sub);
+      const id = parseInt(req.user.sub);
       const userData = await User.findOne(id);
       return userData;
     } catch (e) {
       throw new Error("Please provided an authorization token");
     }
+  }
+  // TODO: get the auth middleware working
+  @Query(() => String)
+  @UseMiddleware(isAuthenticated)
+  async hello(@Ctx() context: MyContext) {
+    return "You are authenticated!";
   }
 }

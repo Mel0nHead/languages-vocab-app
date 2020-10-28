@@ -14,10 +14,6 @@ import { UserResolver } from "./resolvers/UserResolver";
 
 const PORT = 4000;
 
-interface UserRequest extends Request {
-  user: any;
-}
-
 const startServer = async () => {
   const schema = await buildSchema({
     resolvers: [WordResolver, UserResolver],
@@ -25,10 +21,7 @@ const startServer = async () => {
 
   const apolloServer = new ApolloServer({
     schema,
-    context: ({ req }: { req: UserRequest }) => {
-      const user = req.user || null;
-      return { user };
-    },
+    context: ({ req, res }) => ({ req, res }),
   });
 
   await createConnection();
@@ -40,10 +33,12 @@ const startServer = async () => {
       secret: "SUPER_SECRET",
       algorithms: ["HS256"],
       credentialsRequired: false,
-    })
+    }),
+    bodyParser.json(),
+    cors(),
+    logger("dev")
   );
 
-  app.use(bodyParser.json(), cors(), logger("dev"));
   apolloServer.applyMiddleware({ app });
 
   app.listen({ port: PORT }, () => {
