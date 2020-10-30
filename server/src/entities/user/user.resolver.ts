@@ -13,7 +13,6 @@ import {
 import { User } from "./user.entity";
 import { Word } from "../word/word.entity";
 import { CreateUserInput } from "./types/create-user.input";
-import jwt from "jsonwebtoken";
 import { isAuthenticated } from "../../middleware/isAuthenticated";
 import { LoginPayload } from "./types/login.output";
 import { Service } from "typedi";
