@@ -9,17 +9,14 @@ export interface MyContext {
 }
 
 export const isAuthenticated: MiddlewareFn<MyContext> = ({ context }, next) => {
-  const authorized = context.req.headers["authorized"]; // e.g. 'Bearer 102930ajslkdaoq01'
-  const authorizedString = Array.isArray(authorized)
-    ? authorized[0]
-    : authorized;
+  const authorization = context.req.headers.authorization; // e.g. 'Bearer 102930ajslkdaoq01'
 
-  if (!authorizedString) {
+  if (!authorization) {
     throw new Error("You are not authenticated!");
   }
 
   try {
-    const token = authorizedString.split(" ")[1];
+    const token = authorization.split(" ")[1];
     const payload = verify(token, "SUPER_SECRET");
     context.payload = payload as any;
   } catch (err) {
