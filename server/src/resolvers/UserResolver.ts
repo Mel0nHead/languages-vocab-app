@@ -14,7 +14,8 @@ import { User } from "../entity/User";
 import { Word } from "../entity/Word";
 import { CreateUserInput } from "../types/CreateUserInput";
 import jwt from "jsonwebtoken";
-import { isAuthenticated, MyContext } from "../middleware/isAuthenticated";
+import { isAuthenticated } from "../middleware/isAuthenticated";
+import { LoginPayload } from "../types/LoginPayload";
 
 @Resolver(User)
 export class UserResolver implements ResolverInterface<User> {
@@ -66,7 +67,7 @@ export class UserResolver implements ResolverInterface<User> {
     return userData.words;
   }
 
-  @Mutation(() => String, { nullable: true })
+  @Mutation(() => LoginPayload, { nullable: true })
   async login(@Arg("email") email: string, @Arg("password") password: string) {
     try {
       const user = await User.createQueryBuilder("user")
@@ -76,11 +77,16 @@ export class UserResolver implements ResolverInterface<User> {
         })
         .getOne();
 
-      return jwt.sign({ hello: user }, "SUPER_SECRET", {
+      const token = jwt.sign({ hello: user }, "SUPER_SECRET", {
         algorithm: "HS256",
         subject: user.id.toString(),
         expiresIn: "10d",
       });
+
+      return {
+        userId: user.id,
+        token,
+      };
     } catch (e) {
       throw new Error("Invalid email and/or password");
     }

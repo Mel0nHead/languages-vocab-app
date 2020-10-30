@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import express, { Request } from "express";
+import express from "express";
 import expressJwt from "express-jwt";
 import bodyParser from "body-parser";
 import cors from "cors";
