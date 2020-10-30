@@ -9,7 +9,7 @@ import { AuthRoute } from "./AuthRoute";
 import { Login } from "./pages/Login/Login";
 
 export interface PublicRoutesProps extends RouteComponentProps<{}> {
-  handleLogin: (userId: string) => void;
+  handleLogin: (userId: string, token: string) => void;
 }
 
 export const PublicRoutes = withRouter((props: PublicRoutesProps) => {

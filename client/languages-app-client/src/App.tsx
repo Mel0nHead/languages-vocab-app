@@ -33,8 +33,8 @@ export default function App() {
     isAuthorised: !!localStorage.getItem("token"), // obviously dodgy, but will leave it for now
   });
 
-  function handleLogin(userId: string) {
-    localStorage.setItem("token", "abc123");
+  function handleLogin(userId: string, token: string) {
+    localStorage.setItem("token", token);
     localStorage.setItem("userId", userId);
     setAuthContext((currentContext) => ({
       ...currentContext,

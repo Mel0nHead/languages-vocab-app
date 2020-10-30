@@ -7,8 +7,8 @@ export function useLoginMutation() {
     gql`
       mutation login($email: String!, $password: String!) {
         login(password: $password, email: $email) {
-          id
-          email
+          userId
+          token
         }
       }
     `
