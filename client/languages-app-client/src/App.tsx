@@ -11,6 +11,16 @@ import { PublicRoutes } from "./PublicRoutes";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
+  request: (operation) => {
+    const token = localStorage.getItem("token");
+    const authorization = token ? `Bearer ${token}` : "";
+
+    operation.setContext({
+      headers: {
+        authorization,
+      },
+    });
+  },
 });
 
 const useStyles = makeStyles({
