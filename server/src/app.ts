@@ -6,9 +6,10 @@ import cors from "cors";
 import logger from "morgan";
 import { createConnection } from "typeorm";
 import { ApolloServer } from "apollo-server-express";
-import { WordResolver } from "./resolvers/WordResolver";
+import { WordResolver } from "./entities/word/word.resolver";
 import { buildSchema } from "type-graphql";
-import { UserResolver } from "./resolvers/UserResolver";
+import { UserResolver } from "./entities/user/user.resolver";
+import { Container } from "typedi";
 
 // Trying to implement dependency injection
 // create two classes for each entity: repository and service e.g UserRepository and UserService
@@ -19,6 +20,7 @@ const PORT = 4000;
 const startServer = async () => {
   const schema = await buildSchema({
     resolvers: [WordResolver, UserResolver],
+    container: Container,
   });
 
   const apolloServer = new ApolloServer({

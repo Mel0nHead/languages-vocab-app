@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
-import { Word } from "../entity/Word";
+import { Word } from "../word.entity";
 
 @ObjectType()
 export class WordEdge {

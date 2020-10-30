@@ -3,39 +3,34 @@ import {
   Column,
   PrimaryGeneratedColumn,
   BaseEntity,
-  ManyToOne,
+  OneToMany,
 } from "typeorm";
 import { Field, ID, ObjectType } from "type-graphql";
-import { User } from "./User";
+import { Word } from "../word/word.entity";
 
 @ObjectType()
 @Entity()
-export class Word extends BaseEntity {
+export class User extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number;
 
   @Field()
   @Column()
-  language: string;
+  name: string;
 
   @Field()
   @Column()
-  originalWord: string;
+  email: string;
+
+  @Column()
+  password: string;
 
   @Field()
   @Column()
-  translatedWord: string;
+  createdAt: Date;
 
-  @Field()
-  @Column()
-  dateAdded: Date;
-
-  @Field()
-  @Column()
-  dateLastSeen: Date;
-
-  @Field(() => User)
-  @ManyToOne(() => User, (user) => user.words)
-  user: User;
+  @Field(() => [Word])
+  @OneToMany(() => Word, (word) => word.user)
+  words: Word[];
 }

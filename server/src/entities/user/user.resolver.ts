@@ -10,12 +10,12 @@ import {
   Ctx,
   UseMiddleware,
 } from "type-graphql";
-import { User } from "../entity/User";
-import { Word } from "../entity/Word";
-import { CreateUserInput } from "../types/CreateUserInput";
+import { User } from "./user.entity";
+import { Word } from "../word/word.entity";
+import { CreateUserInput } from "./types/CreateUserInput";
 import jwt from "jsonwebtoken";
-import { isAuthenticated } from "../middleware/isAuthenticated";
-import { LoginPayload } from "../types/LoginPayload";
+import { isAuthenticated } from "../../middleware/isAuthenticated";
+import { LoginPayload } from "./types/LoginPayload";
 
 @Resolver(User)
 export class UserResolver implements ResolverInterface<User> {

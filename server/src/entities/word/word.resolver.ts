@@ -9,20 +9,20 @@ import {
   Root,
   UseMiddleware,
 } from "type-graphql";
-import { Word } from "../entity/Word";
-import { AddWordInput } from "../types/AddWordInput";
-import { GetWordsInput } from "../types/GetWordsInput";
-import { WordConnection } from "../types/WordConnection";
-import { WordEdge } from "../types/WordEdge";
-import { applyCursorsToWords } from "../utils/applyCursorsToWords";
-import { sliceWordsUsingFirstAndLast } from "../utils/sliceWordsUsingFirstAndLast";
-import { hasNextPage } from "../utils/hasNextPage";
-import { hasPreviousPage } from "../utils/hasPreviousPage";
-import { User } from "../entity/User";
-import { isAuthenticated } from "../middleware/isAuthenticated";
+import { Word } from "./word.entity";
+import { AddWordInput } from "./types/AddWordInput";
+import { GetWordsInput } from "./types/GetWordsInput";
+import { WordConnection } from "./types/WordConnection";
+import { User } from "../user/user.entity";
+import { isAuthenticated } from "../../middleware/isAuthenticated";
+import { Service } from "typedi";
+import { WordService } from "./word.service";
 
 @Resolver(Word)
+@Service()
 export class WordResolver implements ResolverInterface<Word> {
+  constructor(public wordService: WordService) {}
+
   @Mutation(() => Word)
   @UseMiddleware(isAuthenticated)
   async createWord(
@@ -75,29 +75,14 @@ export class WordResolver implements ResolverInterface<Word> {
       .where("user.id = :id", { id: parseInt(userId) })
       .leftJoinAndSelect("user.words", "word")
       .getOne();
-
-    const filteredWords = applyCursorsToWords(user.words, before, after);
-    const slicedAndFilteredWords = sliceWordsUsingFirstAndLast(
-      filteredWords,
+    const paginatedWords = this.wordService.getPaginatedWords(
+      user.words,
       first,
-      last
+      last,
+      before,
+      after
     );
-
-    const wordEdges: WordEdge[] = slicedAndFilteredWords.map((word) => {
-      return {
-        node: word,
-        cursor: Buffer.from(word.id.toString()).toString("base64"),
-      };
-    });
-
-    return {
-      totalCount: user.words.length,
-      edges: wordEdges,
-      pageInfo: {
-        hasPreviousPage: hasPreviousPage(filteredWords, last),
-        hasNextPage: hasNextPage(filteredWords, first),
-      },
-    };
+    return paginatedWords;
   }
 
   @FieldResolver()
