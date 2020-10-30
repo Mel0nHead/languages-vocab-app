@@ -7,6 +7,7 @@ import {
   ResolverInterface,
   FieldResolver,
   Root,
+  UseMiddleware,
 } from "type-graphql";
 import { Word } from "../entity/Word";
 import { AddWordInput } from "../types/AddWordInput";
@@ -18,10 +19,12 @@ import { sliceWordsUsingFirstAndLast } from "../utils/sliceWordsUsingFirstAndLas
 import { hasNextPage } from "../utils/hasNextPage";
 import { hasPreviousPage } from "../utils/hasPreviousPage";
 import { User } from "../entity/User";
+import { isAuthenticated } from "../middleware/isAuthenticated";
 
 @Resolver(Word)
 export class WordResolver implements ResolverInterface<Word> {
   @Mutation(() => Word)
+  @UseMiddleware(isAuthenticated)
   async createWord(
     @Arg("newWordInput")
     { userId, originalWord, translatedWord, language }: AddWordInput
@@ -47,6 +50,7 @@ export class WordResolver implements ResolverInterface<Word> {
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(isAuthenticated)
   async deleteWord(@Arg("wordId", () => ID) wordId: string) {
     let id = parseInt(wordId);
     await Word.delete(id);
@@ -54,6 +58,7 @@ export class WordResolver implements ResolverInterface<Word> {
   }
 
   @Mutation(() => Word)
+  @UseMiddleware(isAuthenticated)
   async updateWord(@Arg("wordId", () => ID) wordId: string) {
     const id = parseInt(wordId);
     let word = await Word.findOne({ id });
@@ -62,6 +67,7 @@ export class WordResolver implements ResolverInterface<Word> {
   }
 
   @Query(() => WordConnection)
+  @UseMiddleware(isAuthenticated)
   async getWords(
     @Arg("getWordsArgs") { first, last, before, after, userId }: GetWordsInput
   ): Promise<WordConnection> {
@@ -95,6 +101,7 @@ export class WordResolver implements ResolverInterface<Word> {
   }
 
   @FieldResolver()
+  @UseMiddleware(isAuthenticated)
   async user(@Root() word: Word): Promise<User> {
     const id = word.id;
     const wordData = await Word.createQueryBuilder("word")

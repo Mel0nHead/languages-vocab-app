@@ -14,7 +14,7 @@ import { User } from "../entity/User";
 import { Word } from "../entity/Word";
 import { CreateUserInput } from "../types/CreateUserInput";
 import jwt from "jsonwebtoken";
-import { isAuthenticated, MyContext } from "../isAuthenticated";
+import { isAuthenticated, MyContext } from "../middleware/isAuthenticated";
 
 @Resolver(User)
 export class UserResolver implements ResolverInterface<User> {
@@ -24,6 +24,7 @@ export class UserResolver implements ResolverInterface<User> {
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(isAuthenticated)
   async deleteUser(@Arg("userId", () => ID) userId: string) {
     const id = parseInt(userId);
     const user = await User.createQueryBuilder("user")
@@ -40,17 +41,20 @@ export class UserResolver implements ResolverInterface<User> {
   }
 
   @Query(() => User)
+  @UseMiddleware(isAuthenticated)
   async getUser(@Arg("userId", () => ID) userId: string) {
     const id = parseInt(userId);
     return User.findOne({ id });
   }
 
   @Query(() => [User])
+  @UseMiddleware(isAuthenticated)
   async getAllUsers(): Promise<User[]> {
     return User.find();
   }
 
   @FieldResolver()
+  @UseMiddleware(isAuthenticated)
   async words(@Root() user: User): Promise<Word[]> {
     const id = user.id;
 
@@ -91,11 +95,5 @@ export class UserResolver implements ResolverInterface<User> {
     } catch (e) {
       throw new Error("Please provided an authorization token");
     }
-  }
-  // TODO: get the auth middleware working
-  @Query(() => String)
-  @UseMiddleware(isAuthenticated)
-  async hello(@Ctx() context: MyContext) {
-    return "You are authenticated!";
   }
 }
