@@ -13,7 +13,7 @@ const schema = yup.object().shape({
 });
 
 interface LoginProps {
-  handleLogin: (userId: string) => void;
+  handleLogin: (userId: string, token: string) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -69,9 +69,9 @@ export function Login(props: LoginProps) {
         password: values.password,
       },
     });
-    setLoginError(data?.login?.id ? false : true);
-    if (data?.login?.id) {
-      props.handleLogin(data.login.id);
+    setLoginError(data?.login?.token ? false : true);
+    if (data?.login?.token && data.login.userId) {
+      props.handleLogin(data.login.userId, data.login.token);
     }
   }
 
