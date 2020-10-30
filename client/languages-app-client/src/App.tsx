@@ -1,6 +1,11 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useRef, useState } from "react";
 import { BrowserRouter, Redirect } from "react-router-dom";
-import { Container, makeStyles, ThemeProvider } from "@material-ui/core";
+import {
+  Container,
+  IconButton,
+  makeStyles,
+  ThemeProvider,
+} from "@material-ui/core";
 import "./App.css";
 import { theme } from "./theme";
 import { NavBar } from "./components/NavBar";
@@ -8,6 +13,8 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient from "apollo-boost";
 import { PrivateRoutes } from "./PrivateRoutes";
 import { PublicRoutes } from "./PublicRoutes";
+import { SnackbarKey, SnackbarProvider } from "notistack";
+import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
@@ -27,6 +34,9 @@ const useStyles = makeStyles({
   container: {
     paddingTop: "100px",
   },
+  closeIcon: {
+    color: "white",
+  },
 });
 
 interface AuthContext {
@@ -42,6 +52,16 @@ export default function App() {
   const [authContext, setAuthContext] = useState<AuthContext>({
     isAuthorised: !!localStorage.getItem("token"), // obviously dodgy, but will leave it for now
   });
+
+  const notistackRef = useRef<SnackbarProvider>(null);
+
+  function closeSnackbar(key: SnackbarKey) {
+    return () => {
+      if (notistackRef.current) {
+        notistackRef.current.closeSnackbar(key);
+      }
+    };
+  }
 
   function handleLogin(userId: string, token: string) {
     localStorage.setItem("token", token);
@@ -66,18 +86,31 @@ export default function App() {
     <AuthContext.Provider value={authContext}>
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
-          <BrowserRouter>
-            {authContext.isAuthorised ? (
-              <>
-                <NavBar handleLogout={handleLogout} />
-                <Container maxWidth="sm" className={classes.container}>
-                  <PrivateRoutes />
-                </Container>
-              </>
-            ) : (
-              <PublicRoutes handleLogin={handleLogin} />
+          <SnackbarProvider
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            ref={notistackRef}
+            action={(key) => (
+              <IconButton
+                onClick={closeSnackbar(key)}
+                className={classes.closeIcon}
+              >
+                <CloseRoundedIcon />
+              </IconButton>
             )}
-          </BrowserRouter>
+          >
+            <BrowserRouter>
+              {authContext.isAuthorised ? (
+                <>
+                  <NavBar handleLogout={handleLogout} />
+                  <Container maxWidth="sm" className={classes.container}>
+                    <PrivateRoutes />
+                  </Container>
+                </>
+              ) : (
+                <PublicRoutes handleLogin={handleLogin} />
+              )}
+            </BrowserRouter>
+          </SnackbarProvider>
         </ThemeProvider>
       </ApolloProvider>
     </AuthContext.Provider>

@@ -5,6 +5,7 @@ import { fetchTranslation } from "../utils/fetchTranslation";
 import { createWord } from "../utils/createWord";
 import { TextField, Button, Box, makeStyles } from "@material-ui/core";
 import { ChooseLanguages } from "../components/ChooseLanguages";
+import { useSnackbar } from "notistack";
 
 export interface Word {
   language: string;
@@ -34,19 +35,28 @@ export function Home() {
   const [words, setWords] = useState<Word[]>([]);
   const [addWord] = useAddWordMutation();
   const [error, setError] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
-  function handleAdd(word: Word) {
-    addWord({
-      variables: {
-        language: word.language,
-        originalWord: word.originalWord,
-        translatedWord: word.translatedWord,
-        userId: localStorage.getItem("userId") || "",
-      },
-    });
-    setWords((currentWords) => {
-      return currentWords.filter((w) => w.id !== word.id);
-    });
+  async function handleAdd(word: Word) {
+    try {
+      await addWord({
+        variables: {
+          language: word.language,
+          originalWord: word.originalWord,
+          translatedWord: word.translatedWord,
+          userId: localStorage.getItem("userId") || "",
+        },
+      });
+      setWords((currentWords) => {
+        return currentWords.filter((w) => w.id !== word.id);
+      });
+      enqueueSnackbar("Word successfully added.", { variant: "success" });
+    } catch (e) {
+      enqueueSnackbar(
+        "Something went wrong. Please refresh the page and try again.",
+        { variant: "error" }
+      );
+    }
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {

@@ -2,15 +2,25 @@ import React from "react";
 import { useGetAllWordsQuery } from "../graphql/useGetAllWordsQuery";
 import { useDeleteWordMutation } from "../graphql/useDeleteWordMutation";
 import { TranslateCard } from "../components/TranslateCard";
+import { useSnackbar } from "notistack";
 
 export function Review() {
   const { data, error, loading } = useGetAllWordsQuery(
     localStorage.getItem("userId") || ""
   );
   const [deleteWord] = useDeleteWordMutation();
+  const { enqueueSnackbar } = useSnackbar();
 
-  function handleDelete(id: string) {
-    deleteWord({ variables: { id } });
+  async function handleDelete(id: string) {
+    try {
+      await deleteWord({ variables: { id } });
+      enqueueSnackbar("Word successfully deleted.", { variant: "success" });
+    } catch (e) {
+      enqueueSnackbar(
+        "Something went wrong. Please refresh the page and try again.",
+        { variant: "error" }
+      );
+    }
   }
 
   if (loading) {

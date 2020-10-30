@@ -13,6 +13,7 @@ import * as yup from "yup";
 import { useCreateUserMutation } from "../graphql/useCreateUserMutation";
 import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
 import { InitialLoginValues } from "../Login";
+import { useSnackbar } from "notistack";
 
 interface SignupProps {
   isOpen: boolean;
@@ -55,18 +56,27 @@ interface InitialSignupValues extends InitialLoginValues {
 export function Signup(props: SignupProps) {
   const [createUser] = useCreateUserMutation();
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
 
-  function handleSubmit(
+  async function handleSubmit(
     values: InitialSignupValues,
     actions: FormikHelpers<InitialSignupValues>
   ) {
-    createUser({
-      variables: {
-        email: values.email,
-        name: values.name,
-        password: values.password,
-      },
-    });
+    try {
+      await createUser({
+        variables: {
+          email: values.email,
+          name: values.name,
+          password: values.password,
+        },
+      });
+      enqueueSnackbar("User successfully created.", { variant: "success" });
+    } catch (e) {
+      enqueueSnackbar(
+        "Something went wrong. Please refresh the page and try again.",
+        { variant: "error" }
+      );
+    }
     actions.setSubmitting(false);
     props.handleClose();
   }
