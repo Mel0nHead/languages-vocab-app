@@ -10,7 +10,9 @@ import { WordResolver } from "./resolvers/WordResolver";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers/UserResolver";
 
-// following this tutorial for auth: https://www.youtube.com/watch?v=dBuU61ABEDs
+// Trying to implement dependency injection
+// create two classes for each entity: repository and service e.g UserRepository and UserService
+// trying to follow the example in typegraphql docs and canary/graph-api
 
 const PORT = 4000;
 
