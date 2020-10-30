@@ -12,13 +12,18 @@ import {
 } from "type-graphql";
 import { User } from "./user.entity";
 import { Word } from "../word/word.entity";
-import { CreateUserInput } from "./types/CreateUserInput";
+import { CreateUserInput } from "./types/create-user.input";
 import jwt from "jsonwebtoken";
 import { isAuthenticated } from "../../middleware/isAuthenticated";
-import { LoginPayload } from "./types/LoginPayload";
+import { LoginPayload } from "./types/login.output";
+import { Service } from "typedi";
+import { UserService } from "./user.service";
 
 @Resolver(User)
+@Service()
 export class UserResolver implements ResolverInterface<User> {
+  constructor(public userService: UserService) {}
+
   @Mutation(() => User)
   async createUser(@Arg("createUserInput") createUserInput: CreateUserInput) {
     return User.create({ ...createUserInput, createdAt: new Date() }).save();
@@ -76,12 +81,7 @@ export class UserResolver implements ResolverInterface<User> {
           password,
         })
         .getOne();
-
-      const token = jwt.sign({ hello: user }, "SUPER_SECRET", {
-        algorithm: "HS256",
-        subject: user.id.toString(),
-        expiresIn: "10d",
-      });
+      const token = this.userService.generateToken(user);
 
       return {
         userId: user.id,

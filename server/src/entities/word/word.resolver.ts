@@ -10,9 +10,9 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { Word } from "./word.entity";
-import { AddWordInput } from "./types/AddWordInput";
-import { GetWordsInput } from "./types/GetWordsInput";
-import { WordConnection } from "./types/WordConnection";
+import { AddWordInput } from "./types/add-word.input";
+import { GetWordsInput } from "./types/get-words.input";
+import { WordConnection } from "./types/word-connection.output";
 import { User } from "../user/user.entity";
 import { isAuthenticated } from "../../middleware/isAuthenticated";
 import { Service } from "typedi";

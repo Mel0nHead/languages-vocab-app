@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType } from "type-graphql";
-import { PageInfo } from "./PageInfo";
-import { WordEdge } from "./WordEdge";
+import { PageInfo } from "./page-info.ouput";
+import { WordEdge } from "./word-edge.output";
 
 @ObjectType()
 export class WordConnection {

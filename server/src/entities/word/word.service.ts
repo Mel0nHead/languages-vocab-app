@@ -1,6 +1,6 @@
 import { Service } from "typedi";
-import { WordConnection } from "./types/WordConnection";
-import { WordEdge } from "./types/WordEdge";
+import { WordConnection } from "./types/word-connection.output";
+import { WordEdge } from "./types/word-edge.output";
 import { Word } from "./word.entity";
 
 @Service()
