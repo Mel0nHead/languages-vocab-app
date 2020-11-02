@@ -1,20 +1,19 @@
-import { Service } from "typedi";
 import { User } from "./user.entity";
+import { Repository, EntityRepository } from "typeorm";
+import { Service } from "typedi";
 
-export class UserRepository {
-  public getUserWithWords(userId: number) {
-    return User.createQueryBuilder("user")
+@Service()
+@EntityRepository(User)
+export class UserRepository extends Repository<User> {
+  public getUserWithWords(id: number) {
+    return this.createQueryBuilder("user")
       .leftJoinAndSelect("user.words", "word")
-      .where("user.id = :id", { userId })
+      .where("user.id = :id", { id })
       .getOne();
   }
 
-  public getUser(id: number) {
-    return User.findOne(id);
-  }
-
   public getUserUsingEmailAndPassword(email: string, password: string) {
-    return User.createQueryBuilder("user")
+    return this.createQueryBuilder("user")
       .where("user.email = :email AND user.password = :password", {
         email,
         password,

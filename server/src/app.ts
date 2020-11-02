@@ -4,7 +4,7 @@ import expressJwt from "express-jwt";
 import bodyParser from "body-parser";
 import cors from "cors";
 import logger from "morgan";
-import { createConnection } from "typeorm";
+import { createConnection, useContainer } from "typeorm";
 import { ApolloServer } from "apollo-server-express";
 import { WordResolver } from "./entities/word/word.resolver";
 import { buildSchema } from "type-graphql";
@@ -28,6 +28,7 @@ const startServer = async () => {
     context: ({ req, res }) => ({ req, res }),
   });
 
+  useContainer(Container);
   await createConnection();
 
   const app = express();
