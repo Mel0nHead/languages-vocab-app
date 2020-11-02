@@ -30,6 +30,18 @@ const client = new ApolloClient({
   },
 });
 
+client.defaultOptions = {
+  watchQuery: {
+    fetchPolicy: "no-cache",
+  },
+  query: {
+    fetchPolicy: "no-cache",
+  },
+  mutate: {
+    fetchPolicy: "no-cache",
+  },
+};
+
 const useStyles = makeStyles({
   container: {
     paddingTop: "100px",
