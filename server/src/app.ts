@@ -11,6 +11,11 @@ import { buildSchema } from "type-graphql";
 import { UserResolver } from "./entities/user/user.resolver";
 import { Container } from "typedi";
 
+// TODO: Add a 'Test' enity
+// - BE CAREFUL: either delete everything from api or create a migration for this
+// - Test should have: id, user, words (which should be many-to-many with custom property 'correct'), createdAt, updatedAt, finishedAt
+// - need to be able to create, update and delete a Test, as well as get a list of all tests on a user
+
 const PORT = 4000;
 
 const startServer = async () => {
