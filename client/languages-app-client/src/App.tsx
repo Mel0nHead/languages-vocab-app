@@ -10,7 +10,6 @@ import "./App.css";
 import { theme } from "./common/theme";
 import { NavBar } from "./common/components/NavBar";
 import { ApolloProvider } from "@apollo/react-hooks";
-import ApolloClient from "apollo-boost";
 import { PrivateRoutes } from "./common/components/PrivateRoutes";
 import { PublicRoutes } from "./common/components/PublicRoutes";
 import { SnackbarKey, SnackbarProvider } from "notistack";
