@@ -1,6 +1,9 @@
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
-import { getWords, getWordsVariables } from "../generated-graphql-interfaces";
+import {
+  getWords,
+  getWordsVariables,
+} from "../../../generated-graphql-interfaces";
 
 export const getNextWordGql = gql`
   query getWords($first: Int, $after: String, $userId: ID!) {

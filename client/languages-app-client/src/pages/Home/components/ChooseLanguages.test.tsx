@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import React from "react";
-import { useFetch } from "../hooks/useFetch";
+import { useFetch } from "../../../common/hooks/useFetch";
 import { ChooseLanguages } from "./ChooseLanguages";
 
 jest.mock("../hooks/useFetch", () => ({

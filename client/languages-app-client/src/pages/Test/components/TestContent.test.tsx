@@ -2,7 +2,7 @@ import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import { TestContent } from "./TestContent";
 import "@testing-library/jest-dom/extend-expect";
-import { getWords } from "../generated-graphql-interfaces";
+import { getWords } from "../../../generated-graphql-interfaces";
 
 function setUpTest() {
   const nextQuestionMock = jest.fn();

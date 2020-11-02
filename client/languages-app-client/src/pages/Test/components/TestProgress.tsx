@@ -1,6 +1,6 @@
 import { LinearProgress } from "@material-ui/core";
 import React from "react";
-import { normalise } from "../utils/normalise";
+import { normalise } from "../../../common/utils/normalise";
 
 interface TestProgressProps {
   wordCount: number;

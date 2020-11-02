@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/react-hooks";
 import {
   getAllWords,
   getAllWordsVariables,
-} from "../generated-graphql-interfaces";
+} from "../../../generated-graphql-interfaces";
 
 export const getAllWordsGql = gql`
   query getAllWords($userId: ID!) {

@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/react-hooks";
 import {
   createWord,
   createWordVariables,
-} from "../generated-graphql-interfaces";
+} from "../../../generated-graphql-interfaces";
 
 export const addWordGql = gql`
   mutation createWord(

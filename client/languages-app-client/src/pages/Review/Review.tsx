@@ -1,7 +1,7 @@
 import React from "react";
-import { useGetAllWordsQuery } from "../graphql/useGetAllWordsQuery";
-import { useDeleteWordMutation } from "../graphql/useDeleteWordMutation";
-import { TranslateCard } from "../components/TranslateCard";
+import { useGetAllWordsQuery } from "./graphql/useGetAllWordsQuery";
+import { useDeleteWordMutation } from "./graphql/useDeleteWordMutation";
+import { TranslateCard } from "../../common/components/TranslateCard";
 import { useSnackbar } from "notistack";
 
 export function Review() {

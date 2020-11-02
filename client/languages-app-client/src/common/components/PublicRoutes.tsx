@@ -6,7 +6,7 @@ import {
   withRouter,
 } from "react-router-dom";
 import { AuthRoute } from "./AuthRoute";
-import { Login } from "./pages/Login/Login";
+import { Login } from "../../pages/Login/Login";
 
 export interface PublicRoutesProps extends RouteComponentProps<{}> {
   handleLogin: (userId: string, token: string) => void;

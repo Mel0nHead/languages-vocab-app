@@ -3,7 +3,7 @@ import { render, wait, fireEvent } from "@testing-library/react";
 import { MockedProvider, MockedResponse } from "@apollo/react-testing";
 import "@testing-library/jest-dom/extend-expect";
 import { Test } from "./Test";
-import { getNextWordGql } from "../graphql/useGetNextWordQuery";
+import { getNextWordGql } from "./graphql/useGetNextWordQuery";
 
 const getAllWords = {
   getWords: {

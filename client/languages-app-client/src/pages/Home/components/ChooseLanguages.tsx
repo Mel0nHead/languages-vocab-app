@@ -1,7 +1,7 @@
 import React from "react";
 import { LanguageSelect } from "./LanguageSelect";
-import { useFetch } from "../hooks/useFetch";
-import { YANDEX_KEY, YANDEX_URL } from "../constants";
+import { useFetch } from "../../../common/hooks/useFetch";
+import { YANDEX_KEY, YANDEX_URL } from "../../../common/constants";
 
 interface SupportedLanguages {
   dirs: string[];

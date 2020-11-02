@@ -1,11 +1,11 @@
 import "@testing-library/jest-dom/extend-expect";
 import { Review } from "./Review";
-import { getAllWordsGql } from "../graphql/useGetAllWordsQuery";
+import { getAllWordsGql } from "./graphql/useGetAllWordsQuery";
 import { MockedProvider, MockedResponse } from "@apollo/react-testing";
-import { deleteWordGql } from "../graphql/useDeleteWordMutation";
+import { deleteWordGql } from "./graphql/useDeleteWordMutation";
 import { render, wait } from "@testing-library/react";
 import React from "react";
-import { getAllWords } from "../generated-graphql-interfaces";
+import { getAllWords } from "../../generated-graphql-interfaces";
 
 const wordsData: getAllWords = {
   getWords: {

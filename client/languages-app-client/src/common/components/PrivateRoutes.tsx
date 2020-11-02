@@ -1,9 +1,9 @@
 import React from "react";
 import { Switch, withRouter } from "react-router-dom";
 import { AuthRoute } from "./AuthRoute";
-import { Home } from "./pages/Home";
-import { Review } from "./pages/Review";
-import { Test } from "./pages/Test";
+import { Home } from "../../pages/Home/Home";
+import { Review } from "../../pages/Review/Review";
+import { Test } from "../../pages/Test/Test";
 
 export const PrivateRoutes = withRouter(() => {
   return (

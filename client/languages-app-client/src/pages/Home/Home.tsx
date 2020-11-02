@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useAddWordMutation } from "../graphql/useAddWordMutation";
-import { TranslateCard } from "../components/TranslateCard";
-import { fetchTranslation } from "../utils/fetchTranslation";
-import { createWord } from "../utils/createWord";
+import { useAddWordMutation } from "./graphql/useAddWordMutation";
+import { TranslateCard } from "../../common/components/TranslateCard";
+import { fetchTranslation } from "../../common/utils/fetchTranslation";
+import { createWord } from "../../common/utils/createWord";
 import { TextField, Button, Box, makeStyles } from "@material-ui/core";
-import { ChooseLanguages } from "../components/ChooseLanguages";
+import { ChooseLanguages } from "./components/ChooseLanguages";
 import { useSnackbar } from "notistack";
 
 export interface Word {

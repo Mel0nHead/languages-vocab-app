@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/react-hooks";
 import {
   deleteWord,
   deleteWordVariables,
-} from "../generated-graphql-interfaces";
+} from "../../../generated-graphql-interfaces";
 
 export const deleteWordGql = gql`
   mutation deleteWord($id: ID!) {

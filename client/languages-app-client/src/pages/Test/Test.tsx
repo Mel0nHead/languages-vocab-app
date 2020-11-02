@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { StartTest } from "../components/StartTest";
-import { FinishedTest } from "../components/FinishedTest";
-import { TestContent } from "../components/TestContent";
-import { useGetNextWordQuery } from "../graphql/useGetNextWordQuery";
-import { TestProgress } from "../components/TestProgress";
+import { StartTest } from "./components/StartTest";
+import { FinishedTest } from "./components/FinishedTest";
+import { TestContent } from "./components/TestContent";
+import { useGetNextWordQuery } from "./graphql/useGetNextWordQuery";
+import { TestProgress } from "./components/TestProgress";
 
 export type AnswerType = "correct" | "incorrect";
 

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
 import { Location } from "history";
-import { AuthContext } from "./App";
+import { AuthContext } from "../../App";
 
 export function hasLoginInPath(location: Location | undefined): boolean {
   return location ? location.pathname === "/login" : false;

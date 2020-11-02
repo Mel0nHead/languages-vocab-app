@@ -8,10 +8,10 @@ import {
   Box,
   Button,
 } from "@material-ui/core";
-import { getLanguageInfo } from "../utils/getLanguageInfo";
-import { FlagIcon } from "./FlagIcon";
-import { AnswerType } from "../pages/Test";
-import { getWords } from "../generated-graphql-interfaces";
+import { getLanguageInfo } from "../../../common/utils/getLanguageInfo";
+import { FlagIcon } from "../../../common/components/FlagIcon";
+import { AnswerType } from "../Test";
+import { getWords } from "../../../generated-graphql-interfaces";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
