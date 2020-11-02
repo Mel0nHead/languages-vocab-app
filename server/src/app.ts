@@ -11,10 +11,6 @@ import { buildSchema } from "type-graphql";
 import { UserResolver } from "./entities/user/user.resolver";
 import { Container } from "typedi";
 
-// Trying to implement dependency injection
-// create two classes for each entity: repository and service e.g UserRepository and UserService
-// trying to follow the example in typegraphql docs and canary/graph-api
-
 const PORT = 4000;
 
 const startServer = async () => {
