@@ -7,28 +7,14 @@ import {
   ThemeProvider,
 } from "@material-ui/core";
 import "./App.css";
-import { theme } from "./theme";
-import { NavBar } from "./components/NavBar";
+import { theme } from "./common/theme";
+import { NavBar } from "./common/components/NavBar";
 import { ApolloProvider } from "@apollo/react-hooks";
-import ApolloClient from "apollo-boost";
-import { PrivateRoutes } from "./PrivateRoutes";
-import { PublicRoutes } from "./PublicRoutes";
+import { PrivateRoutes } from "./common/components/PrivateRoutes";
+import { PublicRoutes } from "./common/components/PublicRoutes";
 import { SnackbarKey, SnackbarProvider } from "notistack";
 import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
-
-const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
-  request: (operation) => {
-    const token = localStorage.getItem("token");
-    const authorization = token ? `Bearer ${token}` : "";
-
-    operation.setContext({
-      headers: {
-        authorization,
-      },
-    });
-  },
-});
+import apolloClient from "./common/apolloClient";
 
 const useStyles = makeStyles({
   container: {
@@ -52,7 +38,6 @@ export default function App() {
   const [authContext, setAuthContext] = useState<AuthContext>({
     isAuthorised: !!localStorage.getItem("token"), // obviously dodgy, but will leave it for now
   });
-
   const notistackRef = useRef<SnackbarProvider>(null);
 
   function closeSnackbar(key: SnackbarKey) {
@@ -84,7 +69,7 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={authContext}>
-      <ApolloProvider client={client}>
+      <ApolloProvider client={apolloClient}>
         <ThemeProvider theme={theme}>
           <SnackbarProvider
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}

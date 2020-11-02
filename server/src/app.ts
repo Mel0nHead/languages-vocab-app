@@ -4,19 +4,19 @@ import expressJwt from "express-jwt";
 import bodyParser from "body-parser";
 import cors from "cors";
 import logger from "morgan";
-import { createConnection } from "typeorm";
+import { createConnection, useContainer } from "typeorm";
 import { ApolloServer } from "apollo-server-express";
-import { WordResolver } from "./resolvers/WordResolver";
+import { WordResolver } from "./entities/word/word.resolver";
 import { buildSchema } from "type-graphql";
-import { UserResolver } from "./resolvers/UserResolver";
-
-// following this tutorial for auth: https://www.youtube.com/watch?v=dBuU61ABEDs
+import { UserResolver } from "./entities/user/user.resolver";
+import { Container } from "typedi";
 
 const PORT = 4000;
 
 const startServer = async () => {
   const schema = await buildSchema({
     resolvers: [WordResolver, UserResolver],
+    container: Container,
   });
 
   const apolloServer = new ApolloServer({
@@ -24,6 +24,7 @@ const startServer = async () => {
     context: ({ req, res }) => ({ req, res }),
   });
 
+  useContainer(Container);
   await createConnection();
 
   const app = express();

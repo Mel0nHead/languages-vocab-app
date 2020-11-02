@@ -5,7 +5,7 @@
   "username": "root",
   "password": "123456789",
   "database": "languages_app",
-  "entities": ["build/entity/*.js"],
+  "entities": ["build/entities/**/*.entity.js"],
   "logging": true,
   "synchronize": true
 }
