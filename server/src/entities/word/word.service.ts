@@ -84,7 +84,7 @@ export class WordService {
       };
     });
   }
-
+  // TODO: fix bug in pagination!!!
   public getPaginatedWords(
     words: Word[],
     first?: number,
