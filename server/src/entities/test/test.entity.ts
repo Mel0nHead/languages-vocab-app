@@ -15,9 +15,9 @@ export class Test extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  //   @Field(() => User)
-  //   @ManyToOne(() => User, (user) => user.tests)
-  //   user: User;
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.tests)
+  user: User;
 
   @Field()
   @Column()

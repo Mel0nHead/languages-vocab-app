@@ -19,6 +19,7 @@ import { Service } from "typedi";
 import { UserService } from "./user.service";
 import { InjectRepository } from "typeorm-typedi-extensions/decorators/InjectRepository";
 import { UserRepository } from "./user.repository";
+import { Test } from "../test/test.entity";
 
 @Resolver(User)
 @Service()
@@ -69,6 +70,18 @@ export class UserResolver implements ResolverInterface<User> {
     const id = user.id;
     const userData = await this.userRepository.getUserWithWords(id);
     return userData.words;
+  }
+
+  @FieldResolver()
+  @UseMiddleware(isAuthenticated)
+  async tests(@Root() user: User): Promise<Test[]> {
+    const id = user.id;
+    const userData = await this.userRepository
+      .createQueryBuilder("user")
+      .leftJoinAndSelect("user.tests", "tests")
+      .where("user.id = :id", { id })
+      .getOne();
+    return userData.tests;
   }
 
   @Mutation(() => LoginPayload, { nullable: true })
