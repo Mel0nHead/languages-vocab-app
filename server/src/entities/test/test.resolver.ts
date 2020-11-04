@@ -71,5 +71,14 @@ export class TestResolver implements ResolverInterface<Test> {
     return Test.save(test);
   }
 
-  // TODO: add getTests query
+  @Query(() => [Test])
+  @UseMiddleware(isAuthenticated)
+  async getTests(@Arg("userId", () => ID) userId: string) {
+    const id = parseInt(userId);
+    const user = await User.createQueryBuilder("user")
+      .leftJoinAndSelect("user.tests", "test")
+      .where("user.id = :id", { id })
+      .getOne();
+    return user.tests;
+  }
 }

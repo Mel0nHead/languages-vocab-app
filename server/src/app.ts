@@ -10,6 +10,7 @@ import { WordResolver } from "./entities/word/word.resolver";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./entities/user/user.resolver";
 import { Container } from "typedi";
+import { TestResolver } from "./entities/test/test.resolver";
 
 // TODO: Add a 'Test' enity
 // - BE CAREFUL: either delete everything from api or create a migration for this
@@ -20,7 +21,7 @@ const PORT = 4000;
 
 const startServer = async () => {
   const schema = await buildSchema({
-    resolvers: [WordResolver, UserResolver],
+    resolvers: [WordResolver, UserResolver, TestResolver],
     container: Container,
   });
 
