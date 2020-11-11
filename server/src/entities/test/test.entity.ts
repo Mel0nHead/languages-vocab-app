@@ -28,6 +28,6 @@ export class Test extends BaseEntity {
   updatedAt: Date;
 
   @Field({ nullable: true })
-  @Column()
+  @Column({ nullable: true })
   finishedAt: Date;
 }
