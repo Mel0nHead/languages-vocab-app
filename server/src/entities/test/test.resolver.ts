@@ -91,4 +91,9 @@ export class TestResolver implements ResolverInterface<Test> {
       .getOne();
     return user.tests;
   }
+
+  @Query(() => [Test])
+  async getAllTests() {
+    return Test.find();
+  }
 }

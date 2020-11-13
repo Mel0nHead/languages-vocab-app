@@ -8,6 +8,7 @@ import {
   FieldResolver,
   Root,
   UseMiddleware,
+  Field,
 } from "type-graphql";
 import { Word } from "./word.entity";
 import { AddWordInput } from "./types/add-word.input";
@@ -87,5 +88,10 @@ export class WordResolver implements ResolverInterface<Word> {
   async user(@Root() word: Word): Promise<User> {
     const wordData = await this.wordRepository.getWordWithUser(word.id);
     return wordData.user;
+  }
+
+  @Query(() => [Word])
+  async getAllWords() {
+    return this.wordRepository.find();
   }
 }
