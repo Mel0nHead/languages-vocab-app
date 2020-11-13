@@ -8,6 +8,12 @@ Backend: Express, TypeORM, MySQL, Type-GraphQL
 
 # TODO
 
+- INSTALL EXTENSION TO HELP WITH SQL
+
+- ADD INTEGRATION TESTS FOR API
+
+  - currently have no test coverage
+
 - ALLOW FOR BATCH OPERATIONS IN API
 
   - maybe use some sort of data loader (look at Ben Awad's YT for inspiration)
@@ -20,6 +26,3 @@ Backend: Express, TypeORM, MySQL, Type-GraphQL
 - ADD FOREIGN KEYS TO WORD AND TEST ENTITIES
 
   - e.g. add 'userId' field to Word, so that you can query all words for a particular user without having to fetch the User first
-
-- ADD INTEGRATION TESTS FOR API
-  - currently have no test coverage
