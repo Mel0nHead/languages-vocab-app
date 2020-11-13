@@ -8,7 +8,6 @@ import {
   FieldResolver,
   Root,
   UseMiddleware,
-  Field,
 } from "type-graphql";
 import { Word } from "./word.entity";
 import { AddWordInput } from "./types/add-word.input";

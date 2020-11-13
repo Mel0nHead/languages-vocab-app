@@ -30,4 +30,12 @@ export class Test extends BaseEntity {
   @Field({ nullable: true })
   @Column({ nullable: true })
   finishedAt: Date;
+
+  @Field()
+  @Column()
+  correctAnswers: number;
+
+  @Field()
+  @Column()
+  incorrectAnswers: number;
 }

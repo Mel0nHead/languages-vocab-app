@@ -14,15 +14,6 @@ import { isAuthenticated } from "../../middleware/isAuthenticated";
 import { User } from "../user/user.entity";
 import { Test } from "./test.entity";
 import { CreateTestInput } from "./types/create-test.input";
-// For now, just have a field 'answers' that exists on Test
-// This could just be like so:
-// const test = {
-//   answers: [
-//     { word: "hello", isCorrect: false },
-//     { word: "pigeon", isCorrect: true },
-//   ],
-// };
-// Merge this, and then create a new branch for creating many-to-many relationship as it is very experimental and likely to break things.
 
 @Resolver(Test)
 @Service()
@@ -51,6 +42,8 @@ export class TestResolver implements ResolverInterface<Test> {
       createdAt: date,
       updatedAt: date,
       finishedAt: null,
+      correctAnswers: 0,
+      incorrectAnswers: 0,
     }).save();
     user.tests.push(test);
     await User.save(user);
@@ -69,12 +62,20 @@ export class TestResolver implements ResolverInterface<Test> {
   @UseMiddleware(isAuthenticated)
   async updateTest(
     @Arg("testId", () => ID) testId: string,
+    @Arg("isAnswerCorrect", () => Boolean) isAnswerCorrect: boolean,
     @Arg("completed", () => Boolean) completed?: boolean
   ) {
     const id = parseInt(testId);
     let test = await Test.findOne({ id });
     const date = new Date();
     test.updatedAt = date;
+
+    if (isAnswerCorrect) {
+      test.correctAnswers++;
+    } else {
+      test.incorrectAnswers++;
+    }
+
     if (completed) {
       test.finishedAt = date;
     }
