@@ -14,7 +14,7 @@ import { isAuthenticated } from "../../middleware/isAuthenticated";
 import { User } from "../user/user.entity";
 import { Test } from "./test.entity";
 import { CreateTestInput } from "./types/create-test.input";
-
+// TODO: continue refactoring
 @Resolver(Test)
 @Service()
 export class TestResolver implements ResolverInterface<Test> {
