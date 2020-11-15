@@ -20,4 +20,11 @@ export class UserRepository extends Repository<User> {
       })
       .getOne();
   }
+
+  public getUserWithTests(id: number) {
+    return this.createQueryBuilder("user")
+      .leftJoinAndSelect("user.tests", "test")
+      .where("user.id = :id", { id })
+      .getOne();
+  }
 }

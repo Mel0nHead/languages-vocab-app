@@ -11,4 +11,15 @@ export class TestRepository extends Repository<Test> {
       .where("test.id = :id", { id })
       .getOne();
   }
+
+  public createOneAndSave() {
+    const now = new Date();
+    return this.create({
+      createdAt: now,
+      updatedAt: now,
+      finishedAt: null,
+      correctAnswers: 0,
+      incorrectAnswers: 0,
+    }).save();
+  }
 }

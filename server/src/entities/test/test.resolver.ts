@@ -10,22 +10,29 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { Service } from "typedi";
+import { InjectRepository } from "typeorm-typedi-extensions";
 import { isAuthenticated } from "../../middleware/isAuthenticated";
 import { User } from "../user/user.entity";
+import { UserRepository } from "../user/user.repository";
 import { Test } from "./test.entity";
+import { TestRepository } from "./test.repository";
 import { CreateTestInput } from "./types/create-test.input";
-// TODO: continue refactoring
+
 @Resolver(Test)
 @Service()
 export class TestResolver implements ResolverInterface<Test> {
+  constructor(
+    @InjectRepository()
+    private readonly testRepository: TestRepository,
+    @InjectRepository()
+    private readonly userRepository: UserRepository
+  ) {}
+
   @FieldResolver()
   @UseMiddleware(isAuthenticated)
   async user(@Root() test: Test): Promise<User> {
     const { id } = test;
-    const testData = await Test.createQueryBuilder("test")
-      .leftJoinAndSelect("test.user", "user")
-      .where("test.id = :id", { id })
-      .getOne();
+    const testData = await this.testRepository.getTestWithUser(id);
     return testData.user;
   }
 
@@ -33,20 +40,10 @@ export class TestResolver implements ResolverInterface<Test> {
   @UseMiddleware(isAuthenticated)
   async createTest(@Arg("createTestInput") { userId }: CreateTestInput) {
     const id = parseInt(userId);
-    const user = await User.createQueryBuilder("user")
-      .leftJoinAndSelect("user.tests", "test")
-      .where("user.id = :id", { id })
-      .getOne();
-    const date = new Date();
-    const test = await Test.create({
-      createdAt: date,
-      updatedAt: date,
-      finishedAt: null,
-      correctAnswers: 0,
-      incorrectAnswers: 0,
-    }).save();
+    const user = await this.userRepository.getUserWithTests(id);
+    const test = await this.testRepository.createOneAndSave();
     user.tests.push(test);
-    await User.save(user);
+    await this.userRepository.save(user);
     return test;
   }
 
@@ -54,7 +51,7 @@ export class TestResolver implements ResolverInterface<Test> {
   @UseMiddleware(isAuthenticated)
   async deleteTest(@Arg("testId", () => ID) testId: string) {
     let id = parseInt(testId);
-    await Test.delete(id);
+    await this.testRepository.delete(id);
     return true;
   }
 
@@ -66,7 +63,7 @@ export class TestResolver implements ResolverInterface<Test> {
     @Arg("completed", () => Boolean) completed?: boolean
   ) {
     const id = parseInt(testId);
-    let test = await Test.findOne({ id });
+    let test = await this.testRepository.findOne({ id });
     const date = new Date();
     test.updatedAt = date;
 
@@ -79,22 +76,19 @@ export class TestResolver implements ResolverInterface<Test> {
     if (completed) {
       test.finishedAt = date;
     }
-    return Test.save(test);
+    return this.testRepository.save(test);
   }
 
   @Query(() => [Test])
   @UseMiddleware(isAuthenticated)
   async getTests(@Arg("userId", () => ID) userId: string) {
     const id = parseInt(userId);
-    const user = await User.createQueryBuilder("user")
-      .leftJoinAndSelect("user.tests", "test")
-      .where("user.id = :id", { id })
-      .getOne();
+    const user = await this.userRepository.getUserWithTests(id);
     return user.tests;
   }
 
   @Query(() => [Test])
   async getAllTests() {
-    return Test.find();
+    return this.testRepository.find();
   }
 }
