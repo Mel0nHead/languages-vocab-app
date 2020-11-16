@@ -8,13 +8,14 @@ import {
 } from "@material-ui/core";
 import "./App.css";
 import { theme } from "./common/theme";
-import { NavBar } from "./common/components/NavBar";
+import { DRAWER_WIDTH, NavBar } from "./common/components/NavBar";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { PrivateRoutes } from "./common/components/PrivateRoutes";
 import { PublicRoutes } from "./common/components/PublicRoutes";
 import { SnackbarKey, SnackbarProvider } from "notistack";
 import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
 import apolloClient from "./common/apolloClient";
+import { SideNav } from "./common/components/SideNav";
 
 const useStyles = makeStyles({
   container: {
@@ -22,6 +23,13 @@ const useStyles = makeStyles({
   },
   closeIcon: {
     color: "white",
+  },
+  nonSideNavContent: {
+    width: `calc(100% - ${DRAWER_WIDTH}px)`,
+    marginLeft: DRAWER_WIDTH,
+  },
+  drawerPaper: {
+    width: DRAWER_WIDTH,
   },
 });
 
@@ -86,10 +94,13 @@ export default function App() {
             <BrowserRouter>
               {authContext.isAuthorised ? (
                 <>
-                  <NavBar handleLogout={handleLogout} />
-                  <Container maxWidth="sm" className={classes.container}>
-                    <PrivateRoutes />
-                  </Container>
+                  <SideNav />
+                  <div className={classes.nonSideNavContent}>
+                    <NavBar handleLogout={handleLogout} />
+                    <Container maxWidth="md" className={classes.container}>
+                      <PrivateRoutes />
+                    </Container>
+                  </div>
                 </>
               ) : (
                 <PublicRoutes handleLogin={handleLogin} />

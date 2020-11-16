@@ -1,5 +1,11 @@
 import React from "react";
-import { FormControl, InputLabel, Select } from "@material-ui/core";
+import { FormControl, InputLabel, makeStyles, Select } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    marginRight: theme.spacing(2),
+  },
+}));
 
 interface LanguageSelectProps {
   label: string;
@@ -13,9 +19,11 @@ interface LanguageSelectProps {
 }
 
 export function LanguageSelect(props: LanguageSelectProps) {
+  const classes = useStyles();
+
   return (
     <>
-      <FormControl variant="outlined">
+      <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel htmlFor="from-language" data-testid="select-label">
           {props.label}
         </InputLabel>

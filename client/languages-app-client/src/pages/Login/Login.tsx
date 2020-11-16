@@ -102,6 +102,7 @@ export function Login(props: LoginProps) {
           />
           <Box display="flex" justifyContent="center">
             <Button
+              disableElevation
               type="submit"
               variant="contained"
               color="primary"
@@ -128,7 +129,12 @@ export function Login(props: LoginProps) {
           <Divider className={classes.divider} />
         </Form>
       </Formik>
-      <Button onClick={handleOpenDialog} variant="contained" color="secondary">
+      <Button
+        onClick={handleOpenDialog}
+        variant="contained"
+        color="secondary"
+        disableElevation
+      >
         Create new account
       </Button>
 

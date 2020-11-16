@@ -1,32 +1,19 @@
 import React from "react";
 import { makeStyles, AppBar, Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
+
+export const DRAWER_WIDTH = 270;
 
 const useStyles = makeStyles({
-  navLink: {
-    marginRight: "20px",
-    color: "white",
-    textDecoration: "none",
-    "&:hover": {
-      textDecoration: "underline",
-    },
-  },
   navBar: {
+    width: `calc(100% - ${DRAWER_WIDTH}px)`,
+    marginLeft: DRAWER_WIDTH,
     padding: "20px",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
   },
 });
-
-const linkConfig = [
-  { name: "Home", href: "/home" },
-  { name: "Review", href: "/review" },
-  { name: "Test", href: "/test" },
-  { name: "Test Results", href: "/test-results" },
-  { name: "About", href: "/about" },
-];
 
 interface NavBarProps {
   handleLogout: () => void;
@@ -34,21 +21,11 @@ interface NavBarProps {
 
 export function NavBar(props: NavBarProps) {
   const classes = useStyles();
+
   return (
     <AppBar className={classes.navBar}>
-      <nav>
-        {linkConfig.map((link) => (
-          <Link
-            to={link.href}
-            className={classes.navLink}
-            key={link.href}
-            data-testid="nav-link"
-          >
-            {link.name}
-          </Link>
-        ))}
-      </nav>
       <Button
+        disableElevation
         onClick={props.handleLogout}
         variant="outlined"
         style={{ borderColor: "white", color: "white" }}

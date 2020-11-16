@@ -98,7 +98,7 @@ export function Home() {
       <h1>Home</h1>
       <Box mb={4}>
         <TextField
-          variant="filled"
+          variant="outlined"
           label="Enter a word to translate"
           placeholder="e.g. dog"
           fullWidth
@@ -129,8 +129,9 @@ export function Home() {
         <Button
           variant="contained"
           onClick={handleTranslate}
-          color="primary"
+          color="secondary"
           data-testid="translate-btn"
+          disableElevation
         >
           Translate
         </Button>

@@ -18,8 +18,9 @@ export function FinishedTest(props: FinishedTestProps) {
       </Typography>
       <Box mt={2}>
         <Button
+          disableElevation
           variant="contained"
-          color="primary"
+          color="secondary"
           data-testid="start-test-button"
           onClick={props.startAnotherTest}
         >

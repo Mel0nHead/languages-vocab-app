@@ -82,8 +82,10 @@ export function TranslateCard(props: TranslateCardProps) {
       <Divider />
       <CardActions>
         <Button
+          disableElevation
           onClick={onClick}
-          color="primary"
+          color="secondary"
+          variant="contained"
           style={{ fontWeight: "bold" }}
           data-testid="translate-card-button"
         >

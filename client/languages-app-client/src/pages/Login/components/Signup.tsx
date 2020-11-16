@@ -136,6 +136,7 @@ export function Signup(props: SignupProps) {
             />
             <Box className={classes.buttonWrapper}>
               <Button
+                disableElevation
                 type="submit"
                 variant="contained"
                 color="secondary"

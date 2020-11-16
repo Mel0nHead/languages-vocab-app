@@ -120,8 +120,10 @@ export function TestContent(props: TestContentProps) {
         <Divider />
         <Box p={1}>
           <Button
+            disableElevation
             onClick={() => setIsRevealed(true)}
-            color="primary"
+            color="secondary"
+            variant="contained"
             data-testid="reveal-answer-button"
           >
             Reveal answer
@@ -140,6 +142,7 @@ export function TestContent(props: TestContentProps) {
             <Typography>Did you get the answer right?</Typography>
             <Box mt={1}>
               <Button
+                disableElevation
                 variant="contained"
                 className={classes.successButton}
                 onClick={() => handleAnswer("correct")}
@@ -148,6 +151,7 @@ export function TestContent(props: TestContentProps) {
                 Yes
               </Button>
               <Button
+                disableElevation
                 variant="contained"
                 className={classes.failureButton}
                 data-testid="no-button"

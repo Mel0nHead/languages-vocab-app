@@ -49,7 +49,7 @@ export function Review() {
             word={word.node}
             onClick={() => handleDelete(word.node.id)}
             key={word.node.id}
-            buttonLabel="Delete from my words"
+            buttonLabel="Delete"
           />
         );
       })}
