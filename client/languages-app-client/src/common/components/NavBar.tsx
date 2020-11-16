@@ -24,6 +24,7 @@ const linkConfig = [
   { name: "Home", href: "/home" },
   { name: "Review", href: "/review" },
   { name: "Test", href: "/test" },
+  { name: "Test Results", href: "/test-results" },
 ];
 
 interface NavBarProps {

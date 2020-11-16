@@ -40,18 +40,27 @@ export function Test() {
     setCursor(null);
   }
 
-  function handleGetNextQuestion(
+  async function handleGetNextQuestion(
     hasNextPage: boolean,
     newCursor: string,
     answer: AnswerType
   ) {
     setWordCount((wordCount) => wordCount + 1);
-    setCursor((currentCursor) => (hasNextPage ? newCursor : currentCursor));
-    setTestStatus((currentStatus) =>
-      !hasNextPage ? { progress: false, finished: true } : { ...currentStatus }
-    );
+    if (hasNextPage) {
+      setCursor(newCursor);
+    } else {
+      setTestStatus({ progress: false, finished: true });
+    }
     setScore((currentScore) => {
       return { ...currentScore, [answer]: currentScore[answer] + 1 };
+    });
+    const isAnswerCorrect = answer === "correct";
+    await updateTest({
+      variables: {
+        testId: testId || "",
+        isAnswerCorrect,
+        completed: !hasNextPage,
+      },
     });
   }
 
