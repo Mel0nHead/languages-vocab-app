@@ -19,6 +19,8 @@ import { Service } from "typedi";
 import { UserService } from "./user.service";
 import { InjectRepository } from "typeorm-typedi-extensions/decorators/InjectRepository";
 import { UserRepository } from "./user.repository";
+import { Test } from "../test/test.entity";
+import { WordRepository } from "../word/word.repository";
 
 @Resolver(User)
 @Service()
@@ -26,7 +28,9 @@ export class UserResolver implements ResolverInterface<User> {
   constructor(
     public userService: UserService,
     @InjectRepository()
-    private readonly userRepository: UserRepository
+    private readonly userRepository: UserRepository,
+    @InjectRepository()
+    private readonly wordRepository: WordRepository
   ) {}
 
   @Mutation(() => User)
@@ -44,7 +48,7 @@ export class UserResolver implements ResolverInterface<User> {
 
     const wordIds = user.words.map((word) => word.id);
     if (wordIds.length) {
-      await Word.delete(wordIds);
+      await this.wordRepository.delete(wordIds);
     }
     await this.userRepository.delete(id);
     return true;
@@ -69,6 +73,18 @@ export class UserResolver implements ResolverInterface<User> {
     const id = user.id;
     const userData = await this.userRepository.getUserWithWords(id);
     return userData.words;
+  }
+
+  @FieldResolver()
+  @UseMiddleware(isAuthenticated)
+  async tests(@Root() user: User): Promise<Test[]> {
+    const id = user.id;
+    const userData = await this.userRepository
+      .createQueryBuilder("user")
+      .leftJoinAndSelect("user.tests", "tests")
+      .where("user.id = :id", { id })
+      .getOne();
+    return userData.tests;
   }
 
   @Mutation(() => LoginPayload, { nullable: true })

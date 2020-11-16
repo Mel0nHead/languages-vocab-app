@@ -33,8 +33,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface TestContentProps {
-  handleGetNextQuestion: (hasNextPage: boolean, cursor: string) => void;
-  handleScoreChange: (type: AnswerType) => void;
+  handleGetNextQuestion: (
+    hasNextPage: boolean,
+    cursor: string,
+    type: AnswerType
+  ) => void;
   cursor: string | null;
   data: getWords;
 }
@@ -54,9 +57,9 @@ export function TestContent(props: TestContentProps) {
     setIsRevealed(false);
     props.handleGetNextQuestion(
       getWords.pageInfo.hasNextPage,
-      currentWord.cursor
+      currentWord.cursor,
+      answerType
     );
-    props.handleScoreChange(answerType);
   }
 
   return (

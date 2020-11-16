@@ -10,12 +10,13 @@ import { WordResolver } from "./entities/word/word.resolver";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./entities/user/user.resolver";
 import { Container } from "typedi";
+import { TestResolver } from "./entities/test/test.resolver";
 
 const PORT = 4000;
 
 const startServer = async () => {
   const schema = await buildSchema({
-    resolvers: [WordResolver, UserResolver],
+    resolvers: [WordResolver, UserResolver, TestResolver],
     container: Container,
   });
 

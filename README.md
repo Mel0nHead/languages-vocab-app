@@ -4,24 +4,25 @@ An app to help you learn any language through the use of flash cards. Written in
 
 Stack:
 Frontend: React, Material-UI, GraphQL
-Backend: Express, TypeORM, MySQL
+Backend: Express, TypeORM, MySQL, Type-GraphQL
 
 # TODO
 
-- ADD USERS AND THE ABILITY TO LOGIN
+- INSTALL EXTENSION TO HELP WITH SQL
 
-  - should be able to create a user
-  - user should have username and password to log in
-  - create a login page, and dropdown menu so user can log out
+- ADD INTEGRATION TESTS FOR API
 
-- ADD TESTS FOR API
+  - currently have no test coverage
 
-  - need to research this as I have no idea how to do it
+- ALLOW FOR BATCH OPERATIONS IN API
 
-- ADD 'TEST' ENTITY TO BACKEND
+  - maybe use some sort of data loader (look at Ben Awad's YT for inspiration)
 
-  - test entity should exist in API
-  - should be a many-to-many relationship between tests and words (with custom properties)
+- ENCRYPT USER PASSWORDS
 
-- ADD SNACKBARS TO UI
-- use notistack to trigger notifications when events are completed (eg. adding a word, deleting a word etc.)
+  - currently stored as plain text
+  - currently sent from client to api in plaintext
+
+- ADD FOREIGN KEYS TO WORD AND TEST ENTITIES
+
+  - e.g. add 'userId' field to Word, so that you can query all words for a particular user without having to fetch the User first

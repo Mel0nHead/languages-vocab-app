@@ -88,4 +88,9 @@ export class WordResolver implements ResolverInterface<Word> {
     const wordData = await this.wordRepository.getWordWithUser(word.id);
     return wordData.user;
   }
+
+  @Query(() => [Word])
+  async getAllWords() {
+    return this.wordRepository.find();
+  }
 }

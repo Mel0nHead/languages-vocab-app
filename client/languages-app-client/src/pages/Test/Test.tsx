@@ -4,6 +4,8 @@ import { FinishedTest } from "./components/FinishedTest";
 import { TestContent } from "./components/TestContent";
 import { useGetNextWordQuery } from "./graphql/useGetNextWordQuery";
 import { TestProgress } from "./components/TestProgress";
+import { useCreateTestMutation } from "./graphql/useCreateTestMutation";
+import { useUpdateTestMutation } from "./graphql/useUpdateTestMutation";
 
 export type AnswerType = "correct" | "incorrect";
 
@@ -18,29 +20,47 @@ export function Test() {
     cursor,
     localStorage.getItem("userId") || ""
   );
+  const [testId, setTestId] = useState<string | null>(null);
+  const [createTest] = useCreateTestMutation();
+  const [updateTest] = useUpdateTestMutation();
+
   const [wordCount, setWordCount] = useState(0);
   const [score, setScore] = useState({ correct: 0, incorrect: 0 });
 
   const totalWordsCount = data?.getWords?.totalCount;
 
-  function handleStartTest() {
+  async function handleStartTest() {
+    const { data } = await createTest({
+      variables: { userId: localStorage.getItem("userId") || "" },
+    });
+    setTestId(data?.createTest.id || "");
     setWordCount(0);
     setScore({ correct: 0, incorrect: 0 });
     setTestStatus({ progress: true, finished: false });
     setCursor(null);
   }
 
-  function handleGetNextQuestion(hasNextPage: boolean, newCursor: string) {
+  async function handleGetNextQuestion(
+    hasNextPage: boolean,
+    newCursor: string,
+    answer: AnswerType
+  ) {
     setWordCount((wordCount) => wordCount + 1);
-    setCursor((currentCursor) => (hasNextPage ? newCursor : currentCursor));
-    setTestStatus((currentStatus) =>
-      !hasNextPage ? { progress: false, finished: true } : { ...currentStatus }
-    );
-  }
-
-  function handleScoreChange(answer: AnswerType) {
+    if (hasNextPage) {
+      setCursor(newCursor);
+    } else {
+      setTestStatus({ progress: false, finished: true });
+    }
     setScore((currentScore) => {
       return { ...currentScore, [answer]: currentScore[answer] + 1 };
+    });
+    const isAnswerCorrect = answer === "correct";
+    await updateTest({
+      variables: {
+        testId: testId || "",
+        isAnswerCorrect,
+        completed: !hasNextPage,
+      },
     });
   }
 
@@ -80,7 +100,6 @@ export function Test() {
             <TestContent
               cursor={cursor}
               handleGetNextQuestion={handleGetNextQuestion}
-              handleScoreChange={handleScoreChange}
               data={data}
             />
           </>
