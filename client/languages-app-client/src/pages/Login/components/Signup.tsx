@@ -107,7 +107,7 @@ export function Signup(props: SignupProps) {
               name="name"
               label="Name"
               fullWidth={true}
-              variant="filled"
+              variant="outlined"
               className={classes.formInput}
             />
             <Field
@@ -115,7 +115,7 @@ export function Signup(props: SignupProps) {
               name="email"
               label="Email"
               fullWidth={true}
-              variant="filled"
+              variant="outlined"
               className={classes.formInput}
             />
             <Field
@@ -123,7 +123,7 @@ export function Signup(props: SignupProps) {
               name="password"
               label="Password"
               fullWidth={true}
-              variant="filled"
+              variant="outlined"
               className={classes.formInput}
             />
             <Field
@@ -131,7 +131,7 @@ export function Signup(props: SignupProps) {
               name="confirmPassword"
               label="Confirm password"
               fullWidth={true}
-              variant="filled"
+              variant="outlined"
               className={classes.formInput}
             />
             <Box className={classes.buttonWrapper}>

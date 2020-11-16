@@ -89,14 +89,14 @@ export function Login(props: LoginProps) {
             name="email"
             label="Email"
             fullWidth={true}
-            variant="filled"
+            variant="outlined"
             className={classes.formInput}
           />
           <Field
             component={TextField}
             name="password"
             label="Password"
-            variant="filled"
+            variant="outlined"
             fullWidth={true}
             className={classes.formInput}
           />

@@ -1,4 +1,12 @@
-import { Box, Divider, makeStyles, Paper, Typography } from "@material-ui/core";
+import {
+  Box,
+  Divider,
+  Fade,
+  makeStyles,
+  Paper,
+  Typography,
+} from "@material-ui/core";
+import { Skeleton } from "@material-ui/lab";
 import React from "react";
 import { getTests_getTests } from "../../generated-graphql-interfaces";
 import { useGetTestsQuery } from "./graphql/useGetTestsQuery";
@@ -38,42 +46,50 @@ export function TestResults() {
   return (
     <>
       <h1>Test Results</h1>
-      {loading && <b>loading...</b>}
+      <Fade in={loading} timeout={500}>
+        <div>
+          <Skeleton height="100%" variant="rect" />
+        </div>
+      </Fade>
       {error && <b>{error.message}</b>}
-      {data?.getTests.map((test) => {
-        return (
-          <Paper
-            key={test.id}
-            elevation={0}
-            variant="outlined"
-            className={classes.paper}
-          >
-            <Box className={classes.paperHeader}>
-              <Typography className={classes.paperTitle}>
-                Score: {getFinalScoreAsPercentage(test)}%
-              </Typography>
-            </Box>
-            <Divider />
-            <Box p={2}>
-              <Typography>
-                <span className={classes.span}>Test ID:</span> {test.id}
-              </Typography>
-              <Typography>
-                <span className={classes.span}>Completed at:</span>{" "}
-                {test.finishedAt}
-              </Typography>
-              <Typography>
-                <span className={classes.span}>Correct answers:</span>{" "}
-                {test.correctAnswers}
-              </Typography>
-              <Typography>
-                <span className={classes.span}>Incorrect answers:</span>{" "}
-                {test.incorrectAnswers}
-              </Typography>
-            </Box>
-          </Paper>
-        );
-      })}
+      <Fade in={!loading} timeout={500}>
+        <div>
+          {data?.getTests.map((test) => {
+            return (
+              <Paper
+                key={test.id}
+                elevation={0}
+                variant="outlined"
+                className={classes.paper}
+              >
+                <Box className={classes.paperHeader}>
+                  <Typography className={classes.paperTitle}>
+                    Score: {getFinalScoreAsPercentage(test)}%
+                  </Typography>
+                </Box>
+                <Divider />
+                <Box p={2}>
+                  <Typography>
+                    <span className={classes.span}>Test ID:</span> {test.id}
+                  </Typography>
+                  <Typography>
+                    <span className={classes.span}>Completed at:</span>{" "}
+                    {test.finishedAt}
+                  </Typography>
+                  <Typography>
+                    <span className={classes.span}>Correct answers:</span>{" "}
+                    {test.correctAnswers}
+                  </Typography>
+                  <Typography>
+                    <span className={classes.span}>Incorrect answers:</span>{" "}
+                    {test.incorrectAnswers}
+                  </Typography>
+                </Box>
+              </Paper>
+            );
+          })}
+        </div>
+      </Fade>
     </>
   );
 }

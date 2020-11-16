@@ -2,6 +2,8 @@ import React from "react";
 import { LanguageSelect } from "./LanguageSelect";
 import { useFetch } from "../../../common/hooks/useFetch";
 import { YANDEX_KEY, YANDEX_URL } from "../../../common/constants";
+import { Skeleton } from "@material-ui/lab";
+import { Fade } from "@material-ui/core";
 
 interface SupportedLanguages {
   dirs: string[];
@@ -33,12 +35,7 @@ export function ChooseLanguages(props: ChooseLanguagesProps) {
     }
   );
 
-  if (loading)
-    return (
-      <b data-testid="choose-languages-loading">
-        Loading supported languages...
-      </b>
-    );
+  const isReady = !loading && !!data;
 
   if (!!error)
     return (
@@ -47,27 +44,32 @@ export function ChooseLanguages(props: ChooseLanguagesProps) {
       </b>
     );
 
-  if (!data)
-    return (
-      <b data-testid="choose-languages-no-data">
-        No data was retrieved. Refresh the page and try again.
-      </b>
-    );
-
   return (
     <div data-testid="choose-languages">
-      <LanguageSelect
-        label="From:"
-        value={props.currentLanguage.source}
-        handleChange={props.handleLanguageChange("source")}
-        availableLanguages={data.langs}
-      />
-      <LanguageSelect
-        label="To:"
-        value={props.currentLanguage.destination}
-        handleChange={props.handleLanguageChange("destination")}
-        availableLanguages={data.langs}
-      />
+      {isReady ? (
+        <Fade in={isReady} timeout={500}>
+          <div>
+            <LanguageSelect
+              label="From:"
+              value={props.currentLanguage.source}
+              handleChange={props.handleLanguageChange("source")}
+              availableLanguages={data!.langs}
+            />
+            <LanguageSelect
+              label="To:"
+              value={props.currentLanguage.destination}
+              handleChange={props.handleLanguageChange("destination")}
+              availableLanguages={data!.langs}
+            />
+          </div>
+        </Fade>
+      ) : (
+        <Fade in={!isReady} timeout={500}>
+          <div>
+            <Skeleton height={56} variant="rect" width={326} />
+          </div>
+        </Fade>
+      )}
     </div>
   );
 }

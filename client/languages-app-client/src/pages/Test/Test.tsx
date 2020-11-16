@@ -6,6 +6,7 @@ import { useGetNextWordQuery } from "./graphql/useGetNextWordQuery";
 import { TestProgress } from "./components/TestProgress";
 import { useCreateTestMutation } from "./graphql/useCreateTestMutation";
 import { useUpdateTestMutation } from "./graphql/useUpdateTestMutation";
+import { Skeleton } from "@material-ui/lab";
 
 export type AnswerType = "correct" | "incorrect";
 
@@ -64,22 +65,23 @@ export function Test() {
     });
   }
 
-  if (loading) return <b data-testid="loading-message">Loading</b>;
-
-  if (error) return <b data-testid="error-message">Error: {error.message}</b>;
-
-  if (!data) return <b data-testid="no-data-message">No data</b>;
-
-  if (!totalWordsCount)
-    return (
-      <b data-testid="no-words-message">
-        You have no words to test! Please add some words first on the Home page.
-      </b>
-    );
-
   return (
     <div data-testid="test-container">
       <h1>Test</h1>
+      {!loading && !totalWordsCount && (
+        <b data-testid="no-words-message">
+          You have no words to test! Please add some words first on the Home
+          page.
+        </b>
+      )}
+      {!loading && !data && (
+        <b>
+          You have no words to test! Please add some words first on the Home
+          page.
+        </b>
+      )}
+      {loading && <Skeleton variant="rect" height="100%" />}
+      {error && <b data-testid="error-message">An error occurred.</b>}
       <div>
         {!testStatus.progress && !testStatus.finished && (
           <StartTest startNewTest={handleStartTest} />
@@ -88,14 +90,14 @@ export function Test() {
           <FinishedTest
             startAnotherTest={handleStartTest}
             correctAnswers={score.correct}
-            totalWords={totalWordsCount}
+            totalWords={totalWordsCount || 0}
           />
         )}
-        {testStatus.progress && (
+        {testStatus.progress && data && (
           <>
             <TestProgress
               wordCount={wordCount}
-              totalWordsCount={totalWordsCount}
+              totalWordsCount={totalWordsCount || 0}
             />
             <TestContent
               cursor={cursor}
