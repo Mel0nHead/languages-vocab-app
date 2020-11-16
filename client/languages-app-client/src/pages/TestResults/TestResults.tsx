@@ -1,4 +1,4 @@
-import { makeStyles, Paper, Typography } from "@material-ui/core";
+import { Box, Divider, makeStyles, Paper, Typography } from "@material-ui/core";
 import React from "react";
 import { getTests_getTests } from "../../generated-graphql-interfaces";
 import { useGetTestsQuery } from "./graphql/useGetTestsQuery";
@@ -6,11 +6,19 @@ import { useGetTestsQuery } from "./graphql/useGetTestsQuery";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginBottom: theme.spacing(2),
-    padding: theme.spacing(2),
   },
   paperTitle: {
     fontSize: "1.2rem",
     fontWeight: 500,
+  },
+  paperHeader: {
+    padding: theme.spacing(2),
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  span: {
+    color: theme.palette.grey[600],
   },
 }));
 
@@ -40,15 +48,29 @@ export function TestResults() {
             variant="outlined"
             className={classes.paper}
           >
-            <Typography variant="h2" className={classes.paperTitle}>
-              Test ID: {test.id}
-            </Typography>
-            <Typography>Completed at: {test.finishedAt}</Typography>
-            <Typography>Correct answers: {test.correctAnswers}</Typography>
-            <Typography>Incorrect answers: {test.incorrectAnswers}</Typography>
-            <Typography>
-              Total score: {getFinalScoreAsPercentage(test)}%
-            </Typography>
+            <Box className={classes.paperHeader}>
+              <Typography className={classes.paperTitle}>
+                Score: {getFinalScoreAsPercentage(test)}%
+              </Typography>
+            </Box>
+            <Divider />
+            <Box p={2}>
+              <Typography>
+                <span className={classes.span}>Test ID:</span> {test.id}
+              </Typography>
+              <Typography>
+                <span className={classes.span}>Completed at:</span>{" "}
+                {test.finishedAt}
+              </Typography>
+              <Typography>
+                <span className={classes.span}>Correct answers:</span>{" "}
+                {test.correctAnswers}
+              </Typography>
+              <Typography>
+                <span className={classes.span}>Incorrect answers:</span>{" "}
+                {test.incorrectAnswers}
+              </Typography>
+            </Box>
           </Paper>
         );
       })}
