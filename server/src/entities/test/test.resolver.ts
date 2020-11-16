@@ -16,12 +16,14 @@ import { User } from "../user/user.entity";
 import { UserRepository } from "../user/user.repository";
 import { Test } from "./test.entity";
 import { TestRepository } from "./test.repository";
+import { TestService } from "./test.service";
 import { CreateTestInput } from "./types/create-test.input";
 
 @Resolver(Test)
 @Service()
 export class TestResolver implements ResolverInterface<Test> {
   constructor(
+    public testService: TestService,
     @InjectRepository()
     private readonly testRepository: TestRepository,
     @InjectRepository()
@@ -64,19 +66,15 @@ export class TestResolver implements ResolverInterface<Test> {
   ) {
     const id = parseInt(testId);
     let test = await this.testRepository.findOne({ id });
-    const date = new Date();
-    test.updatedAt = date;
-
-    if (isAnswerCorrect) {
-      test.correctAnswers++;
-    } else {
-      test.incorrectAnswers++;
-    }
-
-    if (completed) {
-      test.finishedAt = date;
-    }
-    return this.testRepository.save(test);
+    const testWithUpdatedDates = this.testService.updateTimestamps(
+      test,
+      completed
+    );
+    const fullyUpdatedTest = this.testService.updateAnswers(
+      testWithUpdatedDates as Test,
+      isAnswerCorrect
+    );
+    return this.testRepository.save(fullyUpdatedTest);
   }
 
   @Query(() => [Test])

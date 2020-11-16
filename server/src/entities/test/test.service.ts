@@ -10,11 +10,12 @@ export class TestService {
   }
 
   public updateAnswers(test: Test, isAnswerCorrect: boolean) {
-    const correctAnswers = isAnswerCorrect ? 
-    if (isAnswerCorrect) {
-        test.correctAnswers++;
-      } else {
-        test.incorrectAnswers++;
-      }
+    const correctAnswers = isAnswerCorrect
+      ? test.correctAnswers + 1
+      : test.correctAnswers;
+    const incorrectAnswers = !isAnswerCorrect
+      ? test.incorrectAnswers + 1
+      : test.incorrectAnswers;
+    return { ...test, correctAnswers, incorrectAnswers };
   }
 }
