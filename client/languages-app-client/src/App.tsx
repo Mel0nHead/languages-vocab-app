@@ -6,7 +6,6 @@ import {
   makeStyles,
   ThemeProvider,
 } from "@material-ui/core";
-import "./App.css";
 import { theme } from "./common/theme";
 import { DRAWER_WIDTH, NavBar } from "./common/components/NavBar";
 import { ApolloProvider } from "@apollo/react-hooks";

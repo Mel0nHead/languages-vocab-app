@@ -20,10 +20,18 @@ export interface TranslationResponse {
   text: string[];
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   textField: { marginBottom: "5px" },
   yandexLink: { fontSize: "0.8rem" },
-});
+  cardsWrapper: {
+    marginTop: theme.spacing(5),
+  },
+}));
+
+// TODO:
+// - improve UI of test page
+// - improve UI of test results page
+// - change the selects to autocomplete components on home page
 
 export function Home() {
   const classes = useStyles();
@@ -142,13 +150,13 @@ export function Home() {
           try again.
         </b>
       )}
-      <div>
+      <div className={classes.cardsWrapper}>
         {words.map((word) => (
           <TranslateCard
             word={word}
             onClick={() => handleAdd(word)}
             key={word.id}
-            buttonLabel="Add to my words"
+            buttonLabel="Save"
           />
         ))}
       </div>

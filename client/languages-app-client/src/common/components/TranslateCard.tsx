@@ -1,31 +1,23 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { Box, Paper, Divider } from "@material-ui/core";
+import { Paper, Grid } from "@material-ui/core";
 import { getLanguageInfo } from "../utils/getLanguageInfo";
 import { FlagIcon } from "./FlagIcon";
 import { getAllWords_getWords_edges_node } from "../../generated-graphql-interfaces";
 
-const useStyles = makeStyles({
-  root: {
+const useStyles = makeStyles((theme) => ({
+  paper: {
     minWidth: 275,
     marginBottom: "20px",
+    padding: theme.spacing(2),
   },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
+  buttonWrapper: {
+    display: "flex",
+    justifyContent: "flex-end",
   },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-});
+}));
 
 interface TranslateCardProps {
   word:
@@ -37,15 +29,20 @@ interface TranslateCardProps {
 
 export function TranslateCard(props: TranslateCardProps) {
   const { word, onClick } = props;
-  const langsArr = word.language.split("-");
+  const langugageCodes = word.language.split("-"); // e.g 'en-ru' -> ['en', 'ru']
   const classes = useStyles();
 
+  function mapLanguageCodeToFlag(languageCode: string) {
+    const languageInfo = getLanguageInfo(languageCode);
+    return <FlagIcon languageInfo={languageInfo} />;
+  }
+
   return (
-    <Paper className={classes.root} elevation={3} data-testid="translate-card">
-      <CardContent>
-        <Box mb={2}>
+    <Paper className={classes.paper} elevation={3} data-testid="translate-card">
+      <Grid container alignItems="center">
+        <Grid item xs={5}>
           <Typography color="textSecondary" gutterBottom>
-            Original word
+            Original word: {mapLanguageCodeToFlag(langugageCodes[0])}
           </Typography>
           <Typography
             variant="h5"
@@ -54,10 +51,10 @@ export function TranslateCard(props: TranslateCardProps) {
           >
             {word.originalWord}
           </Typography>
-        </Box>
-        <Box mb={2}>
+        </Grid>
+        <Grid item xs={5}>
           <Typography color="textSecondary" gutterBottom>
-            Translation
+            Translation: {mapLanguageCodeToFlag(langugageCodes[1])}
           </Typography>
           <Typography
             variant="h5"
@@ -66,32 +63,19 @@ export function TranslateCard(props: TranslateCardProps) {
           >
             {word.translatedWord}
           </Typography>
-        </Box>
-        <Box mb={2}>
-          <Typography color="textSecondary" gutterBottom>
-            Languages
-          </Typography>
-          <Typography variant="h5" component="h2" data-testid="icon-container">
-            {langsArr.map((langStr, index) => {
-              const languageInfo = getLanguageInfo(langStr);
-              return <FlagIcon languageInfo={languageInfo} key={index} />;
-            })}
-          </Typography>
-        </Box>
-      </CardContent>
-      <Divider />
-      <CardActions>
-        <Button
-          disableElevation
-          onClick={onClick}
-          color="secondary"
-          variant="contained"
-          style={{ fontWeight: "bold" }}
-          data-testid="translate-card-button"
-        >
-          {props.buttonLabel}
-        </Button>
-      </CardActions>
+        </Grid>
+        <Grid item xs={2} className={classes.buttonWrapper}>
+          <Button
+            disableElevation
+            onClick={onClick}
+            color="secondary"
+            variant="contained"
+            data-testid="translate-card-button"
+          >
+            {props.buttonLabel}
+          </Button>
+        </Grid>
+      </Grid>
     </Paper>
   );
 }

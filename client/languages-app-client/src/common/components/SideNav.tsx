@@ -28,9 +28,6 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     marginTop: 76,
   },
-  icon: {
-    color: theme.palette.secondary.main,
-  },
 }));
 
 export function SideNav() {
@@ -54,7 +51,7 @@ export function SideNav() {
                 history.push(link.href);
               }}
             >
-              <ListItemIcon className={classes.icon}>{link.icon}</ListItemIcon>
+              <ListItemIcon>{link.icon}</ListItemIcon>
               <ListItemText primary={link.name} />
             </ListItem>
           );
