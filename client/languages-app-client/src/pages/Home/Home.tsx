@@ -29,9 +29,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // TODO:
+// - change the selects to autocomplete components on home page (and sort the languages alphabetically)
 // - improve UI of test page
 // - improve UI of test results page
-// - change the selects to autocomplete components on home page
 
 export function Home() {
   const classes = useStyles();
