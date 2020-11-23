@@ -30,8 +30,8 @@ export function Home() {
   const classes = useStyles();
   const [inputValue, setInputValue] = useState("");
   const [currentLanguage, setCurrentLanguage] = useState<CurrentLanguage>({
-    source: ["en", "English"],
-    destination: ["es", "Spanish"],
+    source: { code: "en", name: "English" },
+    destination: { code: "es", name: "Spanish" },
   });
   const [words, setWords] = useState<Word[]>([]);
   const [addWord] = useAddWordMutation();
@@ -78,7 +78,7 @@ export function Home() {
     const textToTranslate = encodeURI(inputValue);
     // TODO: refactor
     if (!currentLanguage.source || !currentLanguage.destination) return;
-    const languageString = `${currentLanguage.source[0]}-${currentLanguage.destination[0]}`; // e.g. en-ru
+    const languageString = `${currentLanguage.source.code}-${currentLanguage.destination.code}`; // e.g. en-ru
 
     const data: TranslationResponse | null = await fetchTranslation(
       languageString,

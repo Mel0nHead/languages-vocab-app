@@ -1,7 +1,7 @@
 import React from "react";
 import { TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
-import { ChosenLanguage } from "../../../common/interfaces";
+import { ChosenLanguage, LanguageOption } from "../../../common/interfaces";
 
 interface LanguageSelectProps {
   label: string;
@@ -13,7 +13,11 @@ interface LanguageSelectProps {
 }
 
 export function LanguageSelect(props: LanguageSelectProps) {
-  const options = Object.entries(props.availableLanguages);
+  const options: LanguageOption[] = Object.entries(
+    props.availableLanguages
+  ).map((language) => {
+    return { code: language[0], name: language[1] };
+  });
 
   return (
     <Autocomplete
@@ -21,11 +25,11 @@ export function LanguageSelect(props: LanguageSelectProps) {
         <TextField {...params} label={props.label} variant="outlined" />
       )}
       options={options}
-      getOptionLabel={(option) => option[1]}
+      getOptionLabel={(option) => option.name}
       value={props.value}
       onChange={props.handleChange}
       getOptionSelected={(option, value) => {
-        return option[0] === value[0] && option[1] === value[1];
+        return option.code === value.code && option.name === value.name;
       }}
     />
   );

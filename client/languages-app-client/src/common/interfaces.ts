@@ -11,7 +11,12 @@ export interface TranslationResponse {
   text: string[];
 }
 
-export type ChosenLanguage = [string, string] | null;
+export interface LanguageOption {
+  code: string;
+  name: string;
+}
+
+export type ChosenLanguage = LanguageOption | null;
 
 export interface CurrentLanguage {
   source: ChosenLanguage;
