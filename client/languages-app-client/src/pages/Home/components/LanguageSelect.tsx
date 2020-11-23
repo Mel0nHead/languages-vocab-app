@@ -13,6 +13,7 @@ interface LanguageSelectProps {
 }
 
 export function LanguageSelect(props: LanguageSelectProps) {
+  // TODO: sort these alphabetically and raise to parent component
   const options: LanguageOption[] = Object.entries(
     props.availableLanguages
   ).map((language) => {
