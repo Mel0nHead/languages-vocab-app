@@ -4,6 +4,7 @@ import { useFetch } from "../../../common/hooks/useFetch";
 import { YANDEX_KEY, YANDEX_URL } from "../../../common/constants";
 import { Skeleton } from "@material-ui/lab";
 import { Fade } from "@material-ui/core";
+import { CurrentLanguage, ChosenLanguage } from "../../../common/interfaces";
 
 interface SupportedLanguages {
   dirs: string[];
@@ -13,18 +14,10 @@ interface SupportedLanguages {
 }
 
 interface ChooseLanguagesProps {
-  currentLanguage: {
-    destination: string;
-    source: string;
-  };
+  currentLanguage: CurrentLanguage;
   handleLanguageChange(
     key: "source" | "destination"
-  ): (
-    event: React.ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
-    }>
-  ) => void;
+  ): (_: any, newValue: ChosenLanguage) => void;
 }
 
 export function ChooseLanguages(props: ChooseLanguagesProps) {

@@ -6,19 +6,12 @@ import { createWord } from "../../common/utils/createWord";
 import { TextField, Button, Box, makeStyles } from "@material-ui/core";
 import { ChooseLanguages } from "./components/ChooseLanguages";
 import { useSnackbar } from "notistack";
-
-export interface Word {
-  language: string;
-  originalWord: string;
-  translatedWord: string;
-  id: string;
-}
-
-export interface TranslationResponse {
-  code: number;
-  lang: string;
-  text: string[];
-}
+import {
+  CurrentLanguage,
+  Word,
+  ChosenLanguage,
+  TranslationResponse,
+} from "../../common/interfaces";
 
 const useStyles = makeStyles((theme) => ({
   textField: { marginBottom: "5px" },
@@ -36,9 +29,9 @@ const useStyles = makeStyles((theme) => ({
 export function Home() {
   const classes = useStyles();
   const [inputValue, setInputValue] = useState("");
-  const [currentLanguage, setCurrentLanguage] = useState({
-    source: "en",
-    destination: "es",
+  const [currentLanguage, setCurrentLanguage] = useState<CurrentLanguage>({
+    source: ["en", "English"],
+    destination: ["es", "Spanish"],
   });
   const [words, setWords] = useState<Word[]>([]);
   const [addWord] = useAddWordMutation();
@@ -72,13 +65,10 @@ export function Home() {
   }
 
   function handleLanguageChange(key: "source" | "destination") {
-    return function (
-      event: React.ChangeEvent<{ name?: string | undefined; value: unknown }>
-    ) {
-      const newLanguage = event.target.value;
+    return function (_: any, newValue: ChosenLanguage) {
       setCurrentLanguage((currentLanguage) => ({
         ...currentLanguage,
-        [key]: newLanguage,
+        [key]: newValue,
       }));
     };
   }
@@ -86,7 +76,9 @@ export function Home() {
   async function handleTranslate() {
     if (!inputValue) return;
     const textToTranslate = encodeURI(inputValue);
-    const languageString = `${currentLanguage.source}-${currentLanguage.destination}`; // e.g. en-ru
+    // TODO: refactor
+    if (!currentLanguage.source || !currentLanguage.destination) return;
+    const languageString = `${currentLanguage.source[0]}-${currentLanguage.destination[0]}`; // e.g. en-ru
 
     const data: TranslationResponse | null = await fetchTranslation(
       languageString,

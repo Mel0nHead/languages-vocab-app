@@ -1,4 +1,4 @@
-import { TranslationResponse, Word } from "../../pages/Home/Home";
+import { TranslationResponse, Word } from "../interfaces";
 
 export function createWord(
   data: TranslationResponse,
