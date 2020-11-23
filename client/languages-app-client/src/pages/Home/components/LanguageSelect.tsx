@@ -1,5 +1,12 @@
-import React from "react";
-import { FormControl, InputLabel, makeStyles, Select } from "@material-ui/core";
+import React, { useState } from "react";
+import {
+  FormControl,
+  InputLabel,
+  makeStyles,
+  Select,
+  TextField,
+} from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -20,9 +27,25 @@ interface LanguageSelectProps {
 
 export function LanguageSelect(props: LanguageSelectProps) {
   const classes = useStyles();
+  const options = Object.entries(props.availableLanguages);
+  const [value, setValue] = useState<[string, string] | null>(null);
 
   return (
     <>
+      <Autocomplete
+        renderInput={(params) => (
+          <TextField {...params} label={props.label} variant="outlined" />
+        )}
+        options={options}
+        getOptionLabel={(option) => option[1]}
+        value={value}
+        onChange={(_: any, newValue: [string, string] | null) => {
+          setValue(newValue);
+        }}
+        getOptionSelected={(option, value) => {
+          return option[0] === value[0] && option[1] === value[1];
+        }}
+      />
       <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel htmlFor="from-language" data-testid="select-label">
           {props.label}
